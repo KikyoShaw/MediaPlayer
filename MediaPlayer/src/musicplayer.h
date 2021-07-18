@@ -25,13 +25,13 @@ namespace Ui {
 class musicplayer;
 }
 
-class musicplayer : public QWidget
+class MusicPlayer : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit musicplayer(QWidget *parent = 0);
-    ~musicplayer();
+    explicit MusicPlayer(QWidget *parent = 0);
+    ~MusicPlayer();
 
 private slots:
     void on_flont_clicked();

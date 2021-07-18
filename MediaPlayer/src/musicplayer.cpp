@@ -4,7 +4,7 @@
 int MaxValue = 1000;//设置进度条的最大值
 int num;
 
-musicplayer::musicplayer(QWidget *parent) :
+MusicPlayer::MusicPlayer(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::musicplayer)
 {
@@ -37,14 +37,14 @@ musicplayer::musicplayer(QWidget *parent) :
     slider_volume->setEnabled(false);
     slider_volume->hide();
     //由于不涉及到slider值的刷新，因此只需对move和自定义click两个信号进行处理，并且可以共用一个槽函数
-    connect(slider_volume,&CustomSlider::costomSliderClicked,this,&musicplayer::slider_volume_changed);
-    connect(slider_volume,&CustomSlider::sliderMoved,this,&musicplayer::slider_volume_changed);
+    connect(slider_volume,&CustomSlider::costomSliderClicked,this,&MusicPlayer::slider_volume_changed);
+    connect(slider_volume,&CustomSlider::sliderMoved,this,&MusicPlayer::slider_volume_changed);
 
     //禁用slider_progress，连接信号槽(进度条)
     ui->slider_progress->setEnabled(false);
-    connect(ui->slider_progress,&CustomSlider::costomSliderClicked,this,&musicplayer::slider_progress_clicked);
-    connect(ui->slider_progress,&CustomSlider::sliderMoved,this,&musicplayer::slider_progress_moved);
-    connect(ui->slider_progress,&CustomSlider::sliderReleased,this,&musicplayer::slider_progress_released);
+    connect(ui->slider_progress,&CustomSlider::costomSliderClicked,this,&MusicPlayer::slider_progress_clicked);
+    connect(ui->slider_progress,&CustomSlider::sliderMoved,this,&MusicPlayer::slider_progress_moved);
+    connect(ui->slider_progress,&CustomSlider::sliderReleased,this,&MusicPlayer::slider_progress_released);
 
     //设置播放器
     player = new QMediaPlayer;
@@ -84,7 +84,7 @@ musicplayer::musicplayer(QWidget *parent) :
     ui->textlabel->hide();
 }
 
-musicplayer::~musicplayer()
+MusicPlayer::~MusicPlayer()
 {
     delete ui;
     delete player;
@@ -103,7 +103,7 @@ void musicplayer::loadLink(const QUrl &url){
 }
 */
 
-void musicplayer::slotDurationChanged(qint64 duration){
+void MusicPlayer::slotDurationChanged(qint64 duration){
     int second = duration/60000;
     int miao = duration%60000/1000;
     if(miao<10&&miao>-0)
@@ -114,7 +114,7 @@ void musicplayer::slotDurationChanged(qint64 duration){
         ui->AllTime->setText("0"+QString::number(second)+":"+QString::number(miao));
 }
 
-void musicplayer::slotPositionChanged(qint64 position){
+void MusicPlayer::slotPositionChanged(qint64 position){
     int sec = position/60000;
     int mia = position%60000/1000;
 
@@ -147,7 +147,7 @@ void musicplayer::slotPositionChanged(qint64 position){
 }
 
 //返回上一级
-void musicplayer::on_flont_clicked()
+void MusicPlayer::on_flont_clicked()
 {
     player->stop();
     this->close();
@@ -155,7 +155,7 @@ void musicplayer::on_flont_clicked()
 }
 
 //网络播放
-void musicplayer::on_open_clicked()
+void MusicPlayer::on_open_clicked()
 {
     if(liveStatus==0)
     {
@@ -178,14 +178,14 @@ void musicplayer::on_open_clicked()
 
 }
 
-void musicplayer::paintEvent(QPaintEvent *)
+void MusicPlayer::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
     p.drawPixmap(0,0,this->width(),this->height(),QPixmap(":/new/image/114.jpg"));
 }
 
 //播放
-void musicplayer::on_play_clicked()
+void MusicPlayer::on_play_clicked()
 {
     if(play_state==0)
     {
@@ -203,7 +203,7 @@ void musicplayer::on_play_clicked()
 }
 
 //音量
-void musicplayer::on_volum_clicked()
+void MusicPlayer::on_volum_clicked()
 {
     //通过hide()和show()方法，实现音量控制Slider的唤出和收起
     qDebug()<<state_slider_volume;
@@ -224,36 +224,36 @@ void musicplayer::on_volum_clicked()
 }
 
 //音量控制Slider的槽函数
-void musicplayer::slider_volume_changed()
+void MusicPlayer::slider_volume_changed()
 {
     player->setVolume(slider_volume->value());
 }
 
 //播放进度控制Slider的槽函数
-void musicplayer::slider_progress_clicked()
+void MusicPlayer::slider_progress_clicked()
 {
     player->setPosition(ui->slider_progress->value()*player->duration()/MaxValue);
 }
 
-void musicplayer::slider_progress_moved()
+void MusicPlayer::slider_progress_moved()
 {
     //暂时停止计时器，在用户拖动过程中不修改slider的值
     timer->stop();
     player->setPosition(ui->slider_progress->value()*player->duration()/MaxValue);
 }
 
-void musicplayer::slider_progress_released()
+void MusicPlayer::slider_progress_released()
 {
     //用户释放滑块后，重启定时器
     timer->start();
 }
 
-void musicplayer::onTimerOut()
+void MusicPlayer::onTimerOut()
 {
     ui->slider_progress->setValue(player->position()*MaxValue/player->duration());
 }
 
-void musicplayer::myPlayerSlot(QModelIndex index)
+void MusicPlayer::myPlayerSlot(QModelIndex index)
 {
     //启用slider并设置范围
     ui->slider_progress->setEnabled(true);
@@ -285,7 +285,7 @@ void musicplayer::myPlayerSlot(QModelIndex index)
 }
 
 //显示歌单导入歌曲
-void musicplayer::on_List_clicked()
+void MusicPlayer::on_List_clicked()
 {
     //歌单模块
     songList->clear();
@@ -346,7 +346,7 @@ void musicplayer::on_List_clicked()
 }
 
 //上一曲
-void musicplayer::on_last_clicked()
+void MusicPlayer::on_last_clicked()
 {
     if(playList->currentIndex()!=0)
     {
@@ -361,7 +361,7 @@ void musicplayer::on_last_clicked()
 }
 
 //下一曲
-void musicplayer::on_next_clicked()
+void MusicPlayer::on_next_clicked()
 {
     if(playList->mediaCount()-playList->currentIndex()!=1)
     {
@@ -376,7 +376,7 @@ void musicplayer::on_next_clicked()
 }
 
 //歌词显示
-void musicplayer::on_lrc_clicked()
+void MusicPlayer::on_lrc_clicked()
 {
     if(lrcStatus==0){
         lrcDia->show();
@@ -388,7 +388,7 @@ void musicplayer::on_lrc_clicked()
 }
 
 //播放模式
-void musicplayer::on_comboBox_activated(const QString name)
+void MusicPlayer::on_comboBox_activated(const QString name)
 {
     if(name==tr("顺序播放"))
         {
@@ -409,7 +409,7 @@ void musicplayer::on_comboBox_activated(const QString name)
 }
 
 //查找(用来搜索歌曲列表的歌)
-void musicplayer::on_find_clicked()
+void MusicPlayer::on_find_clicked()
 {
     if(findStatus==0){
         find();
@@ -421,7 +421,7 @@ void musicplayer::on_find_clicked()
     }
 }
 
-void musicplayer::find()
+void MusicPlayer::find()
 {
     findDia = new QDialog();
     bu = new QPushButton("查找",findDia);
@@ -439,7 +439,7 @@ void musicplayer::find()
 }
 
 //查找功能实现
-void musicplayer::findClick()
+void MusicPlayer::findClick()
 {
     int go = 0;
     if(lineEdit->text()!="请输入歌曲名"){
@@ -461,13 +461,13 @@ void musicplayer::findClick()
 }
 
 //取消查找
-void musicplayer::nofindClick()
+void MusicPlayer::nofindClick()
 {
     findDia->close();
 }
 
 //播放mv
-void musicplayer::on_find_2_clicked()
+void MusicPlayer::on_find_2_clicked()
 {
 
     if(mvStatus==0)

@@ -1,58 +1,61 @@
 #include "mainwidget.h"
-#include "ui_mainwidget.h"
-
-QString sstr;
+#include <QMouseEvent>
+#include <QMovie>
+#include <QMediaPlayer>
+#include <QMessageBox>
+#include "mediaplayer.h"
+#include "musicplayer.h"
 
 MainWidget::MainWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::MainWidget)
+    QWidget(parent)
 {
-    ui->setupUi(this);
+    ui.setupUi(this);
 
     //去除边框
-    this->setWindowFlags(Qt::FramelessWindowHint);
+    setWindowFlags(Qt::FramelessWindowHint);
 
     //设置动态背景
-    movie1 = new QMovie;
-    movie1->setFileName(":/new/image/125.gif");
-    ui->label->setMovie(movie1);
-    movie1->start();
-    ui->label->setScaledContents(true);
+	m_bgMovie = new QMovie(this);
+	m_bgMovie->setFileName(":/new/image/125.gif");
+    ui.label->setMovie(m_bgMovie);
+	m_bgMovie->start();
+    ui.label->setScaledContents(true);
 
     //设置背景音乐
-    player = new QMediaPlayer;
-    player->setMedia(QUrl::fromLocalFile("./star.mp3"));
-    player->setVolume(100);
-    player->play();
+	m_bgPlayer = new QMediaPlayer(this);
+	m_bgPlayer->setMedia(QUrl::fromLocalFile("./star.mp3"));
+	m_bgPlayer->setVolume(100);
+	m_bgPlayer->play();
 }
 
 MainWidget::~MainWidget()
 {
-    delete ui;
-    delete movie1;
-    delete player;
 }
 
 //视频播放器
 void MainWidget::on_vedio_clicked()
 {
-    media = new MediaPlayer();
-    connect(media,SIGNAL(mySignal()),this,SLOT(show()));
-    connect(media,SIGNAL(mySignal()),this,SLOT(my_player()));
-    media->show();
-    player->stop();
-    this->close();
+	m_videoPlayer = QSharedPointer<MediaPlayer>(new MediaPlayer());
+	if (m_videoPlayer) {
+		connect(m_videoPlayer.data(), SIGNAL(mySignal()), this, SLOT(show()));
+		connect(m_videoPlayer.data(), SIGNAL(mySignal()), this, SLOT(my_player()));
+		m_videoPlayer->show();
+	}
+	m_bgPlayer->stop();
+    close();
 }
 
 //音乐播放器
 void MainWidget::on_music_clicked()
 {
-    music = new musicplayer();
-    connect(music,SIGNAL(mySignal()),this,SLOT(show()));
-    connect(music,SIGNAL(mySignal()),this,SLOT(my_player()));
-    music->show();
-    player->stop();
-    this->close();
+	m_musicPlayer = QSharedPointer<MusicPlayer>(new MusicPlayer());
+	if (m_musicPlayer) {
+		connect(m_musicPlayer.data(), SIGNAL(mySignal()), this, SLOT(show()));
+		connect(m_musicPlayer.data(), SIGNAL(mySignal()), this, SLOT(my_player()));
+		m_musicPlayer->show();
+	}
+	m_bgPlayer->stop();
+    close();
 }
 
 //退出
@@ -61,7 +64,7 @@ void MainWidget::on_exit_clicked()
     int mess = QMessageBox::question(this,"提示","确定要退出？",QMessageBox::Yes,QMessageBox::No);
     if(mess==QMessageBox::Yes)
     {
-        player->stop();
+		m_bgPlayer->stop();
         exit(1);
     }
     else if(mess==QMessageBox::No)
@@ -73,38 +76,42 @@ void MainWidget::on_exit_clicked()
 //返回上一级
 void MainWidget::on_help_clicked()
 {
-    player->stop();
-    this->close();
+	m_bgPlayer->stop();
+    close();
     emit MySig();
 }
 
 void MainWidget::my_player()
 {
-    player->setVolume(100);
-    player->play();
+	m_bgPlayer->setVolume(100);
+	m_bgPlayer->play();
 }
 
-void MainWidget::paintEvent(QPaintEvent *)
+void MainWidget::mouseMoveEvent(QMouseEvent * event)
 {
-
+	//判断左键是否被按下，只有左键按下了，其返回值就是1(true)
+	if ((event->buttons() & Qt::LeftButton) && m_bMove)
+	{
+		move(event->globalPos() - m_point);
+	}
+	QWidget::mouseMoveEvent(event);
 }
 
-void MainWidget::mouseMoveEvent(QMouseEvent *e)
+void MainWidget::mousePressEvent(QMouseEvent * event)
 {
-    if(e->buttons() & Qt::LeftButton)//鼠标左击才有效果
-         move(e->globalPos()-point);//移动窗口
+	if (event->button() == Qt::LeftButton)
+	{
+		m_bMove = true;
+		m_point = event->globalPos() - frameGeometry().topLeft();
+	}
+	QWidget::mousePressEvent(event);
 }
 
-void MainWidget::mousePressEvent(QMouseEvent *e)
+void MainWidget::mouseReleaseEvent(QMouseEvent * event)
 {
-    //鼠标事件中包含“按住的是左键”
-    if(e->button()==Qt::LeftButton)
-    {
-        //获取移动的位移量
-        point = e->globalPos()-frameGeometry().topLeft();
-    }
+	m_bMove = false;
+	QWidget::mouseReleaseEvent(event);
 }
-
 
 
 
