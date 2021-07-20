@@ -2,7 +2,6 @@
 #include <QMouseEvent>
 #include <QMovie>
 #include <QMediaPlayer>
-#include <QMessageBox>
 #include "mediaplayer.h"
 #include "musicplayer.h"
 
@@ -11,17 +10,17 @@ MainWidget::MainWidget(QWidget *parent) :
 {
     ui.setupUi(this);
 
-    //å»é™¤è¾¹æ¡†
+    //È¥³ı±ß¿ò
     setWindowFlags(Qt::FramelessWindowHint);
 
-    //è®¾ç½®åŠ¨æ€èƒŒæ™¯
+    //ÉèÖÃ¶¯Ì¬±³¾°
 	m_bgMovie = new QMovie(this);
 	m_bgMovie->setFileName(":/new/image/125.gif");
     ui.label->setMovie(m_bgMovie);
 	m_bgMovie->start();
     ui.label->setScaledContents(true);
 
-    //è®¾ç½®èƒŒæ™¯éŸ³ä¹
+    //ÉèÖÃ±³¾°ÒôÀÖ
 	m_bgPlayer = new QMediaPlayer(this);
 	m_bgPlayer->setMedia(QUrl::fromLocalFile("./star.mp3"));
 	m_bgPlayer->setVolume(100);
@@ -32,7 +31,7 @@ MainWidget::~MainWidget()
 {
 }
 
-//è§†é¢‘æ’­æ”¾å™¨
+//ÊÓÆµ²¥·ÅÆ÷
 void MainWidget::on_vedio_clicked()
 {
 	m_videoPlayer = QSharedPointer<MediaPlayer>(new MediaPlayer());
@@ -45,7 +44,7 @@ void MainWidget::on_vedio_clicked()
     close();
 }
 
-//éŸ³ä¹æ’­æ”¾å™¨
+//ÒôÀÖ²¥·ÅÆ÷
 void MainWidget::on_music_clicked()
 {
 	m_musicPlayer = QSharedPointer<MusicPlayer>(new MusicPlayer());
@@ -58,22 +57,14 @@ void MainWidget::on_music_clicked()
     close();
 }
 
-//é€€å‡º
+//ÍË³ö
 void MainWidget::on_exit_clicked()
 {
-    int mess = QMessageBox::question(this,"æç¤º","ç¡®å®šè¦é€€å‡ºï¼Ÿ",QMessageBox::Yes,QMessageBox::No);
-    if(mess==QMessageBox::Yes)
-    {
-		m_bgPlayer->stop();
-        exit(1);
-    }
-    else if(mess==QMessageBox::No)
-    {
-        return;
-    }
+	m_bgPlayer->stop();
+	close();
 }
 
-//è¿”å›ä¸Šä¸€çº§
+//·µ»ØÉÏÒ»¼¶
 void MainWidget::on_help_clicked()
 {
 	m_bgPlayer->stop();
@@ -89,7 +80,7 @@ void MainWidget::my_player()
 
 void MainWidget::mouseMoveEvent(QMouseEvent * event)
 {
-	//åˆ¤æ–­å·¦é”®æ˜¯å¦è¢«æŒ‰ä¸‹ï¼Œåªæœ‰å·¦é”®æŒ‰ä¸‹äº†ï¼Œå…¶è¿”å›å€¼å°±æ˜¯1(true)
+	//ÅĞ¶Ï×ó¼üÊÇ·ñ±»°´ÏÂ£¬Ö»ÓĞ×ó¼ü°´ÏÂÁË£¬Æä·µ»ØÖµ¾ÍÊÇ1(true)
 	if ((event->buttons() & Qt::LeftButton) && m_bMove)
 	{
 		move(event->globalPos() - m_point);

@@ -1,14 +1,14 @@
 #include "mediaplayer.h"
 #include "ui_mediaplayer.h"
 
-//æ’­æ”¾çŠ¶æ€ï¼Œtrueä¸ºæ’­æ”¾ï¼Œfalseä¸ºæš‚åœ
+//²¥·Å×´Ì¬£¬trueÎª²¥·Å£¬falseÎªÔİÍ£
 bool play_state;
 
-//ä¸Slideræœ‰å…³çš„æ’­æ”¾æ§åˆ¶å˜é‡
+//ÓëSliderÓĞ¹ØµÄ²¥·Å¿ØÖÆ±äÁ¿
 QTimer * timer;
-int maxValue = 1000;//è®¾ç½®è¿›åº¦æ¡çš„æœ€å¤§å€¼
+int maxValue = 1000;//ÉèÖÃ½ø¶ÈÌõµÄ×î´óÖµ
 
-//éŸ³é‡æ§åˆ¶slider
+//ÒôÁ¿¿ØÖÆslider
 CustomSlider * slider_volume;
 
 MediaPlayer::MediaPlayer(QWidget *parent) :
@@ -17,20 +17,20 @@ MediaPlayer::MediaPlayer(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //è®¾ç½®çª—å£å›¾æ ‡
+    //ÉèÖÃ´°¿ÚÍ¼±ê
     QIcon icon;
     icon.addFile(QStringLiteral(":/new/image/MediaPlayer.ico"), QSize(), QIcon::Normal, QIcon::Off);
     this->setWindowIcon(icon);
-    //éšè—è¾¹æ¡†
+    //Òş²Ø±ß¿ò
   //  this->setWindowFlags(Qt::FramelessWindowHint);
     ui->pushButton_play_and_pause->setEnabled(false);
     ui->pushButton_volume->setEnabled(false);
-    //ç¦ç”¨slider_progressï¼Œè¿æ¥ä¿¡å·æ§½
+    //½ûÓÃslider_progress£¬Á¬½ÓĞÅºÅ²Û
     ui->slider_progress->setEnabled(false);
     connect(ui->slider_progress,&CustomSlider::costomSliderClicked,this,&MediaPlayer::slider_progress_clicked);
     connect(ui->slider_progress,&CustomSlider::sliderMoved,this,&MediaPlayer::slider_progress_moved);
     connect(ui->slider_progress,&CustomSlider::sliderReleased,this,&MediaPlayer::slider_progress_released);
-    //æ‰‹åŠ¨è®¾ç½®slider_volume åŒ…æ‹¬åˆå§‹åŒ– æ–¹å‘ ç¦ç”¨ï¼Œä»¥åŠæ§½å‡½æ•°
+    //ÊÖ¶¯ÉèÖÃslider_volume °üÀ¨³õÊ¼»¯ ·½Ïò ½ûÓÃ£¬ÒÔ¼°²Ûº¯Êı
     slider_volume = new CustomSlider(this);
     slider_volume->setOrientation(Qt::Vertical);
     slider_volume->setEnabled(false);
@@ -41,21 +41,21 @@ MediaPlayer::MediaPlayer(QWidget *parent) :
                                  "QSlider::handle:vertical {margin: -2px - 7px - 2px - 7px;height: 17px;}"
                              );*/
     slider_volume->hide();
-    //ç”±äºä¸æ¶‰åŠåˆ°sliderå€¼çš„åˆ·æ–°ï¼Œå› æ­¤åªéœ€å¯¹moveå’Œè‡ªå®šä¹‰clickä¸¤ä¸ªä¿¡å·è¿›è¡Œå¤„ç†ï¼Œå¹¶ä¸”å¯ä»¥å…±ç”¨ä¸€ä¸ªæ§½å‡½æ•°
+    //ÓÉÓÚ²»Éæ¼°µ½sliderÖµµÄË¢ĞÂ£¬Òò´ËÖ»Ğè¶ÔmoveºÍ×Ô¶¨ÒåclickÁ½¸öĞÅºÅ½øĞĞ´¦Àí£¬²¢ÇÒ¿ÉÒÔ¹²ÓÃÒ»¸ö²Ûº¯Êı
     connect(slider_volume,&CustomSlider::costomSliderClicked,this,&MediaPlayer::slider_volume_changed);
     connect(slider_volume,&CustomSlider::sliderMoved,this,&MediaPlayer::slider_volume_changed);
     connect(slider_volume,&CustomSlider::sliderReleased,this,&MediaPlayer::slider_released);
 
 
-    //å®ä¾‹åŒ–ä¸‰ä¸ªå…¨å±€å˜é‡
+    //ÊµÀı»¯Èı¸öÈ«¾Ö±äÁ¿
     layout_video = new QVBoxLayout;
    // layout_video->setMargin(1);
     player = new QMediaPlayer;
     vWidget = new QVideoWidget;
-    //è®¾ç½®å®šæ—¶å™¨
+    //ÉèÖÃ¶¨Ê±Æ÷
     timer = new QTimer();
     timer->setInterval(1000);
-    //å°†timerè¿æ¥è‡³onTimerOutæ§½å‡½æ•°
+    //½«timerÁ¬½ÓÖÁonTimerOut²Ûº¯Êı
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimerOut()));
 
     ui->pushButton->hide();
@@ -64,7 +64,7 @@ MediaPlayer::MediaPlayer(QWidget *parent) :
 
 int MediaPlayer::play_flag = 0;
 
-//æ’­æ”¾è¿›åº¦æ§åˆ¶Sliderçš„æ§½å‡½æ•°
+//²¥·Å½ø¶È¿ØÖÆSliderµÄ²Ûº¯Êı
 void MediaPlayer::slider_progress_clicked()
 {
     player->setPosition(ui->slider_progress->value()*player->duration()/maxValue);
@@ -72,18 +72,18 @@ void MediaPlayer::slider_progress_clicked()
 
 void MediaPlayer::slider_progress_moved()
 {
-    //æš‚æ—¶åœæ­¢è®¡æ—¶å™¨ï¼Œåœ¨ç”¨æˆ·æ‹–åŠ¨è¿‡ç¨‹ä¸­ä¸ä¿®æ”¹sliderçš„å€¼
+    //ÔİÊ±Í£Ö¹¼ÆÊ±Æ÷£¬ÔÚÓÃ»§ÍÏ¶¯¹ı³ÌÖĞ²»ĞŞ¸ÄsliderµÄÖµ
     timer->stop();
     player->setPosition(ui->slider_progress->value()*player->duration()/maxValue);
 }
 
 void MediaPlayer::slider_progress_released()
 {
-    //ç”¨æˆ·é‡Šæ”¾æ»‘å—åï¼Œé‡å¯å®šæ—¶å™¨
+    //ÓÃ»§ÊÍ·Å»¬¿éºó£¬ÖØÆô¶¨Ê±Æ÷
     timer->start();
 }
 
-//éŸ³é‡æ§åˆ¶Sliderçš„æ§½å‡½æ•°
+//ÒôÁ¿¿ØÖÆSliderµÄ²Ûº¯Êı
 void MediaPlayer::slider_volume_changed()
 {
     qDebug() << "slider_volume->value() = " << slider_volume->value();
@@ -127,56 +127,56 @@ void MediaPlayer::on_pushButton_open_file_clicked()
     }
 
     layout_video->setMargin(1);
-    //æ ¹æ®label_playerå°ºå¯¸è®¾ç½®æ’­æ”¾åŒºåŸŸ
+    //¸ù¾İlabel_player³ß´çÉèÖÃ²¥·ÅÇøÓò
     vWidget->resize(ui->label_player->size());
     layout_video->addWidget(vWidget);
     ui->label_player->setLayout(layout_video);
     player->setVideoOutput(vWidget);
 
-    //é€‰æ‹©è§†é¢‘æ–‡ä»¶
-    QString filename = QFileDialog::getOpenFileName(this,tr("é€‰æ‹©è§†é¢‘æ–‡ä»¶"),".",tr("è§†é¢‘æ ¼å¼(*.avi *.mp4 *.flv *.mkv)"));
+    //Ñ¡ÔñÊÓÆµÎÄ¼ş
+    QString filename = QFileDialog::getOpenFileName(this,tr("Ñ¡ÔñÊÓÆµÎÄ¼ş"),".",tr("ÊÓÆµ¸ñÊ½(*.avi *.mp4 *.flv *.mkv)"));
     QFile file(filename);
     if(!file.open(QIODevice::ReadOnly))
     {
-        QMessageBox::information(NULL, "æç¤º", "è¯·é‡æ–°é€‰æ‹©è§†é¢‘æ–‡ä»¶", QMessageBox::Ok, QMessageBox::Ok);
+        QMessageBox::information(NULL, "ÌáÊ¾", "ÇëÖØĞÂÑ¡ÔñÊÓÆµÎÄ¼ş", QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
 
-    //è®¾ç½®æ’­æ”¾å™¨
+    //ÉèÖÃ²¥·ÅÆ÷
     player->setMedia(QUrl::fromLocalFile(filename));
-    //play_stateä¸ºtrueè¡¨ç¤ºæ’­æ”¾ï¼Œfalseè¡¨ç¤ºæš‚åœ
+    //play_stateÎªtrue±íÊ¾²¥·Å£¬false±íÊ¾ÔİÍ£
     play_state = true;
-    //å¯ç”¨æ’­æ”¾/æš‚åœæŒ‰é’®ï¼Œå¹¶å°†å…¶æ–‡æœ¬è®¾ç½®ä¸ºâ€œæš‚åœâ€
+    //ÆôÓÃ²¥·Å/ÔİÍ£°´Å¥£¬²¢½«ÆäÎÄ±¾ÉèÖÃÎª¡°ÔİÍ£¡±
     ui->pushButton_play_and_pause->setEnabled(true);
-    ui->pushButton_play_and_pause->setText("æš‚åœ");
-    //æ’­æ”¾å™¨å¼€å¯
+    ui->pushButton_play_and_pause->setText("ÔİÍ£");
+    //²¥·ÅÆ÷¿ªÆô
     player->play();
     play_flag=1;
 
-    //å¯ç”¨sliderå¹¶è®¾ç½®èŒƒå›´
+    //ÆôÓÃslider²¢ÉèÖÃ·¶Î§
     ui->slider_progress->setEnabled(true);
     ui->slider_progress->setRange(0,maxValue);
     timer->start();
 
-    //å¯ç”¨éŸ³é‡æ§åˆ¶slider
+    //ÆôÓÃÒôÁ¿¿ØÖÆslider
     slider_volume->setEnabled(true);
     slider_volume->setRange(0, 100);
-    //å¯ç”¨éŸ³é‡æŒ‰é’®
+    //ÆôÓÃÒôÁ¿°´Å¥
     ui->pushButton_volume->setEnabled(true);
 }
 
 void MediaPlayer::on_pushButton_play_and_pause_clicked()
 {
-    //åè½¬æ’­æ”¾çŠ¶æ€
+    //·´×ª²¥·Å×´Ì¬
     if(play_state)
     {
         player->pause();
-        ui->pushButton_play_and_pause->setText("æ’­æ”¾");
+        ui->pushButton_play_and_pause->setText("²¥·Å");
     }
     else
     {
         player->play();
-        ui->pushButton_play_and_pause->setText("æš‚åœ");
+        ui->pushButton_play_and_pause->setText("ÔİÍ£");
     }
 
     play_state = !play_state;
@@ -192,7 +192,7 @@ bool state_slider_volume = false;
 void MediaPlayer::on_pushButton_volume_clicked()
 {
     qDebug()<<state_slider_volume;
-    //é€šè¿‡hide()å’Œshow()æ–¹æ³•ï¼Œå®ç°éŸ³é‡æ§åˆ¶Sliderçš„å”¤å‡ºå’Œæ”¶èµ·
+    //Í¨¹ıhide()ºÍshow()·½·¨£¬ÊµÏÖÒôÁ¿¿ØÖÆSliderµÄ»½³öºÍÊÕÆğ
     if(state_slider_volume)
     {
         slider_volume->hide();
@@ -200,7 +200,7 @@ void MediaPlayer::on_pushButton_volume_clicked()
     else
     {
         slider_volume->setValue(player->volume());
-        //è®¡ç®—ä½ç½®ï¼Œä½¿å…¶ä½äºéŸ³é‡æ§åˆ¶æŒ‰é’®çš„ä¸Šæ–¹
+        //¼ÆËãÎ»ÖÃ£¬Ê¹ÆäÎ»ÓÚÒôÁ¿¿ØÖÆ°´Å¥µÄÉÏ·½
         slider_volume->setGeometry(QRect(ui->pushButton_volume->pos().rx()+0.5*ui->pushButton_volume->width()-15,
                                          ui->pushButton_volume->y()-100 , 30, 102));
         slider_volume->show();
@@ -210,16 +210,16 @@ void MediaPlayer::on_pushButton_volume_clicked()
 /*
 void MediaPlayer::mouseMoveEvent(QMouseEvent *e)
 {
-    if(e->buttons() & Qt::LeftButton)//é¼ æ ‡å·¦å‡»æ‰æœ‰æ•ˆæœ
-        move(e->globalPos()-point);//ç§»åŠ¨çª—å£
+    if(e->buttons() & Qt::LeftButton)//Êó±ê×ó»÷²ÅÓĞĞ§¹û
+        move(e->globalPos()-point);//ÒÆ¶¯´°¿Ú
 }
 
 void MediaPlayer::mousePressEvent(QMouseEvent *e)
 {
-    //é¼ æ ‡äº‹ä»¶ä¸­åŒ…å«â€œæŒ‰ä½çš„æ˜¯å·¦é”®â€
+    //Êó±êÊÂ¼şÖĞ°üº¬¡°°´×¡µÄÊÇ×ó¼ü¡±
     if(e->button()==Qt::LeftButton)
     {
-        //è·å–ç§»åŠ¨çš„ä½ç§»é‡
+        //»ñÈ¡ÒÆ¶¯µÄÎ»ÒÆÁ¿
         point = e->globalPos()-frameGeometry().topLeft();
     }
 }
@@ -229,7 +229,7 @@ void MediaPlayer::keyPressEvent(QKeyEvent *e)
     int key = e->key();
     if(key==Qt::Key_Escape)
     {
-        int temp = QMessageBox::question(this,"æç¤º","ç¡®å®šé€€å‡ºï¼Ÿ",
+        int temp = QMessageBox::question(this,"ÌáÊ¾","È·¶¨ÍË³ö£¿",
                                          QMessageBox::Yes,QMessageBox::No);
         if(temp==QMessageBox::Yes)
         {
@@ -257,14 +257,14 @@ void MediaPlayer::on_pushButton_flont_clicked()
     emit mySignal();
 }
 
-//åœ¨çº¿
+//ÔÚÏß
 void MediaPlayer::on_pushButton_live_clicked()
 {
     if(liveStatus==0)
     {
         player->stop();
-        ui->pushButton_play_and_pause->setText("æ’­æ”¾");
-        //ç½‘ç»œæ’­æ”¾åˆå§‹åŒ–
+        ui->pushButton_play_and_pause->setText("²¥·Å");
+        //ÍøÂç²¥·Å³õÊ¼»¯
         LiveView = new QWebEngineView;
         LiveView->settings()->setAttribute(QWebEngineSettings::PluginsEnabled, true);
         LiveView->setAttribute(Qt::WA_DeleteOnClose);

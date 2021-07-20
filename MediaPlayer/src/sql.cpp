@@ -9,25 +9,25 @@ Sql::Sql(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //è®¾ç½®çª—å£å›¾æ ‡
+    //ÉèÖÃ´°¿ÚÍ¼±ê
     QIcon icon;
     icon.addFile(QStringLiteral(":/new/image/Player.ico"), QSize(), QIcon::Normal, QIcon::Off);
     this->setWindowIcon(icon);
-    //é€æ˜åŒ–
+    //Í¸Ã÷»¯
     ui->pushButton->setFlat(true);
     ui->pushButton_2->setFlat(true);
-    //åˆå§‹åŒ–
+    //³õÊ¼»¯
     model = new QSqlTableModel(this);
     model->setTable("game");
     user = new UserSql;
     connect(user,SIGNAL(mySing()),this,SLOT(show()));
 
-    //è®¾ç½®å¯†ç ä¸å¯è§
+    //ÉèÖÃÃÜÂë²»¿É¼û
     ui->passEdit->setEchoMode(QLineEdit::Password);
-    ui->passEdit->setPlaceholderText("è¯·è¾“å…¥å¯†ç :");
-    ui->lineEdit->setPlaceholderText("è¯·è¾“å…¥ç”¨æˆ·å:");
+    ui->passEdit->setPlaceholderText("ÇëÊäÈëÃÜÂë:");
+    ui->lineEdit->setPlaceholderText("ÇëÊäÈëÓÃ»§Ãû:");
 
-    //è®¾ç½®ä¸€é”®åˆ é™¤æŒ‰é”®
+    //ÉèÖÃÒ»¼üÉ¾³ı°´¼ü
     ui->lineEdit->setClearButtonEnabled(true);
     ui->passEdit->setClearButtonEnabled(true);
 
@@ -52,21 +52,21 @@ void Sql::paintEvent(QPaintEvent *)
 
 void Sql::mouseMoveEvent(QMouseEvent *e)
 {
-    if(e->buttons() & Qt::LeftButton)//é¼ æ ‡å·¦å‡»æ‰æœ‰æ•ˆæœ
-         move(e->globalPos()-point);//ç§»åŠ¨çª—å£
+    if(e->buttons() & Qt::LeftButton)//Êó±ê×ó»÷²ÅÓĞĞ§¹û
+         move(e->globalPos()-point);//ÒÆ¶¯´°¿Ú
 }
 
 void Sql::mousePressEvent(QMouseEvent *e)
 {
-    //é¼ æ ‡äº‹ä»¶ä¸­åŒ…å«â€œæŒ‰ä½çš„æ˜¯å·¦é”®â€
+    //Êó±êÊÂ¼şÖĞ°üº¬¡°°´×¡µÄÊÇ×ó¼ü¡±
     if(e->button()==Qt::LeftButton)
     {
-        //è·å–ç§»åŠ¨çš„ä½ç§»é‡
+        //»ñÈ¡ÒÆ¶¯µÄÎ»ÒÆÁ¿
         point = e->globalPos()-frameGeometry().topLeft();
     }
 }
 
-//é”®ç›˜å“åº”ç™»å½•
+//¼üÅÌÏìÓ¦µÇÂ¼
 void Sql::keyPressEvent(QKeyEvent *e)
 {
     int key = e->key();
@@ -74,7 +74,7 @@ void Sql::keyPressEvent(QKeyEvent *e)
     {
         if((ui->lineEdit->text())==NULL||(ui->passEdit->text())==NULL)
         {
-            QMessageBox::information(this,("æç¤º"),("ç”¨æˆ·åæˆ–è€…å¯†ç ä¸èƒ½ä¸ºç©ºï¼"));
+            QMessageBox::information(this,("ÌáÊ¾"),("ÓÃ»§Ãû»òÕßÃÜÂë²»ÄÜÎª¿Õ£¡"));
         }
         else
         {
@@ -99,7 +99,7 @@ void Sql::keyPressEvent(QKeyEvent *e)
                             &&str2==(query->value("password").toString()))
                     {
                         tt=0;
-                        int mes = QMessageBox::information(this,("æç¤º"),("ç™»å½•æˆåŠŸ!"));
+                        int mes = QMessageBox::information(this,("ÌáÊ¾"),("µÇÂ¼³É¹¦!"));
                         if(mes == QMessageBox::Ok)
                         {
                             widget = new MainWidget();
@@ -112,21 +112,21 @@ void Sql::keyPressEvent(QKeyEvent *e)
                 }
                 if(tt==1)
                 {
-                    QMessageBox::information(this,("æç¤º"),("ç”¨æˆ·åæˆ–è€…å¯†ç ä¸æ­£ç¡®!"));
+                    QMessageBox::information(this,("ÌáÊ¾"),("ÓÃ»§Ãû»òÕßÃÜÂë²»ÕıÈ·!"));
                 }
             }
         }
     }
 }
 
-//æ³¨å†Œæ–°è´¦å·
+//×¢²áĞÂÕËºÅ
 void Sql::on_pushButton_2_clicked()
 {
     this->close();
     user->show();
 }
 
-//ç™»å½•
+//µÇÂ¼
 void Sql::on_pushButton_clicked()
 {
 //    QString str11 = "'"+ui->lineEdit->text()+"'";
@@ -138,7 +138,7 @@ void Sql::on_pushButton_clicked()
 //    ui->tableView->setModel(model);
     if((ui->lineEdit->text())==NULL||(ui->passEdit->text())==NULL)
     {
-        QMessageBox::information(this,("æç¤º"),("ç”¨æˆ·åæˆ–è€…å¯†ç ä¸èƒ½ä¸ºç©ºï¼"));
+        QMessageBox::information(this,("ÌáÊ¾"),("ÓÃ»§Ãû»òÕßÃÜÂë²»ÄÜÎª¿Õ£¡"));
     }
     else
     {
@@ -162,7 +162,7 @@ void Sql::on_pushButton_clicked()
                         &&str2==(query->value("password").toString()))
                 {
                     tt=0;
-                    QMessageBox::information(this,("æç¤º"),("ç™»å½•æˆåŠŸ!"));
+                    QMessageBox::information(this,("ÌáÊ¾"),("µÇÂ¼³É¹¦!"));
 
                     widget = new MainWidget();
                     widget->show();
@@ -174,7 +174,7 @@ void Sql::on_pushButton_clicked()
             }
             if(tt==1)
             {
-                QMessageBox::information(this,("æç¤º"),("ç”¨æˆ·åæˆ–è€…å¯†ç ä¸æ­£ç¡®!"));
+                QMessageBox::information(this,("ÌáÊ¾"),("ÓÃ»§Ãû»òÕßÃÜÂë²»ÕıÈ·!"));
             }
         }
     }

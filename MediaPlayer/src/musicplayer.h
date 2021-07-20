@@ -2,28 +2,14 @@
 #define MUSICPLAYER_H
 
 #include <QWidget>
-#include <QMessageBox>
-#include <QMediaPlayer>
-#include <QMovie>
-#include <QFileDialog>
-#include <QFile>
-#include <QFileInfo>
-#include <QPainter>
-#include <QTimer>
-#include <QMediaPlaylist>
-#include <QStringListIterator>
-#include <QStandardItemModel>
-#include <QDesktopWidget>
-#include <QListWidget>
-#include <QFileInfo>
-#include <QLineEdit>
-#include <QWebEngineView>
-#include "customslider.h"
-#include "start.h"
+#include <QSharedPointer>
+#include "ui_musicplayer.h"
 
-namespace Ui {
-class musicplayer;
-}
+class QMediaPlayer;
+class QMediaPlaylist;
+class QStandardItemModel;
+class VSliderWidget;
+class LrcWidget;
 
 class MusicPlayer : public QWidget
 {
@@ -34,65 +20,49 @@ public:
     ~MusicPlayer();
 
 private slots:
-    void on_flont_clicked();
-    void on_open_clicked();
-    void on_play_clicked();
-    void slider_volume_changed();
-    void slider_progress_clicked();
-    void slider_progress_moved();
-    void slider_progress_released();
-    void onTimerOut();
-    void myPlayerSlot(QModelIndex index);
-    void on_List_clicked();
-    void on_last_clicked();
-    void on_next_clicked();
-    void on_volum_clicked();
-    void slotDurationChanged(qint64 duration);
-    void slotPositionChanged(qint64 position);
-    void on_lrc_clicked();
-    void on_comboBox_activated(const QString name);
-    void find();
-    void findClick();
-    void nofindClick();
-    void on_find_clicked();
-    void on_find_2_clicked();
-
-signals:
-    void mySignal();
-
-protected:
-    void paintEvent(QPaintEvent *);
+	void sltMaxOrNormal();
+	void sltSliderProgressClicked();
+	void sltSliderProgressMoved();
+	void sltSliderProgressReleased();
+	void sltMusicPlayOrPause();
+	void sltNextMusicPlay();
+	void sltPrevMusicPlay();
+	void sltOpenLocalMusicList();
+	void sltPlayListClicked(QModelIndex index);
+	void sltTimerOut();
+	void sltDurationChanged(qint64 duration);
+	void sltPositionChanged(qint64 position);
+	void sltSoundVoiceValue(int value);
+	void sltShowVolumeSlider();
+	void sltSetPlayCycle();
+	void sltShowLrcModel();
 
 private:
-    Ui::musicplayer *ui;
-    int play_state=0;//æ’­æ”¾çŠ¶æ€
-    int lrcStatus; //æ­Œè¯çŠ¶æ€
-    int findStatus=0; //æŸ¥æ‰¾çŠ¶æ€
-    int mvStatus=0; //mvæ’­æ”¾çŠ¶æ€
-    int liveStatus=0;//åœ¨çº¿çŠ¶æ€
-    QDialog *findDia; //æŸ¥æ‰¾æ¡†
-    QDialog *lrcDia;//æ­Œè¯æ¡†
-    QPushButton *bu,*bu2,*bu3,*bu4;
-    QPushButton *bu1,*bu12,*bu13,*bu14;
-    QLineEdit *lineEdit,*lineEdit2,*lineEdit3,*lineEdit4;
-    QLabel *lrclabel; //æ­Œè¯label
-    QString tmpPath;//è®°å½•å½“å‰æ·»åŠ æ­Œæ›²çš„è·¯å¾„
-    QString ss="";//è®°å½•å½“å‰ç›®å½•
-    QStringList list;
-    QString file_name="abc";
-    QFileInfo fi;
-    QListWidget* listWidget;
-    QListWidgetItem* lst1;
-    CustomSlider * slider_volume;//éŸ³é‡æ§åˆ¶slider
-    bool state_slider_volume = false;//éŸ³é‡çŠ¶æ€
-    QStringList path;
-    QStandardItemModel *songList;
-    QMediaPlaylist *playList;
-    QMediaPlayer *player;
-    QTimer * timer;
-    QMovie *movie1;
-    Start *mv; //æ’­æ”¾mv
-    QWebEngineView *LiveView;//åœ¨çº¿æ’­æ”¾
+	virtual void mouseMoveEvent(QMouseEvent *event);
+	virtual void mousePressEvent(QMouseEvent *event);
+	virtual void mouseReleaseEvent(QMouseEvent *event);
+
+private:
+    Ui::musicplayer ui;
+	//´°¿ÚÒÆ¶¯ÊôĞÔÖµ
+	QPoint m_point;
+	volatile bool m_bMove = false;
+	//²¥·ÅÆ÷¶ÔÏó
+	QMediaPlayer *m_musicPlayer = nullptr;
+	//¸èÇúÁĞ±í
+	QMediaPlaylist *m_musicPlayList = nullptr;
+	//ÁĞ±íÄ£¿é
+	QStandardItemModel *m_listItemModel = nullptr;
+	//ËùÔÚÄ¿Â¼
+	QString m_filePath;
+	//¶¨Ê±Æ÷¹¤×÷
+	QTimer *m_progressTimer;
+	//¸èÇúÊ±¼ä×Ö·û´®
+	QString m_musicTime;
+	//ÉùÒô½ø¶ÈÌõ
+	VSliderWidget *m_volumeSlider = nullptr;
+	//¸è´ÊÄ£¿é
+	QSharedPointer<LrcWidget> m_lrcWidget = nullptr;
 };
 
 #endif // MUSICPLAYER_H

@@ -27,11 +27,11 @@ public:
     explicit MediaPlayer(QWidget *parent = 0);
     ~MediaPlayer();
     QPoint point;
-    //æ’­æ”¾è§†é¢‘çš„å…¨å±€å˜é‡
+    //²¥·ÅÊÓÆµµÄÈ«¾Ö±äÁ¿
     QVBoxLayout* layout_video;
     QMediaPlayer* player;
     QVideoWidget* vWidget;
-    //åˆ‡æ¢è§†é¢‘æ ‡å¿—ä½
+    //ÇĞ»»ÊÓÆµ±êÖ¾Î»
     static int play_flag;
 
     bool status = false;
@@ -61,8 +61,8 @@ protected:
 
 private:
     Ui::MediaPlayer *ui;
-    int liveStatus=0;//åœ¨çº¿çŠ¶æ€
-    QWebEngineView *LiveView;//åœ¨çº¿æ’­æ”¾
+    int liveStatus=0;//ÔÚÏß×´Ì¬
+    QWebEngineView *LiveView;//ÔÚÏß²¥·Å
 };
 
 #endif // MEDIAPLAYER_H

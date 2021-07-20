@@ -8,18 +8,18 @@ Start::Start(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //éšè—è¾¹æ¡†
+    //Òş²Ø±ß¿ò
     this->setWindowFlags(Qt::FramelessWindowHint);
 
-    //è®¾ç½®çª—å£ä½ç½®ï¼Œå¤§å°
+    //ÉèÖÃ´°¿ÚÎ»ÖÃ£¬´óĞ¡
     this->setGeometry(50,50,800,600);
 
-    //è®¾ç½®çª—å£å›¾æ ‡
+    //ÉèÖÃ´°¿ÚÍ¼±ê
     QIcon icon;
     icon.addFile(QStringLiteral(":/new/image/new.ico"), QSize(), QIcon::Normal, QIcon::Off);
     this->setWindowIcon(icon);
 
-    //åŠ è½½è§†é¢‘æ“ä½œ
+    //¼ÓÔØÊÓÆµ²Ù×÷
     Myplayer=new QMediaPlayer(this);
     video=new QVideoWidget(this);
     video->setAspectRatioMode(Qt::IgnoreAspectRatio);
@@ -40,27 +40,27 @@ Start::~Start()
 
 void Start::mouseMoveEvent(QMouseEvent *e)
 {
-    if(e->buttons() & Qt::LeftButton)//é¼ æ ‡å·¦å‡»æ‰æœ‰æ•ˆæœ
-        move(e->globalPos()-point);//ç§»åŠ¨çª—å£
+    if(e->buttons() & Qt::LeftButton)//Êó±ê×ó»÷²ÅÓĞĞ§¹û
+        move(e->globalPos()-point);//ÒÆ¶¯´°¿Ú
 }
 
 void Start::mousePressEvent(QMouseEvent *e)
 {
-    //é¼ æ ‡äº‹ä»¶ä¸­åŒ…å«â€œæŒ‰ä½çš„æ˜¯å·¦é”®â€
+    //Êó±êÊÂ¼şÖĞ°üº¬¡°°´×¡µÄÊÇ×ó¼ü¡±
     if(e->button()==Qt::LeftButton)
     {
-        //è·å–ç§»åŠ¨çš„ä½ç§»é‡
+        //»ñÈ¡ÒÆ¶¯µÄÎ»ÒÆÁ¿
         point = e->globalPos()-frameGeometry().topLeft();
     }
 }
 
-//é”®ç›˜å“åº”ç»“æŸå¼€åœºåŠ¨ç”»
+//¼üÅÌÏìÓ¦½áÊø¿ª³¡¶¯»­
 void Start::keyPressEvent(QKeyEvent *e)
 {
     int key = e->key();
     if(key==Qt::Key_Escape)
     {
-        int temp = QMessageBox::question(this,"æç¤º","ç¡®å®šç»“æŸMV?",
+        int temp = QMessageBox::question(this,"ÌáÊ¾","È·¶¨½áÊøMV?",
                                          QMessageBox::Yes,QMessageBox::No);
         if(temp==QMessageBox::Yes)
         {

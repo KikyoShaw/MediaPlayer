@@ -10,4 +10,26 @@
         <file>image/Foldercontact.ico</file>
         <file>image/kkk.gif</file>
     </qresource>
+    <qresource prefix="/musicPlayer">
+        <file>image/musicPlayer/ico_gb.png</file>
+        <file>image/musicPlayer/ico_max.png</file>
+        <file>image/musicPlayer/ico_min.png</file>
+        <file>image/musicPlayer/next.png</file>
+        <file>image/musicPlayer/pause.png</file>
+        <file>image/musicPlayer/play.png</file>
+        <file>image/musicPlayer/prev.png</file>
+        <file>image/musicPlayer/jingyin.png</file>
+        <file>image/musicPlayer/shengyin.png</file>
+        <file>image/musicPlayer/xunhuan.png</file>
+        <file>image/musicPlayer/ci.png</file>
+        <file>image/musicPlayer/danqu.png</file>
+        <file>image/musicPlayer/danquxunhuan.png</file>
+        <file>image/musicPlayer/suiji.png</file>
+        <file>image/musicPlayer/open_normal.png</file>
+        <file>image/musicPlayer/yinliang_bg.png</file>
+        <file>image/musicPlayer/yuan.png</file>
+    </qresource>
+    <qresource prefix="/qss">
+        <file>image/qss/whiteScrollbar.qss</file>
+    </qresource>
 </RCC>

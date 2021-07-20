@@ -26,7 +26,7 @@ private slots:
     void my_player();
 
 signals:
-    void MySig(); //è¿”å›ä¸Šä¸€çº§çš„ä¿¡å·
+    void MySig(); //·µ»ØÉÏÒ»¼¶µÄĞÅºÅ
 
 protected:
 	virtual void mouseMoveEvent(QMouseEvent *event);
@@ -35,16 +35,16 @@ protected:
 
 private:
     Ui::MainWidget ui;
-	//çª—å£ç§»åŠ¨å±æ€§å€¼
+	//´°¿ÚÒÆ¶¯ÊôĞÔÖµ
 	QPoint m_point;
 	volatile bool m_bMove = false;
-	//åŠ¨æ€èƒŒæ™¯
+	//¶¯Ì¬±³¾°
     QMovie *m_bgMovie = nullptr;
-	//èƒŒæ™¯éŸ³æ•ˆ
+	//±³¾°ÒôĞ§
     QMediaPlayer *m_bgPlayer = nullptr;
-	//è§†é¢‘æ’­æ”¾å™¨
+	//ÊÓÆµ²¥·ÅÆ÷
 	QSharedPointer<MediaPlayer> m_videoPlayer = nullptr;
-	//éŸ³ä¹æ’­æ”¾å™¨
+	//ÒôÀÖ²¥·ÅÆ÷
 	QSharedPointer <MusicPlayer> m_musicPlayer = nullptr; 
 };
 

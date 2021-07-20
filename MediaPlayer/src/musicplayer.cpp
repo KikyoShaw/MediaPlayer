@@ -1,310 +1,182 @@
 #include "musicplayer.h"
-#include "ui_musicplayer.h"
+#include <QMouseEvent>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
+#include <QStandardItemModel>
+#include <QFileDialog>
+#include <QTimer>
+#include <QScrollBar>
+#include "vsliderwidget.h"
+#include "LrcWidget.h"
 
-int MaxValue = 1000;//è®¾ç½®è¿›åº¦æ¡çš„æœ€å¤§å€¼
-int num;
+//ÉèÖÃ½ø¶ÈÌõµÄ×î´óÖµ
+#define MAXVALUE 1000
+//ÉèÖÃÑ­»·°´Å¥ÊôĞÔ
+constexpr char* Property_id = "id";
+//²¥·ÅË³Ğò
+enum E_PlatType
+{
+	E_SequentialPlay = 1,//Ë³Ğò²¥·Å
+	E_RandomPlay = 2,//Ëæ»ú²¥·Å
+	E_LoopPlay = 3, //ÁĞ±í²¥·Å
+	E_CurrentItemInLoopPlay = 4, //µ¥ÇúÑ­»·
+};
 
 MusicPlayer::MusicPlayer(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::musicplayer)
+    QWidget(parent), m_filePath(QString()), m_musicTime(QString())
 {
-    ui->setupUi(this);
+    ui.setupUi(this);
 
-    QIcon icon;
-    icon.addFile(QStringLiteral(":/new/image/MusicPlayer.ico"), QSize(), QIcon::Normal, QIcon::Off);
-    this->setWindowIcon(icon);
+	setWindowFlags(Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint);
+	setAttribute(Qt::WA_TranslucentBackground);
 
-    //è®¾ç½®åŠ¨æ€èƒŒæ™¯
-    movie1 = new QMovie;
-    movie1->setFileName(":/new/image/kkk.gif");
-    ui->textlabel->setMovie(movie1);
-    movie1->start();
-    ui->textlabel->setScaledContents(true);
+	//³õÊ¼»¯²¥·ÅÆ÷¶ÔÏó
+	m_musicPlayer = new QMediaPlayer(this);
+	//³õÊ¼»¯ÁĞ±í
+	m_musicPlayList = new QMediaPlaylist(this);
+	m_listItemModel = new QStandardItemModel(this);
+	//ÓÅ»¯²¥·ÅÁĞ±íÏÔÊ¾
+	QHeaderView *verticalHeader = ui.localList->verticalHeader();
+	verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+	verticalHeader->setDefaultSectionSize(60);
+	//ÓÅ»¯»¬¶¯Ìõ
+	QFile QSS1(":/qss/image/qss/whiteScrollbar.qss");
+	if (QSS1.open(QIODevice::ReadOnly)) {
+		QString strStyle = QSS1.readAll();
+		ui.localList->verticalScrollBar()->setStyleSheet(strStyle);
+	}
+	//Êı¾İ°ó¶¨
+	ui.localList->setSelectionMode(QAbstractItemView::SingleSelection);
+	ui.localList->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	ui.localList->setSelectionBehavior(QAbstractItemView::SelectRows);
+	connect(ui.localList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(sltPlayListClicked(QModelIndex)));
 
-    //åˆšè¿›å»ç¦ç”¨æŒ‰é’®
-    ui->volum->setEnabled(false);
-    ui->last->setEnabled(false);
-    ui->next->setEnabled(false);
-    ui->find_2->setEnabled(false);
-    ui->find->setEnabled(false);
-    ui->lrc->setEnabled(false);
-    ui->comboBox->setEnabled(false);
-    ui->play->setEnabled(false);
+	connect(ui.pushButton_min, &QPushButton::clicked, this, &MusicPlayer::showMinimized);
+	connect(ui.pushButton_close, &QPushButton::clicked, this, &MusicPlayer::close);
+	connect(ui.pushButton_max, &QPushButton::clicked, this, &MusicPlayer::sltMaxOrNormal);
 
-    //æ‰‹åŠ¨è®¾ç½®slider_volume åŒ…æ‹¬åˆå§‹åŒ– æ–¹å‘ ç¦ç”¨ï¼Œä»¥åŠæ§½å‡½æ•°
-    slider_volume = new CustomSlider(this);
-    slider_volume->setOrientation(Qt::Vertical);
-    slider_volume->setEnabled(false);
-    slider_volume->hide();
-    //ç”±äºä¸æ¶‰åŠåˆ°sliderå€¼çš„åˆ·æ–°ï¼Œå› æ­¤åªéœ€å¯¹moveå’Œè‡ªå®šä¹‰clickä¸¤ä¸ªä¿¡å·è¿›è¡Œå¤„ç†ï¼Œå¹¶ä¸”å¯ä»¥å…±ç”¨ä¸€ä¸ªæ§½å‡½æ•°
-    connect(slider_volume,&CustomSlider::costomSliderClicked,this,&MusicPlayer::slider_volume_changed);
-    connect(slider_volume,&CustomSlider::sliderMoved,this,&MusicPlayer::slider_volume_changed);
+	//½ûÓÃslider_progress£¬Á¬½ÓĞÅºÅ²Û(½ø¶ÈÌõ)
+	ui.slider_progress->setEnabled(false);
+	connect(ui.slider_progress,	&CustomSlider::costomSliderClicked,	this,	&MusicPlayer::sltSliderProgressClicked);
+	connect(ui.slider_progress,	&CustomSlider::sliderMoved,	this,	&MusicPlayer::sltSliderProgressMoved);
+	connect(ui.slider_progress,	&CustomSlider::sliderReleased,	this,	&MusicPlayer::sltSliderProgressReleased);
+	//²¥·Å¿Ø¼ş
+	connect(ui.pushButton_play, &QPushButton::clicked, this, &MusicPlayer::sltMusicPlayOrPause);
+	connect(ui.pushButton_next, &QPushButton::clicked, this, &MusicPlayer::sltNextMusicPlay);
+	connect(ui.pushButton_prev, &QPushButton::clicked, this, &MusicPlayer::sltPrevMusicPlay);
+	//±¾µØ¸èÇú
+	connect(ui.pushButton_local, &QPushButton::clicked, this, [=]() {
+		ui.stackedWidget->setCurrentWidget(ui.page_localList);
+	});
+	//µ¼Èë¸èÇú
+	connect(ui.pushButton_open, &QPushButton::clicked, this, &MusicPlayer::sltOpenLocalMusicList);
+	//½ø¶ÈÍ¬²½
+	connect(m_musicPlayer, SIGNAL(durationChanged(qint64)), this, SLOT(sltDurationChanged(qint64)));
+	connect(m_musicPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(sltPositionChanged(qint64)));
+	//²¥·ÅË³Ğò
+	ui.pushButton_cycle->setProperty(Property_id, E_SequentialPlay);
+	connect(ui.pushButton_cycle, &QPushButton::clicked, this, &MusicPlayer::sltSetPlayCycle);
 
-    //ç¦ç”¨slider_progressï¼Œè¿æ¥ä¿¡å·æ§½(è¿›åº¦æ¡)
-    ui->slider_progress->setEnabled(false);
-    connect(ui->slider_progress,&CustomSlider::costomSliderClicked,this,&MusicPlayer::slider_progress_clicked);
-    connect(ui->slider_progress,&CustomSlider::sliderMoved,this,&MusicPlayer::slider_progress_moved);
-    connect(ui->slider_progress,&CustomSlider::sliderReleased,this,&MusicPlayer::slider_progress_released);
+	//³õÊ¼»¯¶¨Ê±Æ÷
+	m_progressTimer = new QTimer(this);
+	m_progressTimer->setInterval(1000);
+	//½«timerÁ¬½ÓÖÁonTimerOut²Ûº¯Êı
+	connect(m_progressTimer, SIGNAL(timeout()), this, SLOT(sltTimerOut()));
 
-    //è®¾ç½®æ’­æ”¾å™¨
-    player = new QMediaPlayer;
+	//ÉùÒô½ø¶ÈÌõ³õÊ¼»¯
+	m_volumeSlider = new VSliderWidget(this);
+	m_volumeSlider->setVisible(false);
+	connect(m_volumeSlider, &VSliderWidget::sigValueChanged, this, &MusicPlayer::sltSoundVoiceValue);
+	connect(ui.pushButton_volum, &QPushButton::clicked, this, &MusicPlayer::sltShowVolumeSlider);
 
-    //è®¾ç½®å®šæ—¶å™¨
-    timer = new QTimer();
-    timer->setInterval(1000);
-    //å°†timerè¿æ¥è‡³onTimerOutæ§½å‡½æ•°
-    connect(timer, SIGNAL(timeout()), this, SLOT(onTimerOut()));
-
-    //åˆå§‹åŒ–
-    playList = new QMediaPlaylist;
-    songList = new QStandardItemModel;
-
-    //æ­Œè¯æ˜¾ç¤ºæ¨¡å—
-     QDesktopWidget* desktopWidget = QApplication::desktop();
-      //è·å–å¯ç”¨æ¡Œé¢å¤§å°
-    QRect deskRect = desktopWidget->availableGeometry();
-    lrcDia = new QDialog();
-    lrclabel = new QLabel(lrcDia);
-    lrcDia->setWindowFlags(Qt::FramelessWindowHint);  //æŠŠçª—å£è®¾ç½®æˆæ²¡æ¡†æ¶çš„
-    lrcDia->setAttribute(Qt::WA_TranslucentBackground, true);
-    lrcDia->setGeometry(deskRect.width()/2-286,deskRect.height()-160,572,100);
-    lrclabel->setGeometry(0,0,572,100);
-    lrcDia->setStyleSheet("background-color: rgba(255, 255, 255, 0);");
-    lrclabel->setStyleSheet("background-color: rgba(255, 255, 255, 0);color: rgb(30, 64, 255);");
-    lrclabel->setFont(QFont("åæ–‡å½©äº‘",32));
-    lrclabel->setAlignment(Qt::AlignCenter);
-    lrclabel->setText("æ¨æ¡ƒéŸ³ä¹  å€¾å¬ä¸–ç•Œçš„ç¾");
-    lrclabel->show();
-
-    connect(player,SIGNAL(durationChanged(qint64)),this,SLOT(slotDurationChanged(qint64)));
-    connect(player,SIGNAL(positionChanged(qint64)),this,SLOT(slotPositionChanged(qint64)));
-
-    //éšè—æ­Œå•
-    ui->sList->hide();
-    ui->textlabel->hide();
+	//¸è´ÊÄ£¿é³õÊ¼»¯
+	m_lrcWidget = QSharedPointer<LrcWidget>(new LrcWidget());
+	connect(ui.pushButton_lrc, &QPushButton::clicked, this, &MusicPlayer::sltShowLrcModel);
 }
 
 MusicPlayer::~MusicPlayer()
 {
-    delete ui;
-    delete player;
-    delete timer;
-    delete lrcDia;
-    delete lrclabel;
-    delete playList;
-    delete songList;
-    delete findDia;
-    delete LiveView;
 }
 
-/*
-void musicplayer::loadLink(const QUrl &url){
-    ui->webView->load(url);
-}
-*/
-
-void MusicPlayer::slotDurationChanged(qint64 duration){
-    int second = duration/60000;
-    int miao = duration%60000/1000;
-    if(miao<10&&miao>-0)
-     {
-        ui->AllTime->setText("0"+QString::number(second)+":"+"0"+QString::number(miao));
-     }
-    else
-        ui->AllTime->setText("0"+QString::number(second)+":"+QString::number(miao));
-}
-
-void MusicPlayer::slotPositionChanged(qint64 position){
-    int sec = position/60000;
-    int mia = position%60000/1000;
-
-    ui->label->setText( playList->currentMedia().canonicalUrl().fileName());
-
-    QFile file( ss +playList->currentMedia().canonicalUrl().fileName().split(".").front() + ".lrc");
-    //qDebug() << ss +playList->currentMedia().canonicalUrl().fileName().split(".").front() + ".lrc";
-     if (file.open(QIODevice::ReadOnly|QIODevice::Text)) {
-        QTextStream stream(&file);
-        QString line;
-         while ( !stream.atEnd()) {
-            line = stream.readLine();
-           // qDebug() << line;
-            if(line.mid(1,2).toInt()==(position/60000)&&(line.mid(4,2)).toInt()==(position%60000/1000))
-            {
-               lrclabel->setText(line.split("]").last());
-            }
-            file.close();
-     }
- }else{
-         lrclabel->setText("æœªæ‰¾åˆ°ç›¸åº”æ­Œè¯ï¼");
-     }
-
-    if(mia<10&&mia>-0)
-     {
-        ui->StartTime->setText("0"+QString::number(sec)+":"+"0"+QString::number(mia));
-     }
-    else
-        ui->StartTime->setText("0"+QString::number(sec)+":"+QString::number(mia));
-}
-
-//è¿”å›ä¸Šä¸€çº§
-void MusicPlayer::on_flont_clicked()
+void MusicPlayer::sltMaxOrNormal()
 {
-    player->stop();
-    this->close();
-    emit mySignal();
+	if (isMaximized())
+		showNormal();
+	else
+		showMaximized();
 }
 
-//ç½‘ç»œæ’­æ”¾
-void MusicPlayer::on_open_clicked()
+void MusicPlayer::sltSliderProgressClicked()
 {
-    if(liveStatus==0)
-    {
-        player->pause();
-        ui->play->setText("æ’­æ”¾");
-        //ç½‘ç»œæ’­æ”¾åˆå§‹åŒ–
-        LiveView = new QWebEngineView;
-        LiveView->setAttribute(Qt::WA_DeleteOnClose);
-        LiveView->load(QUrl("http://music.163.com"));
-        LiveView->resize(1024, 768);
-        LiveView->show();
-        liveStatus=1;
-    }else if(liveStatus==1)
-    {
-       // LiveView->reload();
-        LiveView->close();
-        player->stop();
-        liveStatus=0;
+	m_musicPlayer->setPosition(ui.slider_progress->value()*m_musicPlayer->duration() / MAXVALUE);
+}
+
+void MusicPlayer::sltSliderProgressMoved()
+{
+	//ÔİÊ±Í£Ö¹¼ÆÊ±Æ÷£¬ÔÚÓÃ»§ÍÏ¶¯¹ı³ÌÖĞ²»ĞŞ¸ÄsliderµÄÖµ
+    m_progressTimer->stop();
+    m_musicPlayer->setPosition(ui.slider_progress->value()*m_musicPlayer->duration() /  MAXVALUE);
+
+}
+
+void MusicPlayer::sltSliderProgressReleased()
+{
+	//ÓÃ»§ÊÍ·Å»¬¿éºó£¬ÖØÆô¶¨Ê±Æ÷
+	m_progressTimer->start();
+}
+
+void MusicPlayer::sltMusicPlayOrPause()
+{
+	auto isPlay = ui.pushButton_play->isChecked();
+	if (isPlay) {
+		m_musicPlayer->play();
+	}
+	else {
+		m_musicPlayer->pause();
+	}
+}
+
+void MusicPlayer::sltNextMusicPlay()
+{
+	if(0 != m_musicPlayList->currentIndex()){
+        m_musicPlayList->setCurrentIndex(m_musicPlayList->previousIndex());
+        m_musicPlayer->play();
     }
-
-}
-
-void MusicPlayer::paintEvent(QPaintEvent *)
-{
-    QPainter p(this);
-    p.drawPixmap(0,0,this->width(),this->height(),QPixmap(":/new/image/114.jpg"));
-}
-
-//æ’­æ”¾
-void MusicPlayer::on_play_clicked()
-{
-    if(play_state==0)
-    {
-        player->pause();
-        ui->play->setText("æ’­æ”¾");
-        play_state=1;
+    else{
+		m_musicPlayList->setCurrentIndex(m_musicPlayList->mediaCount() - 1);
+		m_musicPlayer->play();
     }
-    else
-    {
-        player->play();
-        ui->play->setText("æš‚åœ");
-        play_state=0;
-    }
-
 }
 
-//éŸ³é‡
-void MusicPlayer::on_volum_clicked()
+void MusicPlayer::sltPrevMusicPlay()
 {
-    //é€šè¿‡hide()å’Œshow()æ–¹æ³•ï¼Œå®ç°éŸ³é‡æ§åˆ¶Sliderçš„å”¤å‡ºå’Œæ”¶èµ·
-    qDebug()<<state_slider_volume;
-    if(state_slider_volume)
-    {
-        slider_volume->hide();
-    }
-    else
-    {
-        slider_volume->setValue(player->volume());
-        //è®¡ç®—ä½ç½®ï¼Œä½¿å…¶ä½äºéŸ³é‡æ§åˆ¶æŒ‰é’®çš„ä¸Šæ–¹
-
-        slider_volume->setGeometry(QRect(ui->volum->pos().rx()+0.5*ui->volum->width()-15,
-                                         ui->volum->y()-100 , 30, 100));
-        slider_volume->show();
-    }
-    state_slider_volume = !state_slider_volume;
+	if (1 != (m_musicPlayList->mediaCount() - m_musicPlayList->currentIndex())){
+		m_musicPlayList->setCurrentIndex(m_musicPlayList->nextIndex());
+		m_musicPlayer->play();
+	}
+	else{
+		m_musicPlayList->setCurrentIndex(0);
+		m_musicPlayer->play();
+	}
 }
 
-//éŸ³é‡æ§åˆ¶Sliderçš„æ§½å‡½æ•°
-void MusicPlayer::slider_volume_changed()
+void MusicPlayer::sltOpenLocalMusicList()
 {
-    player->setVolume(slider_volume->value());
-}
+	//ÏÈÍ£Ö¹²¥·ÅÆ÷×é¼ş
+	m_musicPlayer->stop();
+	m_progressTimer->stop();
+	//²¥·ÅÁĞ±íÄ£¿é
+	m_musicPlayList->clear();
+	//¸èµ¥Ä£¿é
+    m_listItemModel->clear();
+	m_listItemModel->setHorizontalHeaderItem(0, new QStandardItem(QStringLiteral("¸èÇúÁĞ±í")));
+	ui.localList->setModel(m_listItemModel);
+	ui.localList->setColumnWidth(0, ui.page_localList->width());
+	ui.localList->verticalHeader()->hide();
 
-//æ’­æ”¾è¿›åº¦æ§åˆ¶Sliderçš„æ§½å‡½æ•°
-void MusicPlayer::slider_progress_clicked()
-{
-    player->setPosition(ui->slider_progress->value()*player->duration()/MaxValue);
-}
-
-void MusicPlayer::slider_progress_moved()
-{
-    //æš‚æ—¶åœæ­¢è®¡æ—¶å™¨ï¼Œåœ¨ç”¨æˆ·æ‹–åŠ¨è¿‡ç¨‹ä¸­ä¸ä¿®æ”¹sliderçš„å€¼
-    timer->stop();
-    player->setPosition(ui->slider_progress->value()*player->duration()/MaxValue);
-}
-
-void MusicPlayer::slider_progress_released()
-{
-    //ç”¨æˆ·é‡Šæ”¾æ»‘å—åï¼Œé‡å¯å®šæ—¶å™¨
-    timer->start();
-}
-
-void MusicPlayer::onTimerOut()
-{
-    ui->slider_progress->setValue(player->position()*MaxValue/player->duration());
-}
-
-void MusicPlayer::myPlayerSlot(QModelIndex index)
-{
-    //å¯ç”¨sliderå¹¶è®¾ç½®èŒƒå›´
-    ui->slider_progress->setEnabled(true);
-    ui->slider_progress->setRange(0,MaxValue);
-    timer->start();
-    int m = index.row();
-    playList->setCurrentIndex(m);
-    player->play();
-
-    //å¯ç”¨æ’­æ”¾/æš‚åœæŒ‰é’®ï¼Œå¹¶å°†å…¶æ–‡æœ¬è®¾ç½®ä¸ºâ€œæš‚åœâ€
-    ui->play->setEnabled(true);
-    ui->play->setText("æš‚åœ");
-    play_state = 0;
-
-    //å¯ç”¨éŸ³é‡æ§åˆ¶slider
-    slider_volume->setEnabled(true);
-    slider_volume->setRange(0, 100);
-
-    //å¯ç”¨æŒ‰é’®
-    ui->volum->setEnabled(true);
-    ui->last->setEnabled(true);
-    ui->next->setEnabled(true);
-    ui->find_2->setEnabled(true);
-    ui->find->setEnabled(true);
-    ui->lrc->setEnabled(true);
-    ui->comboBox->setEnabled(true);
-    ui->play->setEnabled(true);
-
-}
-
-//æ˜¾ç¤ºæ­Œå•å¯¼å…¥æ­Œæ›²
-void MusicPlayer::on_List_clicked()
-{
-    //æ­Œå•æ¨¡å—
-    songList->clear();
-    songList->setHorizontalHeaderItem(0,new QStandardItem(QObject::tr("æ­Œæ›²åˆ—è¡¨")));
-    ui->sList->setModel(songList);
-    ui->sList->setColumnWidth(0,390);
-    ui->sList->verticalHeader()->hide();
-    ui->sList->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->sList->setSelectionBehavior(QAbstractItemView::SelectRows);
-    connect(ui->sList,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(myPlayerSlot(QModelIndex)));
-
-    //æ’­æ”¾åˆ—è¡¨æ¨¡å—
-    playList->clear();
-
-    timer->stop();
-    player->stop();
-    path = QFileDialog::getOpenFileNames(this,"é€‰æ‹©æ­Œæ›²",".","(*.mp3)");
+    auto path = QFileDialog::getOpenFileNames(this, QStringLiteral("Ñ¡Ôñ¸èÇú"), ".", "(*.mp3)");
     int i=0;
-    QString addSongs;
+    QString addSongs = QString();
     QListIterator<QString>mylist(path);
     while(mylist.hasNext())
     {
@@ -312,32 +184,26 @@ void MusicPlayer::on_List_clicked()
         QFileInfo file;
         file = QFileInfo(addSongs);
         QString fileName = file.fileName();
-        songList->setItem(i,0,new QStandardItem(fileName));
-        playList->addMedia(QUrl::fromLocalFile(addSongs));
+        m_listItemModel->setItem(i,0,new QStandardItem(fileName));
+		m_musicPlayList->addMedia(QUrl::fromLocalFile(addSongs));
         i++;
-        num++;
     }
-    playList->setPlaybackMode(QMediaPlaylist::Loop);
-    player->setPlaylist(playList);
-    ui->sList->show();
-    ui->textlabel->show();
-    QString PathString;
-    for(int j=0; j<path.size(); ++j)
-    {
-        PathString=QDir::toNativeSeparators(path.at(j)); //æŠŠæ–œæ è½¬åŒ–æˆåæ–œæ 
-        if(!PathString.isEmpty())
-        {
-            file_name=PathString.split("\\").last();//ç”¨æ–œæ åˆ†å¼€ï¼Œå–æœ€åä¸€ä¸ªåå­—
+	m_musicPlayList->setPlaybackMode(QMediaPlaylist::Loop);
+    m_musicPlayer->setPlaylist(m_musicPlayList);
+    QString PathString = QString();
+    for(int j = 0; j < path.size(); ++j){
+        PathString = QDir::toNativeSeparators(path.at(j)); //°ÑĞ±¸Ü×ª»¯³É·´Ğ±¸Ü
+        if(!PathString.isEmpty()){
+            QString file_name = PathString.split("\\").last();//ÓÃĞ±¸Ü·Ö¿ª£¬È¡×îºóÒ»¸öÃû×Ö
         }
     }
-    if(PathString.contains("\\"))
-    {
-      tmpPath = PathString.replace("\\","/",Qt::CaseInsensitive);
-      list = tmpPath.split("/");
-      for(int i = 0;;i++){
-          if(list.at(i)==tmpPath.split("/").last()){
+    if(PathString.contains("\\")) {
+      auto tmpPath = PathString.replace("\\","/",Qt::CaseInsensitive);
+      auto list = tmpPath.split("/");
+      for(int i = 0;i < list.size();i++){
+          if(list.value(i) == tmpPath.split("/").last()){
               for(int j = 0; j < i; j++){
-                  ss = ss + list.at(j) + "/";
+				  m_filePath = m_filePath + list.at(j) + "/";
                 }
                 return;
           }
@@ -345,144 +211,176 @@ void MusicPlayer::on_List_clicked()
     }
 }
 
-//ä¸Šä¸€æ›²
-void MusicPlayer::on_last_clicked()
+void MusicPlayer::sltPlayListClicked(QModelIndex index)
 {
-    if(playList->currentIndex()!=0)
-    {
-        playList->setCurrentIndex(playList->previousIndex());
-        player->play();
-    }
-    else
-    {
-        playList->setCurrentIndex(playList->mediaCount()-1);
-        player->play();
-    }
+	//ÆôÓÃslider²¢ÉèÖÃ·¶Î§
+    ui.slider_progress->setEnabled(true);
+    ui.slider_progress->setRange(0, MAXVALUE);
+	m_progressTimer->start();
+    m_musicPlayList->setCurrentIndex(index.row());
+    m_musicPlayer->play();
+
+	////ÔªÊı¾İµÄ½âÎöĞèÒªÊ±¼ä£¬ËùÒÔÕâÀïĞèÒªÑ­»·µÈ´ı£¨µ«Í¬Ê±ĞèÒª±£³ÖQtÊÂ¼ş´¦Àí»úÖÆÔÚÔËĞĞ£©
+	//while (!m_musicPlayer->isMetaDataAvailable()) {
+	//	QCoreApplication::processEvents();
+	//}
+	//QStringList list = m_musicPlayer->availableMetaData();//µ÷ÊÔÊ±²é¿´ÓĞÄÄĞ©ÔªÊı¾İ¿ÉÓÃ
+	//if (m_musicPlayer->isMetaDataAvailable()) {
+	//	//¸èÇúĞÅÏ¢
+	//	QString author = m_musicPlayer->metaData(QStringLiteral("Author")).toStringList().join(",");
+	//	QString title = m_musicPlayer->metaData(QStringLiteral("Title")).toString();
+	//	QString albumTitle = m_musicPlayer->metaData(QStringLiteral("AlbumTitle")).toString();
+	//	int audioBitRate = m_musicPlayer->metaData(QStringLiteral("AudioBitRate")).toInt();
+	//	qint64 duration = m_musicPlayer->duration();
+	//}
+
+    //ÆôÓÃ²¥·Å/ÔİÍ£°´Å¥£¬²¢½«ÆäÎÄ±¾ÉèÖÃÎª¡°ÔİÍ£¡±
+	ui.pushButton_play->setChecked(true);
+
+	//ÉèÖÃÉùÒô
+	m_volumeSlider->setVoiceValue(m_musicPlayer->volume());
 }
 
-//ä¸‹ä¸€æ›²
-void MusicPlayer::on_next_clicked()
+void MusicPlayer::sltTimerOut()
 {
-    if(playList->mediaCount()-playList->currentIndex()!=1)
-    {
-        playList->setCurrentIndex(playList->nextIndex());
-        player->play();
-    }
-    else
-    {
-        playList->setCurrentIndex(0);
-        player->play();
-    }
+	ui.slider_progress->setValue(m_musicPlayer->position()*MAXVALUE / m_musicPlayer->duration());
 }
 
-//æ­Œè¯æ˜¾ç¤º
-void MusicPlayer::on_lrc_clicked()
+void MusicPlayer::sltDurationChanged(qint64 duration)
 {
-    if(lrcStatus==0){
-        lrcDia->show();
-        lrcStatus=1;
-    }else{
-        lrcDia->close();
-        lrcStatus=0;
-    }
+	ui.label_name->setText(m_musicPlayList->currentMedia().canonicalUrl().fileName());
+	//×ÜÊ±¼ä
+	int sec_all = (m_musicPlayer->duration()) / 60000;
+	int minute_all = (m_musicPlayer->duration()) % 60000 / 1000;
+	if (minute_all < 10 && minute_all > -0){
+		m_musicTime = "0" + QString::number(sec_all) + ":" + "0" + QString::number(minute_all);
+	}
+	else if(minute_all >= 10){
+		m_musicTime = "0" + QString::number(sec_all) + ":" + QString::number(minute_all);
+	}
 }
 
-//æ’­æ”¾æ¨¡å¼
-void MusicPlayer::on_comboBox_activated(const QString name)
+void MusicPlayer::sltPositionChanged(qint64 position)
 {
-    if(name==tr("é¡ºåºæ’­æ”¾"))
-        {
-            playList->setPlaybackMode(QMediaPlaylist::Sequential);//é¡ºåºæ’­æ”¾
-        }
-    else if(name==tr("éšæœºæ’­æ”¾"))
-        {
-            playList->setPlaybackMode(QMediaPlaylist::Random); //éšæœºæ’­æ”¾
-        }
-    else if(name==tr("åˆ—è¡¨å¾ªç¯"))
-    {
-             playList->setPlaybackMode(QMediaPlaylist::Loop); //åˆ—è¡¨å¾ªç¯
-    }
-    else if(name==tr("å•æ›²å¾ªç¯"))
-    {
-            playList->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop); //å•æ›²å¾ªç¯
-    }
+	//µ±Ç°Ê±¼ä
+	int sec_now = position / 60000;
+    int minute_now = position % 60000 / 1000;
+	//¸è´ÊĞ£Ñé
+    QFile file(m_filePath + m_musicPlayer->currentMedia().canonicalUrl().fileName().split(".").front() + ".lrc");
+    //qDebug() << ss +playList->currentMedia().canonicalUrl().fileName().split(".").front() + ".lrc";
+	if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		QTextStream stream(&file);
+		QString line;
+		while (!stream.atEnd()) {
+			line = stream.readLine();
+			// qDebug() << line;
+			if (line.mid(1, 2).toInt() == (position / 60000) && (line.mid(4, 2)).toInt() == (position % 60000 / 1000)) {
+				m_lrcWidget->setLrc(line.split("]").last());
+			}
+			file.close();
+		}
+	}
+	 else{
+		m_lrcWidget->setLrc(QStringLiteral("ÔİÊ±Ã»ÓĞÕÒµ½¸è´Ê"));
+     }
+
+    if(minute_now < 10 && minute_now > -0)
+     {
+		auto nowTime = "0" + QString::number(sec_now) + ":" + "0" + QString::number(minute_now);
+        ui.label_volumNum->setText(QString("%1/%2").arg(nowTime).arg(m_musicTime));
+     }
+	else if(minute_now >= 10){
+		auto nowTime = "0" + QString::number(sec_now) + ":" + QString::number(minute_now);
+		ui.label_volumNum->setText(QString("%1/%2").arg(nowTime).arg(m_musicTime));
+	}
 }
 
-//æŸ¥æ‰¾(ç”¨æ¥æœç´¢æ­Œæ›²åˆ—è¡¨çš„æ­Œ)
-void MusicPlayer::on_find_clicked()
+void MusicPlayer::sltSoundVoiceValue(int value)
 {
-    if(findStatus==0){
-        find();
-        findStatus++;
-    }else{
-        if(findDia->isVisible()!=true){
-            find();
-        }
-    }
+	if (0 == value) {
+		ui.pushButton_volum->setStyleSheet("border-image: url(:/musicPlayer/image/musicPlayer/jingyin.png);");
+	}
+	else {
+		ui.pushButton_volum->setStyleSheet("border-image: url(:/musicPlayer/image/musicPlayer/shengyin.png);");
+	}
+	m_musicPlayer->setVolume(value);
 }
 
-void MusicPlayer::find()
+void MusicPlayer::sltShowVolumeSlider()
 {
-    findDia = new QDialog();
-    bu = new QPushButton("æŸ¥æ‰¾",findDia);
-    bu1 = new QPushButton("å–æ¶ˆ",findDia);
-    lineEdit = new QLineEdit("è¯·è¾“å…¥æ­Œæ›²å",findDia);
-
-    findDia->setGeometry(538,400,291,61);
-    bu->setGeometry(-6,30,151,31);
-    bu1->setGeometry(144,30,151,31);
-    lineEdit->setGeometry(0,0,291,31);
-    findDia->show();
-    lineEdit->show();
-    connect(bu,SIGNAL(clicked()),this,SLOT(findClick()));
-    connect(bu1,SIGNAL(clicked()),this,SLOT(nofindClick()));
+	int posX = ui.pushButton_volum->x() + ui.widget_bCenter->x() + ui.widget_left->width() - 4;
+	int posY = ui.pushButton_volum->y() + ui.widget_bottom->y() - m_volumeSlider->height() - 10;
+	m_volumeSlider->move(posX, posY);
+	auto isVisible = m_volumeSlider->isVisible();
+	m_volumeSlider->setVisible(!isVisible);
 }
 
-//æŸ¥æ‰¾åŠŸèƒ½å®ç°
-void MusicPlayer::findClick()
+void MusicPlayer::sltSetPlayCycle()
 {
-    int go = 0;
-    if(lineEdit->text()!="è¯·è¾“å…¥æ­Œæ›²å"){
-        for(int i=0 ; i < num ; i++){
-            if(lineEdit->text()==songList->item(i)->text().split(".").front()){
-                findDia->close();
-                go ++;
-                QMessageBox::information(this,"æç¤º","æ‚¨æŸ¥æ‰¾çš„æ­Œæ›²åœ¨æ­Œæ›²åˆ—è¡¨!");
-                return;
-                }
-            }
-                if(go==0)
-            {
-                QMessageBox::information(this,"æç¤º","æ²¡æœ‰æ‰¾åˆ°æ‚¨è¦æŸ¥æ‰¾çš„æ­Œæ›²,è¯·é‡è¯•!");
-                lineEdit->setText("è¯·è¾“å…¥æ­Œæ›²å!");
-                return;
-            }
-    }
+	auto playType = ui.pushButton_cycle->property(Property_id).toInt();
+	switch (playType)
+	{
+	case E_SequentialPlay: {
+		//µ±Ç°Ë³Ğò²¥·Å£¬ÇĞ»»µ½Ëæ»ú²¥·Å
+		ui.pushButton_cycle->setProperty(Property_id, E_RandomPlay);
+		m_musicPlayList->setPlaybackMode(QMediaPlaylist::Random);
+		ui.pushButton_cycle->setStyleSheet("border-image: url(:/musicPlayer/image/musicPlayer/suiji.png);");
+		break;
+	}
+	case E_RandomPlay: {
+		//µ±Ç°Ëæ»ú²¥·Å£¬ÇĞ»»µ½ÁĞ±íÑ­»·
+		ui.pushButton_cycle->setProperty(Property_id, E_LoopPlay);
+		m_musicPlayList->setPlaybackMode(QMediaPlaylist::Loop);
+		ui.pushButton_cycle->setStyleSheet("border-image: url(:/musicPlayer/image/musicPlayer/danquxunhuan.png);");
+		break;
+	}
+	case E_LoopPlay: {
+		//µ±Ç°ÁĞ±íÑ­»·²¥·Å£¬ÇĞ»»µ½µ¥ÇúÑ­»·
+		ui.pushButton_cycle->setProperty(Property_id, E_CurrentItemInLoopPlay);
+		m_musicPlayList->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+		ui.pushButton_cycle->setStyleSheet("border-image: url(:/musicPlayer/image/musicPlayer/danqu.png);");
+		break;
+	}
+	case E_CurrentItemInLoopPlay:{
+		//µ±Ç°µ¥ÇúÑ­»·²¥·Å£¬ÇĞ»»µ½Ë³Ğò²¥·Å
+		ui.pushButton_cycle->setProperty(Property_id, E_SequentialPlay);
+		m_musicPlayList->setPlaybackMode(QMediaPlaylist::Sequential);
+		ui.pushButton_cycle->setStyleSheet("border-image: url(:/musicPlayer/image/musicPlayer/xunhuan.png);");
+		break;
+	}
+	default:
+		break;
+	}
 }
 
-//å–æ¶ˆæŸ¥æ‰¾
-void MusicPlayer::nofindClick()
+void MusicPlayer::sltShowLrcModel()
 {
-    findDia->close();
+	auto isVisible = m_lrcWidget->isVisible();
+	m_lrcWidget->setVisible(!isVisible);
 }
 
-//æ’­æ”¾mv
-void MusicPlayer::on_find_2_clicked()
+void MusicPlayer::mouseMoveEvent(QMouseEvent * event)
 {
+	//ÅĞ¶Ï×ó¼üÊÇ·ñ±»°´ÏÂ£¬Ö»ÓĞ×ó¼ü°´ÏÂÁË£¬Æä·µ»ØÖµ¾ÍÊÇ1(true)
+	if ((event->buttons() & Qt::LeftButton) && m_bMove)
+	{
+		move(event->globalPos() - m_point);
+	}
+	QWidget::mouseMoveEvent(event);
+}
 
-    if(mvStatus==0)
-    {
-        player->pause();
-        ui->play->setText("æ’­æ”¾");
-        mv = new Start();
-        mv->setAttribute(Qt::WA_DeleteOnClose);
-        mv->show();
-        mvStatus=1;
-    }else if(mvStatus==1)
-    {
-        mv->Myplayer->stop();
-        mv->close();
-        player->play();
-        mvStatus=0;
-    }
+void MusicPlayer::mousePressEvent(QMouseEvent * event)
+{
+	//Êó±êÊÂ¼şÖĞ°üº¬¡°°´×¡µÄÊÇ×ó¼ü¡±
+	if ((event->button() == Qt::LeftButton) && (event->pos().y() < 56) && (event->pos().y() > 0))
+	{
+		m_bMove = true;
+		//»ñÈ¡ÒÆ¶¯µÄÎ»ÒÆÁ¿
+		m_point = event->globalPos() - frameGeometry().topLeft();
+	}
+}
+
+void MusicPlayer::mouseReleaseEvent(QMouseEvent * event)
+{
+	m_bMove = false;
 }

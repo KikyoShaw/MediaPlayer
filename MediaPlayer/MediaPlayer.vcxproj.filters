@@ -52,6 +52,15 @@
     <ClCompile Include="src\usersql.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\vsliderwidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LrcWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vmarqueelabel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\customslider.h">
@@ -75,6 +84,15 @@
     <QtMoc Include="src\usersql.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="src\vsliderwidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\LrcWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\vmarqueelabel.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="src\mainwidget.ui">
@@ -96,6 +114,12 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="src\usersql.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\vsliderwidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\LrcWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

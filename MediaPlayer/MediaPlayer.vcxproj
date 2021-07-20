@@ -31,12 +31,12 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
-    <QtInstall>Qt5.12.11_32bit</QtInstall>
+    <QtInstall>Qt5.12.11_msvc2017_32</QtInstall>
     <QtModules>core;gui;multimedia;multimediawidgets;network;sql;webenginewidgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="QtSettings">
-    <QtInstall>Qt5.12.11_32bit</QtInstall>
+    <QtInstall>Qt5.12.11_msvc2017_32</QtInstall>
     <QtModules>core;gui;multimedia;multimediawidgets;network;sql;webenginewidgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
@@ -96,12 +96,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\customslider.cpp" />
+    <ClCompile Include="src\LrcWidget.cpp" />
     <ClCompile Include="src\mainwidget.cpp" />
     <ClCompile Include="src\MediaPlayer.cpp" />
     <ClCompile Include="src\musicplayer.cpp" />
     <ClCompile Include="src\sql.cpp" />
     <ClCompile Include="src\start.cpp" />
     <ClCompile Include="src\usersql.cpp" />
+    <ClCompile Include="src\vmarqueelabel.cpp" />
+    <ClCompile Include="src\vsliderwidget.cpp" />
     <QtRcc Include="MediaPlayer.qrc" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -112,6 +115,7 @@
     <QtMoc Include="src\mainwidget.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="src\LrcWidget.ui" />
     <QtUic Include="src\mainwidget.ui" />
     <QtUic Include="src\MediaPlayer.ui" />
     <QtUic Include="src\musicplayer.ui" />
@@ -119,6 +123,7 @@
     <QtUic Include="src\sql.ui" />
     <QtUic Include="src\start.ui" />
     <QtUic Include="src\usersql.ui" />
+    <QtUic Include="src\vsliderwidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\MediaPlayer.h" />
@@ -134,6 +139,15 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\usersql.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\vsliderwidget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\LrcWidget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\vmarqueelabel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
