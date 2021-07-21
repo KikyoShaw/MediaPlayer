@@ -24,6 +24,7 @@ private slots:
     void on_exit_clicked();
     void on_help_clicked();
     void my_player();
+	void sltOpenWeb(const QString &text);
 
 signals:
     void MySig(); //返回上一级的信号
@@ -46,6 +47,8 @@ private:
 	QSharedPointer<MediaPlayer> m_videoPlayer = nullptr;
 	//音乐播放器
 	QSharedPointer <MusicPlayer> m_musicPlayer = nullptr; 
+	//更多
+	QLabel *m_blogLabel = nullptr;
 };
 
 #endif // MAINWIDGET_H

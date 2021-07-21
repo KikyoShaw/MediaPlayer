@@ -9,6 +9,8 @@
         <file>image/Player.ico</file>
         <file>image/Foldercontact.ico</file>
         <file>image/kkk.gif</file>
+        <file>image/mainwidget.gif</file>
+        <file>image/1.gif</file>
     </qresource>
     <qresource prefix="/musicPlayer">
         <file>image/musicPlayer/ico_gb.png</file>
@@ -31,5 +33,8 @@
     </qresource>
     <qresource prefix="/qss">
         <file>image/qss/whiteScrollbar.qss</file>
+    </qresource>
+    <qresource prefix="/music">
+        <file>Music/kikyo.mp3</file>
     </qresource>
 </RCC>

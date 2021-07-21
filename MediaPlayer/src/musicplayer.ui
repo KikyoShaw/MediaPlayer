@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1090</width>
+    <width>1080</width>
     <height>760</height>
    </rect>
   </property>
@@ -79,6 +79,23 @@
 	background: rgba(27,28,30,0.5);
 	border-bottom-left-radius: 6px;
 	border-top-left-radius: 6px;
+}
+
+QPushButton
+{
+	border:none;
+	background-color:transparent;
+	font-size: 16px;
+	font-family: 微软雅黑;
+	color: #01EEC3;
+}
+
+QPushButton:hover
+{
+	background-color: rgba(255, 255, 255, 0.2);
+	font-size: 16px;
+	font-family: 微软雅黑;
+	color: #01EEC3;
 }</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -98,6 +115,28 @@
           <number>0</number>
          </property>
          <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>48</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>48</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="text">
+            <string>首页</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="pushButton_local">
            <property name="minimumSize">
             <size>
@@ -115,22 +154,7 @@
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="styleSheet">
-            <string notr="true">#pushButton_local
-{
-	border:none;
-	background-color:transparent;
-	font-size: 16px;
-	font-family: 微软雅黑;
-	color: #01EEC3;
-}
-
-#pushButton_local:hover
-{
-	background-color: rgba(255, 255, 255, 0.2);
-	font-size: 16px;
-	font-family: 微软雅黑;
-	color: #01EEC3;
-}</string>
+            <string notr="true"/>
            </property>
            <property name="text">
             <string>本地歌曲</string>
@@ -403,7 +427,7 @@
                  <number>0</number>
                 </property>
                 <property name="leftMargin">
-                 <number>0</number>
+                 <number>10</number>
                 </property>
                 <property name="topMargin">
                  <number>0</number>
@@ -414,19 +438,6 @@
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item>
-                 <spacer name="horizontalSpacer_4">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>731</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
                 <item>
                  <widget class="QPushButton" name="pushButton_open">
                   <property name="minimumSize">
@@ -448,6 +459,19 @@
                    <string notr="true">border-image: url(:/musicPlayer/image/musicPlayer/open_normal.png);</string>
                   </property>
                  </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>731</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
                 </item>
                </layout>
               </widget>
@@ -502,34 +526,79 @@ QHeaderView
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="page_2"/>
+           <widget class="QWidget" name="page_web">
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QWebEngineView" name="webEngineView">
+               <property name="url">
+                <url>
+                 <string>about:blank</string>
+                </url>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </item>
-         <item alignment="Qt::AlignHCenter">
-          <widget class="CustomSlider" name="slider_progress">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
+         <item>
+          <widget class="QWidget" name="widget_progress" native="true">
            <property name="minimumSize">
             <size>
-             <width>860</width>
+             <width>0</width>
              <height>20</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>860</width>
+             <width>16777215</width>
              <height>20</height>
             </size>
            </property>
-           <property name="cursor">
-            <cursorShape>PointingHandCursor</cursorShape>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QSlider
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="CustomSlider" name="slider_progress">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QSlider
 {
     border-color: rgba(52,7,91,100%);
 }
@@ -565,13 +634,16 @@ QSlider::handle:horizontal
 	width:  10px; 
 	height: 10px; 
 } </string>
-           </property>
-           <property name="value">
-            <number>0</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
@@ -905,6 +977,11 @@ color: #01EEC3;
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QWebEngineView</class>
+   <extends>QWidget</extends>
+   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
+  </customwidget>
   <customwidget>
    <class>CustomSlider</class>
    <extends>QSlider</extends>

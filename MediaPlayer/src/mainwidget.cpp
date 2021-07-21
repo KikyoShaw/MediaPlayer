@@ -4,6 +4,8 @@
 #include <QMediaPlayer>
 #include "mediaplayer.h"
 #include "musicplayer.h"
+#include "gifProxyStyle.h"
+#include <QDesktopServices>
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent)
@@ -12,19 +14,38 @@ MainWidget::MainWidget(QWidget *parent) :
 
     //去除边框
     setWindowFlags(Qt::FramelessWindowHint);
+	setAttribute(Qt::WA_TranslucentBackground);
 
+	//设置gif所在的label类属性
+	auto size = ui.label->size();
+	ui.label->setStyle(new GifProxyStyle(size, 6));
     //设置动态背景
 	m_bgMovie = new QMovie(this);
-	m_bgMovie->setFileName(":/new/image/125.gif");
-    ui.label->setMovie(m_bgMovie);
+	m_bgMovie->setFileName(":/new/image/1.gif");
+	ui.label->setMovie(m_bgMovie);
 	m_bgMovie->start();
-    ui.label->setScaledContents(true);
+	//ui.label->setScaledContents(true);
 
     //设置背景音乐
 	m_bgPlayer = new QMediaPlayer(this);
-	m_bgPlayer->setMedia(QUrl::fromLocalFile("./star.mp3"));
+	m_bgPlayer->setMedia(QUrl::fromLocalFile("Music/kikyo.mp3"));
 	m_bgPlayer->setVolume(100);
 	m_bgPlayer->play();
+
+	//初始化更多文本
+	m_blogLabel = new QLabel(this);
+	if (m_blogLabel) {
+		m_blogLabel->setAlignment(Qt::AlignCenter);
+		m_blogLabel->setFixedSize(width(), 30);
+		m_blogLabel->move(0, (height() - m_blogLabel->height())/2 + 60);
+		m_blogLabel->setStyleSheet("font: 14px Microsoft YaHei;");
+		QString strText = QStringLiteral("CSDN: <a style='color:#01EEC3;text-decoration:none;'href = 'https://blog.csdn.net/qq_36651243'>%1</a>   GitHub: "
+			"<a style='color:#01EEC3;text-decoration:none;'href = 'https://github.com/KikyoShaw'>%1</a>").arg(QStringLiteral("点击进入"));
+		m_blogLabel->setText(strText);
+		//超链接查看web协议
+		connect(m_blogLabel, &QLabel::linkActivated, this, &MainWidget::sltOpenWeb);
+		m_blogLabel->setVisible(false);
+	}
 }
 
 MainWidget::~MainWidget()
@@ -67,15 +88,22 @@ void MainWidget::on_exit_clicked()
 //返回上一级
 void MainWidget::on_help_clicked()
 {
-	m_bgPlayer->stop();
-    close();
-    emit MySig();
+	if (m_blogLabel) {
+		auto isVisible = m_blogLabel->isVisible();
+		m_blogLabel->setVisible(!isVisible);
+	}
 }
 
 void MainWidget::my_player()
 {
 	m_bgPlayer->setVolume(100);
 	m_bgPlayer->play();
+}
+
+void MainWidget::sltOpenWeb(const QString & text)
+{
+	QUrl url = text;
+	QDesktopServices::openUrl(url);
 }
 
 void MainWidget::mouseMoveEvent(QMouseEvent * event)

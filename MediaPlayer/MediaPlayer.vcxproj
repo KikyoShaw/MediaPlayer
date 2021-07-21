@@ -96,6 +96,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\customslider.cpp" />
+    <ClCompile Include="src\gifProxyStyle.cpp" />
     <ClCompile Include="src\LrcWidget.cpp" />
     <ClCompile Include="src\mainwidget.cpp" />
     <ClCompile Include="src\MediaPlayer.cpp" />
@@ -148,6 +149,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\vmarqueelabel.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\gifProxyStyle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

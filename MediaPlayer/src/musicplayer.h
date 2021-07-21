@@ -19,6 +19,12 @@ public:
     explicit MusicPlayer(QWidget *parent = 0);
     ~MusicPlayer();
 
+private:
+	void initMusicPlayer();
+	void initLrcModel();
+	void initVolumeSlider();
+	void initWebModel();
+
 private slots:
 	void sltMaxOrNormal();
 	void sltSliderProgressClicked();

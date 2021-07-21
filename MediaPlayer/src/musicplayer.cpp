@@ -8,6 +8,7 @@
 #include <QScrollBar>
 #include "vsliderwidget.h"
 #include "LrcWidget.h"
+#include <QWebEngineSettings>
 
 //设置进度条的最大值
 #define MAXVALUE 1000
@@ -30,26 +31,8 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 	setWindowFlags(Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint);
 	setAttribute(Qt::WA_TranslucentBackground);
 
-	//初始化播放器对象
-	m_musicPlayer = new QMediaPlayer(this);
-	//初始化列表
-	m_musicPlayList = new QMediaPlaylist(this);
-	m_listItemModel = new QStandardItemModel(this);
-	//优化播放列表显示
-	QHeaderView *verticalHeader = ui.localList->verticalHeader();
-	verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-	verticalHeader->setDefaultSectionSize(60);
-	//优化滑动条
-	QFile QSS1(":/qss/image/qss/whiteScrollbar.qss");
-	if (QSS1.open(QIODevice::ReadOnly)) {
-		QString strStyle = QSS1.readAll();
-		ui.localList->verticalScrollBar()->setStyleSheet(strStyle);
-	}
-	//数据绑定
-	ui.localList->setSelectionMode(QAbstractItemView::SingleSelection);
-	ui.localList->setEditTriggers(QAbstractItemView::NoEditTriggers);
-	ui.localList->setSelectionBehavior(QAbstractItemView::SelectRows);
-	connect(ui.localList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(sltPlayListClicked(QModelIndex)));
+	//音乐播放模块
+	initMusicPlayer();
 
 	connect(ui.pushButton_min, &QPushButton::clicked, this, &MusicPlayer::showMinimized);
 	connect(ui.pushButton_close, &QPushButton::clicked, this, &MusicPlayer::close);
@@ -84,18 +67,76 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 	connect(m_progressTimer, SIGNAL(timeout()), this, SLOT(sltTimerOut()));
 
 	//声音进度条初始化
-	m_volumeSlider = new VSliderWidget(this);
-	m_volumeSlider->setVisible(false);
-	connect(m_volumeSlider, &VSliderWidget::sigValueChanged, this, &MusicPlayer::sltSoundVoiceValue);
-	connect(ui.pushButton_volum, &QPushButton::clicked, this, &MusicPlayer::sltShowVolumeSlider);
+	initVolumeSlider();
 
 	//歌词模块初始化
-	m_lrcWidget = QSharedPointer<LrcWidget>(new LrcWidget());
-	connect(ui.pushButton_lrc, &QPushButton::clicked, this, &MusicPlayer::sltShowLrcModel);
+	initLrcModel();
+
+	//web模块初始化
+	initWebModel();
 }
 
 MusicPlayer::~MusicPlayer()
 {
+}
+
+void MusicPlayer::initMusicPlayer()
+{
+	//初始化播放器对象
+	m_musicPlayer = new QMediaPlayer(this);
+	//初始化列表
+	m_musicPlayList = new QMediaPlaylist(this);
+	m_listItemModel = new QStandardItemModel(this);
+	//优化播放列表显示
+	QHeaderView *verticalHeader = ui.localList->verticalHeader();
+	verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+	verticalHeader->setDefaultSectionSize(60);
+	//优化滑动条
+	QFile QSS1(":/qss/image/qss/whiteScrollbar.qss");
+	if (QSS1.open(QIODevice::ReadOnly)) {
+		QString strStyle = QSS1.readAll();
+		ui.localList->verticalScrollBar()->setStyleSheet(strStyle);
+	}
+	//数据绑定
+	ui.localList->setSelectionMode(QAbstractItemView::SingleSelection);
+	ui.localList->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	ui.localList->setSelectionBehavior(QAbstractItemView::SelectRows);
+	connect(ui.localList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(sltPlayListClicked(QModelIndex)));
+}
+
+void MusicPlayer::initLrcModel()
+{
+	m_lrcWidget = QSharedPointer<LrcWidget>(new LrcWidget());
+	connect(ui.pushButton_lrc, &QPushButton::clicked, this, &MusicPlayer::sltShowLrcModel);
+}
+
+void MusicPlayer::initVolumeSlider()
+{
+	m_volumeSlider = new VSliderWidget(this);
+	m_volumeSlider->setVisible(false);
+	connect(m_volumeSlider, &VSliderWidget::sigValueChanged, this, &MusicPlayer::sltSoundVoiceValue);
+	connect(ui.pushButton_volum, &QPushButton::clicked, this, &MusicPlayer::sltShowVolumeSlider);
+}
+
+void MusicPlayer::initWebModel()
+{
+	ui.stackedWidget->setCurrentWidget(ui.page_web);
+	connect(ui.pushButton, &QPushButton::clicked, this, [=]() {ui.stackedWidget->setCurrentWidget(ui.page_web);});
+	//设置webEngine属性
+	//禁止右键菜单
+	ui.webEngineView->setContextMenuPolicy(Qt::NoContextMenu);
+	//设置页面透明
+	ui.webEngineView->page()->setBackgroundColor(Qt::transparent);
+	//隐藏滑动条
+	ui.webEngineView->page()->settings()->setAttribute(QWebEngineSettings::ShowScrollBars, false);
+	//写入本地html
+	//从html文件中读取内容后写入webview
+	QString htmlPath = "E:/shaw/test/MediaPlayer/MediaPlayer/web/main.html";
+	QFile file(htmlPath);
+	if (!file.exists()){
+		return;
+	}
+	ui.webEngineView->load(QUrl("file:///" + htmlPath));
 }
 
 void MusicPlayer::sltMaxOrNormal()
