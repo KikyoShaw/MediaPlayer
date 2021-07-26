@@ -2,7 +2,6 @@
 
 #include <QObject>
 #include <QPixmap>
-//#include "qtpromise\qpromise.h"
 #include "musicInfoModel.h"
 
 class MusicManager : public QObject
@@ -59,6 +58,8 @@ private:
 	QMap<QString, QString> m_musicLrcMap;
 	//Í¼Æ¬
 	QPixmap m_imagePixMap;
+	//ÏÂÔØÂ·¾¶
+	QString m_downLoadFilePath;
 
 private:
 	MusicManager(QObject *parent = Q_NULLPTR);

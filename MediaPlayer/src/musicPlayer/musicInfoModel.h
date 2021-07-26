@@ -15,6 +15,8 @@ struct MusicInfo
 	int musicDuration = 0; // 时间
 	QString hash; // hash
 	QString albumId;//album_id
+	QString path; //文件所在路径位置（不包含文件名）
+	QString url; //下载链接
 };
 Q_DECLARE_METATYPE(MusicInfo);
 

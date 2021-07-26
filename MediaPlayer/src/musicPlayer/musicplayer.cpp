@@ -37,7 +37,10 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 	initMusicPlayer();
 
 	connect(ui.pushButton_min, &QPushButton::clicked, this, &MusicPlayer::showMinimized);
-	connect(ui.pushButton_close, &QPushButton::clicked, this, &MusicPlayer::close);
+	//connect(ui.pushButton_close, &QPushButton::clicked, this, &MusicPlayer::close);
+	connect(ui.pushButton_close, &QPushButton::clicked, this, [=] {
+		exit(0);
+	});
 	connect(ui.pushButton_max, &QPushButton::clicked, this, &MusicPlayer::sltMaxOrNormal);
 
 	//禁用slider_progress，连接信号槽(进度条)
@@ -68,11 +71,16 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 	//网络播放模块
 	m_netWorkMusicPlay = new QNetworkAccessManager(this);
 	connect(m_netWorkMusicPlay, &QNetworkAccessManager::finished, this, &MusicPlayer::sltNetWorkMusicPlay, Qt::DirectConnection);
+	//网络下载模块
+	m_netWorkDownLoad = new QNetworkAccessManager(this);
+	connect(m_netWorkDownLoad, &QNetworkAccessManager::finished, this, &MusicPlayer::sltDownLoadByNetWork, Qt::DirectConnection);
 	//点击歌曲封面
 	connect(ui.label_image, &MusicImage::sigMouseClicked, this, [=]() {
 		ui.page_lrc->setMusicInfo();
 		ui.stackedWidget->setCurrentWidget(ui.page_lrc);
 	});
+	//下载接口
+	connect(ui.pushButton_download, &QPushButton::clicked, this, &MusicPlayer::sltDownLoadButtonClick);
 
 	//声音进度条初始化
 	initVolumeSlider();
@@ -195,6 +203,7 @@ void MusicPlayer::parseJsonSongInfo(const QString & json)
 					info.musicName = musicManager.getJsonData(valuedataObject, "song_name");
 					info.musicPlayer = musicManager.getJsonData(valuedataObject, "author_name");
 					info.musicAlbum = musicManager.getJsonData(valuedataObject, "album_name");
+					info.url = url;
 					musicManager.savePlayingMusicInfo(info);
 					//启用播放/暂停按钮，并将其文本设置为“暂停”
 					ui.pushButton_play->setChecked(true);
@@ -450,6 +459,36 @@ void MusicPlayer::sltNetWorkMusicPlay(QNetworkReply * reply)
 		QString result(bytes);  //转化为字符串
 		parseJsonSongInfo(result);
 	}
+}
+
+void MusicPlayer::sltDownLoadButtonClick()
+{
+	ui.pushButton_download->setEnabled(false);
+	QNetworkRequest request;
+	//设置请求数据
+	auto info = musicManager.getPlayingMusicInfo();
+	request.setUrl(QUrl(info.url));
+	request.setHeader(QNetworkRequest::UserAgentHeader, "RT-Thread ART");
+	m_netWorkDownLoad->get(request);
+}
+
+void MusicPlayer::sltDownLoadByNetWork(QNetworkReply * reply)
+{
+	//获取响应的信息，状态码为200表示正常
+	QVariant status_code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+	//无错误返回
+	if (reply->error() == QNetworkReply::NoError) {
+		QByteArray bytes = reply->readAll();  //获取字节
+		//下载路径（测试先固定路径,后续扩展）
+		auto info = musicManager.getPlayingMusicInfo();
+		//拼接
+		auto destFileName = info.musicName + ".mp3";
+		QFile file(destFileName);
+		file.open(QIODevice::WriteOnly);
+		file.write(bytes);
+		file.close();
+	}
+	ui.pushButton_download->setEnabled(true);
 }
 
 void MusicPlayer::mouseMoveEvent(QMouseEvent * event)

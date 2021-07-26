@@ -36,6 +36,8 @@ void MusicInfoWidget::setLrcInfo(int position)
 	{
 		QString key = iter.key();
 		if (key.mid(1, 2).toInt() == (position / 60000) && (key.mid(4, 2)).toInt() == (position % 60000 / 1000)) {
+			if (iter == beginIter)
+				clearUI();
 			auto lrc = iter.value();
 			//µ±Ç°¸è´Ê
 			ui.label_lrc->setText(lrc);
@@ -84,4 +86,14 @@ void MusicInfoWidget::setLrcInfo(int position)
 		}
 		iter++;
 	}
+}
+
+void MusicInfoWidget::clearUI()
+{
+	ui.label_n1->clear();
+	ui.label_n2->clear();
+	ui.label_n3->clear();
+	ui.label_l1->clear();
+	ui.label_l2->clear();
+	ui.label_l3->clear();
 }

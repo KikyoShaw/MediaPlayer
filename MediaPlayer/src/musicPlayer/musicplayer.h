@@ -47,6 +47,8 @@ private slots:
 	void sltSearchMusic();
 	void sltMouseDoubleClicked(int row);
 	void sltNetWorkMusicPlay(QNetworkReply *reply);
+	void sltDownLoadButtonClick();
+	void sltDownLoadByNetWork(QNetworkReply *reply);
 
 signals:
 	void sigReturnPanel();
@@ -75,6 +77,8 @@ private:
 	QSharedPointer<LrcWidget> m_lrcWidget = nullptr;
 	//网络歌曲播放请求
 	QNetworkAccessManager *m_netWorkMusicPlay = nullptr;
+	//下载请求
+	QNetworkAccessManager *m_netWorkDownLoad = nullptr;
 };
 
 #endif // MUSICPLAYER_H

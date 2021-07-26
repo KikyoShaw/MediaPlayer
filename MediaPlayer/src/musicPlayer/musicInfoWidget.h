@@ -16,6 +16,9 @@ public:
 	void setLrcInfo(int position);
 
 private:
+	void clearUI();
+
+private:
 	Ui::musicWidget ui;
 };
 
