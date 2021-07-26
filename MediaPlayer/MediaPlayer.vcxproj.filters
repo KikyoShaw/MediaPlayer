@@ -21,6 +21,9 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
+    <Filter Include="musicPlayer">
+      <UniqueIdentifier>{cc0a92b8-6565-4665-9de6-5654c494b9e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MediaPlayer.qrc">
@@ -40,9 +43,6 @@
     <ClCompile Include="src\MediaPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\musicplayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\sql.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -55,14 +55,35 @@
     <ClCompile Include="src\vsliderwidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\LrcWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\vmarqueelabel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gifProxyStyle.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\musicPlayer\LrcWidget.cpp">
+      <Filter>musicPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\musicPlayer\musicInfoDelegate.cpp">
+      <Filter>musicPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\musicPlayer\musicInfoModel.cpp">
+      <Filter>musicPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\musicPlayer\musicManager.cpp">
+      <Filter>musicPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\musicPlayer\musicplayer.cpp">
+      <Filter>musicPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\musicPlayer\searchMusicView.cpp">
+      <Filter>musicPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\musicPlayer\musicImage.cpp">
+      <Filter>musicPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\musicPlayer\musicInfoWidget.cpp">
+      <Filter>musicPlayer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,9 +94,6 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="src\MediaPlayer.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="src\musicplayer.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="src\sql.h">
@@ -90,11 +108,32 @@
     <QtMoc Include="src\vsliderwidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="src\LrcWidget.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="src\vmarqueelabel.h">
       <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\musicPlayer\LrcWidget.h">
+      <Filter>musicPlayer</Filter>
+    </QtMoc>
+    <QtMoc Include="src\musicPlayer\musicInfoDelegate.h">
+      <Filter>musicPlayer</Filter>
+    </QtMoc>
+    <QtMoc Include="src\musicPlayer\musicInfoModel.h">
+      <Filter>musicPlayer</Filter>
+    </QtMoc>
+    <QtMoc Include="src\musicPlayer\musicManager.h">
+      <Filter>musicPlayer</Filter>
+    </QtMoc>
+    <QtMoc Include="src\musicPlayer\musicplayer.h">
+      <Filter>musicPlayer</Filter>
+    </QtMoc>
+    <QtMoc Include="src\musicPlayer\searchMusicView.h">
+      <Filter>musicPlayer</Filter>
+    </QtMoc>
+    <QtMoc Include="src\musicPlayer\musicImage.h">
+      <Filter>musicPlayer</Filter>
+    </QtMoc>
+    <QtMoc Include="src\musicPlayer\musicInfoWidget.h">
+      <Filter>musicPlayer</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -102,9 +141,6 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="src\MediaPlayer.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="src\musicplayer.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="src\network.ui">
@@ -122,8 +158,17 @@
     <QtUic Include="src\vsliderwidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="src\LrcWidget.ui">
-      <Filter>Form Files</Filter>
+    <QtUic Include="src\musicPlayer\LrcWidget.ui">
+      <Filter>musicPlayer</Filter>
+    </QtUic>
+    <QtUic Include="src\musicPlayer\musicplayer.ui">
+      <Filter>musicPlayer</Filter>
+    </QtUic>
+    <QtUic Include="src\musicPlayer\searchMusicView.ui">
+      <Filter>musicPlayer</Filter>
+    </QtUic>
+    <QtUic Include="src\musicPlayer\musicInfoWidget.ui">
+      <Filter>musicPlayer</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>

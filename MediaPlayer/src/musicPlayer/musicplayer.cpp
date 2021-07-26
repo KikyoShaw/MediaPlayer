@@ -2,16 +2,18 @@
 #include <QMouseEvent>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
-#include <QStandardItemModel>
 #include <QFileDialog>
-#include <QTimer>
 #include <QScrollBar>
 #include "vsliderwidget.h"
 #include "LrcWidget.h"
 #include <QWebEngineSettings>
+#include "musicManager.h"
+#include "musicInfoDelegate.h"
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QNetworkReply>
 
-//设置进度条的最大值
-#define MAXVALUE 1000
 //设置循环按钮属性
 constexpr char* Property_id = "id";
 //播放顺序
@@ -39,9 +41,8 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 	connect(ui.pushButton_max, &QPushButton::clicked, this, &MusicPlayer::sltMaxOrNormal);
 
 	//禁用slider_progress，连接信号槽(进度条)
-	ui.slider_progress->setEnabled(false);
+	//ui.slider_progress->setEnabled(false);
 	connect(ui.slider_progress,	&CustomSlider::costomSliderClicked,	this,	&MusicPlayer::sltSliderProgressClicked);
-	connect(ui.slider_progress,	&CustomSlider::sliderMoved,	this,	&MusicPlayer::sltSliderProgressMoved);
 	connect(ui.slider_progress,	&CustomSlider::sliderReleased,	this,	&MusicPlayer::sltSliderProgressReleased);
 	//播放控件
 	connect(ui.pushButton_play, &QPushButton::clicked, this, &MusicPlayer::sltMusicPlayOrPause);
@@ -53,18 +54,25 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 	});
 	//导入歌曲
 	connect(ui.pushButton_open, &QPushButton::clicked, this, &MusicPlayer::sltOpenLocalMusicList);
-	//进度同步
-	connect(m_musicPlayer, SIGNAL(durationChanged(qint64)), this, SLOT(sltDurationChanged(qint64)));
-	connect(m_musicPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(sltPositionChanged(qint64)));
 	//播放顺序
 	ui.pushButton_cycle->setProperty(Property_id, E_SequentialPlay);
 	connect(ui.pushButton_cycle, &QPushButton::clicked, this, &MusicPlayer::sltSetPlayCycle);
-
-	//初始化定时器
-	m_progressTimer = new QTimer(this);
-	m_progressTimer->setInterval(1000);
-	//将timer连接至onTimerOut槽函数
-	connect(m_progressTimer, SIGNAL(timeout()), this, SLOT(sltTimerOut()));
+	//返回主界面
+	connect(ui.pushButton_return, &QPushButton::clicked, this, &MusicPlayer::sltReturnPanel);
+	//搜索
+	connect(ui.pushButton_search, &QPushButton::clicked, this, &MusicPlayer::sltSearchMusic);
+	//播放搜索列表里的歌
+	connect(&musicManager, &MusicManager::sigMouseDoubleClicked, this, &MusicPlayer::sltMouseDoubleClicked);
+	//播放本地的歌
+	connect(&musicManager, &MusicManager::sigMouseDoubleClicked_local, this, &MusicPlayer::sltPlayListClicked);
+	//网络播放模块
+	m_netWorkMusicPlay = new QNetworkAccessManager(this);
+	connect(m_netWorkMusicPlay, &QNetworkAccessManager::finished, this, &MusicPlayer::sltNetWorkMusicPlay, Qt::DirectConnection);
+	//点击歌曲封面
+	connect(ui.label_image, &MusicImage::sigMouseClicked, this, [=]() {
+		ui.page_lrc->setMusicInfo();
+		ui.stackedWidget->setCurrentWidget(ui.page_lrc);
+	});
 
 	//声音进度条初始化
 	initVolumeSlider();
@@ -86,22 +94,33 @@ void MusicPlayer::initMusicPlayer()
 	m_musicPlayer = new QMediaPlayer(this);
 	//初始化列表
 	m_musicPlayList = new QMediaPlaylist(this);
-	m_listItemModel = new QStandardItemModel(this);
-	//优化播放列表显示
-	QHeaderView *verticalHeader = ui.localList->verticalHeader();
-	verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-	verticalHeader->setDefaultSectionSize(60);
+	m_musicPlayList->setPlaybackMode(QMediaPlaylist::Sequential);
+	//m_musicPlayList->setPlaybackMode(QMediaPlaylist::Loop);
+	m_musicPlayer->setVolume(50);
+	m_musicPlayer->setPlaylist(m_musicPlayList);
+	//设置positionChanged信号发送频率，毫秒级别
+	m_musicPlayer->setNotifyInterval(500);
+	//进度同步
+	connect(m_musicPlayer, SIGNAL(durationChanged(qint64)), this, SLOT(sltDurationChanged(qint64)));
+	connect(m_musicPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(sltPositionChanged(qint64)));
 	//优化滑动条
 	QFile QSS1(":/qss/image/qss/whiteScrollbar.qss");
 	if (QSS1.open(QIODevice::ReadOnly)) {
 		QString strStyle = QSS1.readAll();
-		ui.localList->verticalScrollBar()->setStyleSheet(strStyle);
+		ui.listView->verticalScrollBar()->setStyleSheet(strStyle);
+	}
+	//列表样式
+	QFile QSS2(":/qss/image/qss/listViews.qss");
+	if (QSS2.open(QIODevice::ReadOnly)) {
+		QString strStyle = QSS2.readAll();
+		ui.listView->setStyleSheet(strStyle);
 	}
 	//数据绑定
-	ui.localList->setSelectionMode(QAbstractItemView::SingleSelection);
-	ui.localList->setEditTriggers(QAbstractItemView::NoEditTriggers);
-	ui.localList->setSelectionBehavior(QAbstractItemView::SelectRows);
-	connect(ui.localList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(sltPlayListClicked(QModelIndex)));
+	ui.listView->setModel(&musicManager.getLocalMusicInfoModel());
+	ui.listView->setSelectionMode(QAbstractItemView::SingleSelection);
+	ui.listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	ui.listView->setUpdatesEnabled(true);
+	ui.listView->setItemDelegate(new MusicInfoDelegate(E_Local));
 }
 
 void MusicPlayer::initLrcModel()
@@ -113,6 +132,7 @@ void MusicPlayer::initLrcModel()
 void MusicPlayer::initVolumeSlider()
 {
 	m_volumeSlider = new VSliderWidget(this);
+	m_volumeSlider->setVoiceValue(50);
 	m_volumeSlider->setVisible(false);
 	connect(m_volumeSlider, &VSliderWidget::sigValueChanged, this, &MusicPlayer::sltSoundVoiceValue);
 	connect(ui.pushButton_volum, &QPushButton::clicked, this, &MusicPlayer::sltShowVolumeSlider);
@@ -139,6 +159,60 @@ void MusicPlayer::initWebModel()
 	ui.webEngineView->load(QUrl("file:///" + htmlPath));
 }
 
+void MusicPlayer::checkLrcWidget(int position)
+{
+	auto lrc = musicManager.getLrcByTime(position);
+	if (!lrc.isEmpty()) {
+		m_lrcWidget->setLrc(lrc);
+	}
+}
+
+void MusicPlayer::parseJsonSongInfo(const QString & json)
+{
+	QByteArray byte_array;
+	QJsonParseError json_error;
+	QJsonDocument parse_doucment = QJsonDocument::fromJson(byte_array.append(json), &json_error);
+	if (parse_doucment.isNull()) {
+		return;
+	}
+	if (json_error.error == QJsonParseError::NoError){
+		if (parse_doucment.isObject()){
+			QJsonObject rootObj = parse_doucment.object();
+			if (rootObj.contains("data")){
+				QJsonValue valuedata = rootObj.value("data");
+				if (valuedata.isObject()){
+					QJsonObject valuedataObject = valuedata.toObject();
+					//播放
+					QString url = musicManager.getJsonData(valuedataObject, "play_url");
+					m_musicPlayList->addMedia(QUrl::fromLocalFile(url));
+					m_musicPlayList->setCurrentIndex(m_musicPlayList->mediaCount() - 1);
+					m_musicPlayer->play();
+					//音频名字显示
+					QString name = musicManager.getJsonData(valuedataObject, "audio_name");
+					ui.label_name->setText(name);
+					//歌名,歌手，专辑
+					MusicInfo info;
+					info.musicName = musicManager.getJsonData(valuedataObject, "song_name");
+					info.musicPlayer = musicManager.getJsonData(valuedataObject, "author_name");
+					info.musicAlbum = musicManager.getJsonData(valuedataObject, "album_name");
+					musicManager.savePlayingMusicInfo(info);
+					//启用播放/暂停按钮，并将其文本设置为“暂停”
+					ui.pushButton_play->setChecked(true);
+					//歌词获取
+					musicManager.getLrcJsonData(valuedataObject, "lyrics");
+					//图片显示
+					auto imageUrl = musicManager.getJsonData(valuedataObject, "img");
+					ui.label_image->requestImage(imageUrl);
+				}
+				else
+				{
+					qDebug() << "出错";
+				}
+			}
+		}
+	}
+}
+
 void MusicPlayer::sltMaxOrNormal()
 {
 	if (isMaximized())
@@ -149,21 +223,12 @@ void MusicPlayer::sltMaxOrNormal()
 
 void MusicPlayer::sltSliderProgressClicked()
 {
-	m_musicPlayer->setPosition(ui.slider_progress->value()*m_musicPlayer->duration() / MAXVALUE);
-}
-
-void MusicPlayer::sltSliderProgressMoved()
-{
-	//暂时停止计时器，在用户拖动过程中不修改slider的值
-    m_progressTimer->stop();
-    m_musicPlayer->setPosition(ui.slider_progress->value()*m_musicPlayer->duration() /  MAXVALUE);
-
+	m_musicPlayer->setPosition(ui.slider_progress->value());
 }
 
 void MusicPlayer::sltSliderProgressReleased()
 {
-	//用户释放滑块后，重启定时器
-	m_progressTimer->start();
+	m_musicPlayer->setPosition(ui.slider_progress->value());
 }
 
 void MusicPlayer::sltMusicPlayOrPause()
@@ -203,137 +268,81 @@ void MusicPlayer::sltPrevMusicPlay()
 
 void MusicPlayer::sltOpenLocalMusicList()
 {
-	//先停止播放器组件
-	m_musicPlayer->stop();
-	m_progressTimer->stop();
-	//播放列表模块
-	m_musicPlayList->clear();
-	//歌单模块
-    m_listItemModel->clear();
-	m_listItemModel->setHorizontalHeaderItem(0, new QStandardItem(QStringLiteral("歌曲列表")));
-	ui.localList->setModel(m_listItemModel);
-	ui.localList->setColumnWidth(0, ui.page_localList->width());
-	ui.localList->verticalHeader()->hide();
+	auto fileList = QFileDialog::getOpenFileNames(this,
+		QStringLiteral("选择音频文件"),
+		".",
+		QStringLiteral("音频文件(*.mp3 *.wav *.wma)mp3文件(*.mp3);;wav文件(*.wav);;wma文件(*.wma);;所有文件(*.*)"));
 
-    auto path = QFileDialog::getOpenFileNames(this, QStringLiteral("选择歌曲"), ".", "(*.mp3)");
-    int i=0;
-    QString addSongs = QString();
-    QListIterator<QString>mylist(path);
-    while(mylist.hasNext())
-    {
-        addSongs = mylist.next();
-        QFileInfo file;
-        file = QFileInfo(addSongs);
-        QString fileName = file.fileName();
-        m_listItemModel->setItem(i,0,new QStandardItem(fileName));
-		m_musicPlayList->addMedia(QUrl::fromLocalFile(addSongs));
-        i++;
-    }
-	m_musicPlayList->setPlaybackMode(QMediaPlaylist::Loop);
-    m_musicPlayer->setPlaylist(m_musicPlayList);
-    QString PathString = QString();
-    for(int j = 0; j < path.size(); ++j){
-        PathString = QDir::toNativeSeparators(path.at(j)); //把斜杠转化成反斜杠
-        if(!PathString.isEmpty()){
-            QString file_name = PathString.split("\\").last();//用斜杠分开，取最后一个名字
-        }
-    }
-    if(PathString.contains("\\")) {
-      auto tmpPath = PathString.replace("\\","/",Qt::CaseInsensitive);
-      auto list = tmpPath.split("/");
-      for(int i = 0;i < list.size();i++){
-          if(list.value(i) == tmpPath.split("/").last()){
-              for(int j = 0; j < i; j++){
-				  m_filePath = m_filePath + list.at(j) + "/";
-                }
-                return;
-          }
-        }
-    }
+	if (fileList.isEmpty()) return;
+	musicManager.getLocalMusicInfoModel().clear();
+	for (auto & each : fileList) {
+		QFileInfo fileInfo(each);
+		if (fileInfo.exists()) {
+			//添加到列表
+			m_musicPlayList->addMedia(QUrl::fromLocalFile(each));
+			MusicInfo info;
+			info.musicName = fileInfo.fileName();
+			m_filePath = each.replace(info.musicName, "");
+			musicManager.getLocalMusicInfoModel().addInfoToModel(info);
+		}
+	}
+	////先停止播放器组件
+	//m_musicPlayer->stop();
+	////播放列表模块
+	//m_musicPlayList->clear();
 }
 
-void MusicPlayer::sltPlayListClicked(QModelIndex index)
+void MusicPlayer::sltPlayListClicked(int row)
 {
-	//启用slider并设置范围
-    ui.slider_progress->setEnabled(true);
-    ui.slider_progress->setRange(0, MAXVALUE);
-	m_progressTimer->start();
-    m_musicPlayList->setCurrentIndex(index.row());
+    m_musicPlayList->setCurrentIndex(row);
     m_musicPlayer->play();
-
-	////元数据的解析需要时间，所以这里需要循环等待（但同时需要保持Qt事件处理机制在运行）
-	//while (!m_musicPlayer->isMetaDataAvailable()) {
-	//	QCoreApplication::processEvents();
-	//}
-	//QStringList list = m_musicPlayer->availableMetaData();//调试时查看有哪些元数据可用
-	//if (m_musicPlayer->isMetaDataAvailable()) {
-	//	//歌曲信息
-	//	QString author = m_musicPlayer->metaData(QStringLiteral("Author")).toStringList().join(",");
-	//	QString title = m_musicPlayer->metaData(QStringLiteral("Title")).toString();
-	//	QString albumTitle = m_musicPlayer->metaData(QStringLiteral("AlbumTitle")).toString();
-	//	int audioBitRate = m_musicPlayer->metaData(QStringLiteral("AudioBitRate")).toInt();
-	//	qint64 duration = m_musicPlayer->duration();
-	//}
 
     //启用播放/暂停按钮，并将其文本设置为“暂停”
 	ui.pushButton_play->setChecked(true);
-
-	//设置声音
-	m_volumeSlider->setVoiceValue(m_musicPlayer->volume());
-}
-
-void MusicPlayer::sltTimerOut()
-{
-	ui.slider_progress->setValue(m_musicPlayer->position()*MAXVALUE / m_musicPlayer->duration());
+	//歌名
+	auto name = m_musicPlayList->currentMedia().canonicalUrl().fileName();
+	ui.label_name->setText(name);
+	//歌词信息
+	QString path = m_filePath + name.split(".").front() + ".lrc";
+	musicManager.getLoaclLrcData(path);
 }
 
 void MusicPlayer::sltDurationChanged(qint64 duration)
 {
-	ui.label_name->setText(m_musicPlayList->currentMedia().canonicalUrl().fileName());
+	//设置进度条
+	ui.slider_progress->setMaximum(duration);
 	//总时间
-	int sec_all = (m_musicPlayer->duration()) / 60000;
-	int minute_all = (m_musicPlayer->duration()) % 60000 / 1000;
-	if (minute_all < 10 && minute_all > -0){
-		m_musicTime = "0" + QString::number(sec_all) + ":" + "0" + QString::number(minute_all);
+	int secs = duration / 1000;
+	int mins = secs / 60;
+	secs = secs % 60;
+	if (secs < 10 && secs > -0){
+		m_musicTime = "0" + QString::number(mins) + ":" + "0" + QString::number(secs);
 	}
-	else if(minute_all >= 10){
-		m_musicTime = "0" + QString::number(sec_all) + ":" + QString::number(minute_all);
+	else if(secs >= 10){
+		m_musicTime = "0" + QString::number(mins) + ":" + QString::number(secs);
 	}
 }
 
 void MusicPlayer::sltPositionChanged(qint64 position)
 {
+	if (ui.slider_progress->isSliderDown()) return;
+	ui.slider_progress->setSliderPosition(position);
 	//当前时间
-	int sec_now = position / 60000;
-    int minute_now = position % 60000 / 1000;
-	//歌词校验
-    QFile file(m_filePath + m_musicPlayer->currentMedia().canonicalUrl().fileName().split(".").front() + ".lrc");
-    //qDebug() << ss +playList->currentMedia().canonicalUrl().fileName().split(".").front() + ".lrc";
-	if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		QTextStream stream(&file);
-		QString line;
-		while (!stream.atEnd()) {
-			line = stream.readLine();
-			// qDebug() << line;
-			if (line.mid(1, 2).toInt() == (position / 60000) && (line.mid(4, 2)).toInt() == (position % 60000 / 1000)) {
-				m_lrcWidget->setLrc(line.split("]").last());
-			}
-			file.close();
-		}
-	}
-	 else{
-		m_lrcWidget->setLrc(QStringLiteral("暂时没有找到歌词"));
-     }
-
-    if(minute_now < 10 && minute_now > -0)
+	int secs = position / 1000;
+	int mins = secs / 60;
+	secs = secs % 60;
+    if(secs < 10 && secs > -0)
      {
-		auto nowTime = "0" + QString::number(sec_now) + ":" + "0" + QString::number(minute_now);
+		auto nowTime = "0" + QString::number(mins) + ":" + "0" + QString::number(secs);
         ui.label_volumNum->setText(QString("%1/%2").arg(nowTime).arg(m_musicTime));
      }
-	else if(minute_now >= 10){
-		auto nowTime = "0" + QString::number(sec_now) + ":" + QString::number(minute_now);
+	else if(secs >= 10){
+		auto nowTime = "0" + QString::number(mins) + ":" + QString::number(secs);
 		ui.label_volumNum->setText(QString("%1/%2").arg(nowTime).arg(m_musicTime));
 	}
+	//歌词校验
+	checkLrcWidget(position);
+	ui.page_lrc->setLrcInfo(position);
 }
 
 void MusicPlayer::sltSoundVoiceValue(int value)
@@ -398,6 +407,49 @@ void MusicPlayer::sltShowLrcModel()
 {
 	auto isVisible = m_lrcWidget->isVisible();
 	m_lrcWidget->setVisible(!isVisible);
+}
+
+void MusicPlayer::sltReturnPanel()
+{
+	if (m_musicPlayer->state() != QMediaPlayer::StoppedState) {
+		m_musicPlayer->stop();
+	}
+	emit sigReturnPanel();
+	close();
+}
+
+void MusicPlayer::sltSearchMusic()
+{
+	auto word = ui.lineEdit_search->text();
+	ui.page_search->searchMusic(word);
+	ui.stackedWidget->setCurrentWidget(ui.page_search);
+}
+
+void MusicPlayer::sltMouseDoubleClicked(int row)
+{
+	auto hash = musicManager.getMusicInfoModel().getHash(row);
+	auto albumId = musicManager.getMusicInfoModel().getAlbumId(row);
+	QString url = QString("http://www.kugou.com/yy/index.php?r=play/getdata"
+		"&hash=%1&album_id=%2&_=1497972864535").arg(hash).arg(albumId);
+	//设置请求数据
+	QNetworkRequest request;
+	request.setUrl(QUrl(url));
+	//不加头无法得到json，可能是为了防止机器爬取
+	request.setRawHeader("Cookie", "kg_mid=2333");
+	request.setHeader(QNetworkRequest::CookieHeader, 2333);
+	m_netWorkMusicPlay->get(request);
+}
+
+void MusicPlayer::sltNetWorkMusicPlay(QNetworkReply * reply)
+{
+	//获取响应的信息，状态码为200表示正常
+	QVariant status_code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+	//无错误返回
+	if (reply->error() == QNetworkReply::NoError){
+		QByteArray bytes = reply->readAll();  //获取字节
+		QString result(bytes);  //转化为字符串
+		parseJsonSongInfo(result);
+	}
 }
 
 void MusicPlayer::mouseMoveEvent(QMouseEvent * event)

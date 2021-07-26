@@ -7,9 +7,10 @@
 
 class QMediaPlayer;
 class QMediaPlaylist;
-class QStandardItemModel;
 class VSliderWidget;
 class LrcWidget;
+class QNetworkAccessManager;
+class QNetworkReply;
 
 class MusicPlayer : public QWidget
 {
@@ -24,24 +25,31 @@ private:
 	void initLrcModel();
 	void initVolumeSlider();
 	void initWebModel();
+	void checkLrcWidget(int index);
+	void parseJsonSongInfo(const QString& json);
 
 private slots:
 	void sltMaxOrNormal();
 	void sltSliderProgressClicked();
-	void sltSliderProgressMoved();
 	void sltSliderProgressReleased();
 	void sltMusicPlayOrPause();
 	void sltNextMusicPlay();
 	void sltPrevMusicPlay();
 	void sltOpenLocalMusicList();
-	void sltPlayListClicked(QModelIndex index);
-	void sltTimerOut();
+	void sltPlayListClicked(int row);
 	void sltDurationChanged(qint64 duration);
 	void sltPositionChanged(qint64 position);
 	void sltSoundVoiceValue(int value);
 	void sltShowVolumeSlider();
 	void sltSetPlayCycle();
 	void sltShowLrcModel();
+	void sltReturnPanel();
+	void sltSearchMusic();
+	void sltMouseDoubleClicked(int row);
+	void sltNetWorkMusicPlay(QNetworkReply *reply);
+
+signals:
+	void sigReturnPanel();
 
 private:
 	virtual void mouseMoveEvent(QMouseEvent *event);
@@ -57,18 +65,16 @@ private:
 	QMediaPlayer *m_musicPlayer = nullptr;
 	//歌曲列表
 	QMediaPlaylist *m_musicPlayList = nullptr;
-	//列表模块
-	QStandardItemModel *m_listItemModel = nullptr;
 	//所在目录
 	QString m_filePath;
-	//定时器工作
-	QTimer *m_progressTimer;
 	//歌曲时间字符串
 	QString m_musicTime;
 	//声音进度条
 	VSliderWidget *m_volumeSlider = nullptr;
 	//歌词模块
 	QSharedPointer<LrcWidget> m_lrcWidget = nullptr;
+	//网络歌曲播放请求
+	QNetworkAccessManager *m_netWorkMusicPlay = nullptr;
 };
 
 #endif // MUSICPLAYER_H

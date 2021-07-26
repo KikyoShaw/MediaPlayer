@@ -60,12 +60,12 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)MediaPlayer\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MediaPlayer\src;$(SolutionDir)MediaPlayer\src\musicPlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)MediaPlayer\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MediaPlayer\src;$(SolutionDir)MediaPlayer\src\musicPlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="Configuration">
@@ -97,10 +97,16 @@
   <ItemGroup>
     <ClCompile Include="src\customslider.cpp" />
     <ClCompile Include="src\gifProxyStyle.cpp" />
-    <ClCompile Include="src\LrcWidget.cpp" />
     <ClCompile Include="src\mainwidget.cpp" />
     <ClCompile Include="src\MediaPlayer.cpp" />
-    <ClCompile Include="src\musicplayer.cpp" />
+    <ClCompile Include="src\musicPlayer\LrcWidget.cpp" />
+    <ClCompile Include="src\musicPlayer\musicImage.cpp" />
+    <ClCompile Include="src\musicPlayer\musicInfoDelegate.cpp" />
+    <ClCompile Include="src\musicPlayer\musicInfoModel.cpp" />
+    <ClCompile Include="src\musicPlayer\musicInfoWidget.cpp" />
+    <ClCompile Include="src\musicPlayer\musicManager.cpp" />
+    <ClCompile Include="src\musicPlayer\musicplayer.cpp" />
+    <ClCompile Include="src\musicPlayer\searchMusicView.cpp" />
     <ClCompile Include="src\sql.cpp" />
     <ClCompile Include="src\start.cpp" />
     <ClCompile Include="src\usersql.cpp" />
@@ -116,10 +122,12 @@
     <QtMoc Include="src\mainwidget.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="src\LrcWidget.ui" />
     <QtUic Include="src\mainwidget.ui" />
     <QtUic Include="src\MediaPlayer.ui" />
-    <QtUic Include="src\musicplayer.ui" />
+    <QtUic Include="src\musicPlayer\LrcWidget.ui" />
+    <QtUic Include="src\musicPlayer\musicInfoWidget.ui" />
+    <QtUic Include="src\musicPlayer\musicplayer.ui" />
+    <QtUic Include="src\musicPlayer\searchMusicView.ui" />
     <QtUic Include="src\network.ui" />
     <QtUic Include="src\sql.ui" />
     <QtUic Include="src\start.ui" />
@@ -128,9 +136,6 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\MediaPlayer.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="src\musicplayer.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\sql.h" />
@@ -145,13 +150,18 @@
     <QtMoc Include="src\vsliderwidget.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\LrcWidget.h" />
-  </ItemGroup>
-  <ItemGroup>
     <QtMoc Include="src\vmarqueelabel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gifProxyStyle.h" />
+    <QtMoc Include="src\musicPlayer\musicInfoWidget.h" />
+    <QtMoc Include="src\musicPlayer\musicImage.h" />
+    <QtMoc Include="src\musicPlayer\searchMusicView.h" />
+    <QtMoc Include="src\musicPlayer\musicplayer.h" />
+    <QtMoc Include="src\musicPlayer\musicManager.h" />
+    <QtMoc Include="src\musicPlayer\musicInfoModel.h" />
+    <QtMoc Include="src\musicPlayer\musicInfoDelegate.h" />
+    <QtMoc Include="src\musicPlayer\LrcWidget.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

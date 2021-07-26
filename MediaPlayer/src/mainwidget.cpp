@@ -61,7 +61,9 @@ void MainWidget::on_vedio_clicked()
 		connect(m_videoPlayer.data(), SIGNAL(mySignal()), this, SLOT(my_player()));
 		m_videoPlayer->show();
 	}
-	m_bgPlayer->stop();
+	if (m_bgPlayer->state() != QMediaPlayer::StoppedState) {
+		m_bgPlayer->stop();
+	}
     close();
 }
 
@@ -70,18 +72,21 @@ void MainWidget::on_music_clicked()
 {
 	m_musicPlayer = QSharedPointer<MusicPlayer>(new MusicPlayer());
 	if (m_musicPlayer) {
-		connect(m_musicPlayer.data(), SIGNAL(mySignal()), this, SLOT(show()));
-		connect(m_musicPlayer.data(), SIGNAL(mySignal()), this, SLOT(my_player()));
+		connect(m_musicPlayer.data(), SIGNAL(sigReturnPanel()), this, SLOT(my_player()));
 		m_musicPlayer->show();
 	}
-	m_bgPlayer->stop();
+	if (m_bgPlayer->state() != QMediaPlayer::StoppedState) {
+		m_bgPlayer->stop();
+	}
     close();
 }
 
 //ÍË³ö
 void MainWidget::on_exit_clicked()
 {
-	m_bgPlayer->stop();
+	if (m_bgPlayer->state() != QMediaPlayer::StoppedState) {
+		m_bgPlayer->stop();
+	}
 	close();
 }
 
@@ -98,6 +103,7 @@ void MainWidget::my_player()
 {
 	m_bgPlayer->setVolume(100);
 	m_bgPlayer->play();
+	show();
 }
 
 void MainWidget::sltOpenWeb(const QString & text)

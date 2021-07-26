@@ -232,7 +232,7 @@ QSlider::handle:vertical
   <customwidget>
    <class>CustomSlider</class>
    <extends>QSlider</extends>
-   <header location="global">customslider.h</header>
+   <header>customslider.h</header>
   </customwidget>
  </customwidgets>
  <resources>

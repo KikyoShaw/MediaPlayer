@@ -1,0 +1,24 @@
+QListView
+{
+	border:none;
+	background: transparent;
+}
+
+QListView::item
+{
+	height:60px;
+}
+
+QListView::item:hover
+{
+    background-color: rgba(255,255,255,0.1);
+	border-radius: 4px;
+	margin:2 2 2 2;
+}
+
+QListView::item:selected 
+{
+	background-color: rgba(255,255,255,0.1);
+	border-radius: 4px;
+	margin:2 2 2 2;
+}

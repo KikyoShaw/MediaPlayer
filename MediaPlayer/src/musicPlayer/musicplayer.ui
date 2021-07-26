@@ -106,7 +106,7 @@ QPushButton:hover
           <number>0</number>
          </property>
          <property name="topMargin">
-          <number>56</number>
+          <number>0</number>
          </property>
          <property name="rightMargin">
           <number>0</number>
@@ -114,6 +114,60 @@ QPushButton:hover
          <property name="bottomMargin">
           <number>0</number>
          </property>
+         <item>
+          <widget class="QWidget" name="widget_logo" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>70</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>70</height>
+            </size>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_logo">
+              <property name="font">
+               <font>
+                <family>华文彩云</family>
+                <pointsize>22</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgb(255, 255, 255);</string>
+              </property>
+              <property name="text">
+               <string>离歌音乐</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
          <item>
           <widget class="QPushButton" name="pushButton">
            <property name="minimumSize">
@@ -158,6 +212,138 @@ QPushButton:hover
            </property>
            <property name="text">
             <string>本地歌曲</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_love">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>48</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>48</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="text">
+            <string>我喜欢</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_history">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>48</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>48</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="text">
+            <string>播放记录</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_hot">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>48</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>48</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="text">
+            <string>热门歌曲</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_player">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>48</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>48</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="text">
+            <string>歌手</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_listen">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>48</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>48</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="text">
+            <string>电台</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_mv">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>48</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>48</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="text">
+            <string>精选MV</string>
            </property>
           </widget>
          </item>
@@ -246,6 +432,87 @@ QPushButton:hover
              </spacer>
             </item>
             <item>
+             <widget class="QWidget" name="widget_seach" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>28</height>
+               </size>
+              </property>
+              <widget class="QLineEdit" name="lineEdit_search">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>200</width>
+                 <height>28</height>
+                </rect>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>200</width>
+                 <height>28</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>200</width>
+                 <height>28</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">#lineEdit_search
+{
+	font-size: 12px;
+	font-family: 微软雅黑;
+	color: rgba(255, 255, 255, 1);
+	background: rgba(255, 255, 255, 0.15);
+	border-radius: 14px;
+	padding-left:12px;
+	padding-right:24px;
+}</string>
+               </property>
+               <property name="placeholderText">
+                <string>周杰伦</string>
+               </property>
+              </widget>
+              <widget class="QPushButton" name="pushButton_search">
+               <property name="geometry">
+                <rect>
+                 <x>176</x>
+                 <y>6</y>
+                 <width>16</width>
+                 <height>16</height>
+                </rect>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>16</width>
+                 <height>16</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16</width>
+                 <height>16</height>
+                </size>
+               </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">border-image: url(:/musicPlayer/image/musicPlayer/yyjy_ssxl_icon.png);</string>
+               </property>
+              </widget>
+             </widget>
+            </item>
+            <item>
              <widget class="QWidget" name="widget_topRight" native="true">
               <property name="styleSheet">
                <string notr="true">#pushButton_min
@@ -299,6 +566,99 @@ QPushButton:hover
                <property name="bottomMargin">
                 <number>0</number>
                </property>
+               <item>
+                <spacer name="horizontalSpacer_5">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_return">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="toolTip">
+                  <string>返回主界面</string>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">border-image: url(:/musicPlayer/image/musicPlayer/ico_zkt.png);</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_style">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="toolTip">
+                  <string>换皮肤</string>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">#pushButton_style{
+border-image: url(:/musicPlayer/image/musicPlayer/pifu.png);
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_set">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="toolTip">
+                  <string>设置</string>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">border-image: url(:/musicPlayer/image/musicPlayer/icon_set.png);</string>
+                 </property>
+                </widget>
+               </item>
                <item>
                 <widget class="QPushButton" name="pushButton_min">
                  <property name="minimumSize">
@@ -477,49 +837,12 @@ QPushButton:hover
               </widget>
              </item>
              <item>
-              <widget class="QTableView" name="localList">
+              <widget class="QListView" name="listView">
                <property name="styleSheet">
-                <string notr="true">
-QTableView
-{
-	outline:0px;    /*去除item虚线框*/
-	border:none;
-	background-color:transparent;
-	font: 75 11pt &quot;Microsoft YaHei&quot;;
-	padding-left:10px;
-}
-
-QTableView::item
+                <string notr="true">#listView
 {
 	border:none;
-	background-color:transparent;
-	color: #FFFFFF;
-}
-
-QTableView::item:hover
-{
-    background-color: rgba(255,255,255,0.1);
-}
-
-QTableView::item::selected
-{
-	color: #01EEC3;
-}
-
-QHeaderView::section
-{
-	border:none;
-	background-color:transparent;
-	font: 75 9pt &quot;Microsoft YaHei&quot;;
-	color: #FFFFFF;
-}
-
-QHeaderView
-{
-	border:none;
-	background-color:transparent;
-	font: 75 9pt &quot;Microsoft YaHei&quot;;
-	color: #FFFFFF;
+	background: transparent;
 }</string>
                </property>
               </widget>
@@ -554,6 +877,8 @@ QHeaderView
              </item>
             </layout>
            </widget>
+           <widget class="SearchMusic" name="page_search"/>
+           <widget class="MusicInfoWidget" name="page_lrc"/>
           </widget>
          </item>
          <item>
@@ -714,6 +1039,25 @@ QSlider::handle:horizontal
                 <number>0</number>
                </property>
                <item>
+                <widget class="MusicImage" name="label_image">
+                 <property name="minimumSize">
+                  <size>
+                   <width>50</width>
+                   <height>50</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>50</width>
+                   <height>50</height>
+                  </size>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="VMarqueeLabel" name="label_name">
                  <property name="styleSheet">
                   <string notr="true">#label_name
@@ -820,17 +1164,17 @@ color: #01EEC3;
                  <property name="styleSheet">
                   <string notr="true">#pushButton_play
 {
-	border-image: url(:/musicPlayer/image/musicPlayer/pause.png);
+	border-image: url(:/musicPlayer/image/musicPlayer/play.png);
 }
 
 #pushButton_play:unchecked
 {  
-	border-image: url(:/musicPlayer/image/musicPlayer/pause.png);
+	border-image: url(:/musicPlayer/image/musicPlayer/play.png);
 }  
   
 #pushButton_play:checked
 { 
-	border-image: url(:/musicPlayer/image/musicPlayer/play.png);
+	border-image: url(:/musicPlayer/image/musicPlayer/pause.png);
 }</string>
                  </property>
                  <property name="checkable">
@@ -941,17 +1285,39 @@ color: #01EEC3;
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_lrc">
+                <widget class="QPushButton" name="pushButton_download">
                  <property name="minimumSize">
                   <size>
-                   <width>22</width>
-                   <height>22</height>
+                   <width>20</width>
+                   <height>20</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>22</width>
-                   <height>22</height>
+                   <width>20</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="toolTip">
+                  <string>下载</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_lrc">
+                 <property name="minimumSize">
+                  <size>
+                   <width>20</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>20</width>
+                   <height>20</height>
                   </size>
                  </property>
                  <property name="cursor">
@@ -990,11 +1356,28 @@ color: #01EEC3;
   <customwidget>
    <class>VMarqueeLabel</class>
    <extends>QLabel</extends>
-   <header location="global">vmarqueelabel.h</header>
+   <header>vmarqueelabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SearchMusic</class>
+   <extends>QWidget</extends>
+   <header>searchMusicView.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MusicImage</class>
+   <extends>QLabel</extends>
+   <header>musicImage.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MusicInfoWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">musicInfoWidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../MediaPlayer.qrc"/>
+  <include location="../../MediaPlayer.qrc"/>
  </resources>
  <connections/>
 </ui>
