@@ -13,6 +13,7 @@ struct MusicInfo
 	QString musicPlayer; //歌手
 	QString musicAlbum; // 专辑
 	int musicDuration = 0; // 时间
+	QString mvHash; //mv hash
 	QString hash; // hash
 	QString albumId;//album_id
 	QString path; //文件所在路径位置（不包含文件名）

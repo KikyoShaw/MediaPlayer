@@ -143,7 +143,8 @@ void MediaPlayer::on_pushButton_open_file_clicked()
     }
 
     //设置播放器
-    player->setMedia(QUrl::fromLocalFile(filename));
+   // player->setMedia(QUrl::fromLocalFile(filename));
+	player->setMedia(QUrl::fromLocalFile("http://fs.mv.web.kugou.com/202107270955/5018e19c140d5adf019a877ae12f31b2/G031/M08/12/1D/_5MEAFXd0KSAZMLpARSo2wZan7k579.mp4"));
     //play_state为true表示播放，false表示暂停
     play_state = true;
     //启用播放/暂停按钮，并将其文本设置为“暂停”

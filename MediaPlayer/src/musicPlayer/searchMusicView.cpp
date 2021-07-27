@@ -102,6 +102,7 @@ void SearchMusic::parseJson(const QString & json)
 								info.musicName = musicManager.getJsonData(object, "songname_original");
 								info.musicPlayer = musicManager.getJsonData(object, "singername");
 								info.musicAlbum = musicManager.getJsonData(object, "album_name");
+								info.mvHash = musicManager.getJsonData(object, "mvhash");
 								info.hash = musicManager.getJsonData(object, "hash");
 								info.albumId = musicManager.getJsonData(object, "album_id");
 								if (object.contains("duration")) {

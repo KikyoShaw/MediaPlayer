@@ -1128,6 +1128,31 @@ color: #01EEC3;
                       </widget>
                      </item>
                      <item>
+                      <widget class="QPushButton" name="pushButton_lookMv">
+                       <property name="minimumSize">
+                        <size>
+                         <width>20</width>
+                         <height>20</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>20</width>
+                         <height>20</height>
+                        </size>
+                       </property>
+                       <property name="cursor">
+                        <cursorShape>PointingHandCursor</cursorShape>
+                       </property>
+                       <property name="toolTip">
+                        <string>查看mv</string>
+                       </property>
+                       <property name="text">
+                        <string>MV</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
                       <spacer name="horizontalSpacer_6">
                        <property name="orientation">
                         <enum>Qt::Horizontal</enum>

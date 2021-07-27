@@ -37,10 +37,10 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 	initMusicPlayer();
 
 	connect(ui.pushButton_min, &QPushButton::clicked, this, &MusicPlayer::showMinimized);
-	//connect(ui.pushButton_close, &QPushButton::clicked, this, &MusicPlayer::close);
-	connect(ui.pushButton_close, &QPushButton::clicked, this, [=] {
+	connect(ui.pushButton_close, &QPushButton::clicked, this, &MusicPlayer::close);
+	/*connect(ui.pushButton_close, &QPushButton::clicked, this, [=] {
 		exit(0);
-	});
+	});*/
 	connect(ui.pushButton_max, &QPushButton::clicked, this, &MusicPlayer::sltMaxOrNormal);
 
 	//禁用slider_progress，连接信号槽(进度条)
@@ -321,34 +321,17 @@ void MusicPlayer::sltDurationChanged(qint64 duration)
 	//设置进度条
 	ui.slider_progress->setMaximum(duration);
 	//总时间
-	int secs = duration / 1000;
-	int mins = secs / 60;
-	secs = secs % 60;
-	if (secs < 10 && secs > -0){
-		m_musicTime = "0" + QString::number(mins) + ":" + "0" + QString::number(secs);
-	}
-	else if(secs >= 10){
-		m_musicTime = "0" + QString::number(mins) + ":" + QString::number(secs);
-	}
+	QTime allTime(0, duration / 60000, qRound((duration % 60000) / 1000.0));
+	m_musicTime = allTime.toString(tr("mm:ss"));
 }
 
 void MusicPlayer::sltPositionChanged(qint64 position)
 {
 	if (ui.slider_progress->isSliderDown()) return;
 	ui.slider_progress->setSliderPosition(position);
-	//当前时间
-	int secs = position / 1000;
-	int mins = secs / 60;
-	secs = secs % 60;
-    if(secs < 10 && secs > -0)
-     {
-		auto nowTime = "0" + QString::number(mins) + ":" + "0" + QString::number(secs);
-        ui.label_volumNum->setText(QString("%1/%2").arg(nowTime).arg(m_musicTime));
-     }
-	else if(secs >= 10){
-		auto nowTime = "0" + QString::number(mins) + ":" + QString::number(secs);
-		ui.label_volumNum->setText(QString("%1/%2").arg(nowTime).arg(m_musicTime));
-	}
+	QTime duration(0, position / 60000, qRound((position % 60000) / 1000.0));
+	auto localTime = duration.toString(tr("mm:ss"));
+	ui.label_volumNum->setText(QString("%1/%2").arg(localTime).arg(m_musicTime));
 	//歌词校验
 	checkLrcWidget(position);
 	ui.page_lrc->setLrcInfo(position);
