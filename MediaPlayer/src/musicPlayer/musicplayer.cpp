@@ -124,6 +124,7 @@ void MusicPlayer::initMusicPlayer()
 		ui.listView->setStyleSheet(strStyle);
 	}
 	//数据绑定
+	musicManager.getLocalMusicInfoModel().clear();
 	ui.listView->setModel(&musicManager.getLocalMusicInfoModel());
 	ui.listView->setSelectionMode(QAbstractItemView::SingleSelection);
 	ui.listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -283,7 +284,6 @@ void MusicPlayer::sltOpenLocalMusicList()
 		QStringLiteral("音频文件(*.mp3 *.wav *.wma)mp3文件(*.mp3);;wav文件(*.wav);;wma文件(*.wma);;所有文件(*.*)"));
 
 	if (fileList.isEmpty()) return;
-	musicManager.getLocalMusicInfoModel().clear();
 	for (auto & each : fileList) {
 		QFileInfo fileInfo(each);
 		if (fileInfo.exists()) {

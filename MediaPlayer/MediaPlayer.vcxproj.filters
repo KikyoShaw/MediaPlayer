@@ -24,6 +24,12 @@
     <Filter Include="musicPlayer">
       <UniqueIdentifier>{cc0a92b8-6565-4665-9de6-5654c494b9e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="videoPlayer">
+      <UniqueIdentifier>{9feb9c7d-e647-4e8d-8671-52169f71abb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{6a963636-a5b6-4242-8cef-11eebc1af4d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MediaPlayer.qrc">
@@ -34,31 +40,13 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\customslider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\mainwidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MediaPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\sql.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\start.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\usersql.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vsliderwidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vmarqueelabel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gifProxyStyle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\LrcWidget.cpp">
@@ -85,30 +73,36 @@
     <ClCompile Include="src\musicPlayer\musicInfoWidget.cpp">
       <Filter>musicPlayer</Filter>
     </ClCompile>
+    <ClCompile Include="src\videoPlayer\videoPlayer.cpp">
+      <Filter>videoPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\videoPlayer\videoWidget.cpp">
+      <Filter>videoPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\videoPlayer\videoControls.cpp">
+      <Filter>videoPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\customslider.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\gifProxyStyle.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\vmarqueelabel.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\vsliderwidget.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\customslider.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="src\mainwidget.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="src\MediaPlayer.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="src\sql.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="src\start.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="src\usersql.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="src\vsliderwidget.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="src\vmarqueelabel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\LrcWidget.h">
@@ -135,27 +129,30 @@
     <QtMoc Include="src\musicPlayer\musicInfoWidget.h">
       <Filter>musicPlayer</Filter>
     </QtMoc>
+    <QtMoc Include="src\videoPlayer\videoPlayer.h">
+      <Filter>videoPlayer</Filter>
+    </QtMoc>
+    <QtMoc Include="src\videoPlayer\videoWidget.h">
+      <Filter>videoPlayer</Filter>
+    </QtMoc>
+    <QtMoc Include="src\common\customslider.h">
+      <Filter>common</Filter>
+    </QtMoc>
+    <QtMoc Include="src\common\vmarqueelabel.h">
+      <Filter>common</Filter>
+    </QtMoc>
+    <QtMoc Include="src\common\vsliderwidget.h">
+      <Filter>common</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="src\mainwidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="src\MediaPlayer.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="src\network.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <QtUic Include="src\sql.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="src\start.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <QtUic Include="src\usersql.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="src\vsliderwidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="src\musicPlayer\LrcWidget.ui">
@@ -170,10 +167,22 @@
     <QtUic Include="src\musicPlayer\musicInfoWidget.ui">
       <Filter>musicPlayer</Filter>
     </QtUic>
+    <QtUic Include="src\videoPlayer\videoPlayer.ui">
+      <Filter>videoPlayer</Filter>
+    </QtUic>
+    <QtUic Include="src\videoPlayer\videoWidget.ui">
+      <Filter>videoPlayer</Filter>
+    </QtUic>
+    <QtUic Include="src\common\vsliderwidget.ui">
+      <Filter>common</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\gifProxyStyle.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\videoPlayer\videoControls.h">
+      <Filter>videoPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\gifProxyStyle.h">
+      <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

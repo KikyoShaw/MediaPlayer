@@ -7,7 +7,7 @@
 
 class QMovie;
 class QMediaPlayer;
-class MediaPlayer;
+class VideoPlayer;
 class MusicPlayer;
 
 class MainWidget : public QWidget
@@ -44,7 +44,7 @@ private:
 	//背景音效
     QMediaPlayer *m_bgPlayer = nullptr;
 	//视频播放器
-	QSharedPointer<MediaPlayer> m_videoPlayer = nullptr;
+	QSharedPointer<VideoPlayer> m_videoPlayer = nullptr;
 	//音乐播放器
 	QSharedPointer <MusicPlayer> m_musicPlayer = nullptr; 
 	//更多

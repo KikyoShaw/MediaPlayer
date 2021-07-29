@@ -39,6 +39,7 @@
     <qresource prefix="/qss">
         <file>image/qss/whiteScrollbar.qss</file>
         <file>image/qss/listViews.qss</file>
+        <file>image/qss/listWidget.qss</file>
     </qresource>
     <qresource prefix="/music">
         <file>Music/kikyo.mp3</file>

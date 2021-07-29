@@ -60,12 +60,12 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)MediaPlayer\src;$(SolutionDir)MediaPlayer\src\musicPlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MediaPlayer\src;$(SolutionDir)\MediaPlayer\src\common;$(SolutionDir)MediaPlayer\src\musicPlayer;$(SolutionDir)MediaPlayer\src\videoPlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)MediaPlayer\src;$(SolutionDir)MediaPlayer\src\musicPlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MediaPlayer\src;$(SolutionDir)\MediaPlayer\src\common;$(SolutionDir)MediaPlayer\src\musicPlayer;$(SolutionDir)MediaPlayer\src\videoPlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="Configuration">
@@ -95,10 +95,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\customslider.cpp" />
-    <ClCompile Include="src\gifProxyStyle.cpp" />
+    <ClCompile Include="src\common\customslider.cpp" />
+    <ClCompile Include="src\common\gifProxyStyle.cpp" />
+    <ClCompile Include="src\common\vmarqueelabel.cpp" />
+    <ClCompile Include="src\common\vsliderwidget.cpp" />
     <ClCompile Include="src\mainwidget.cpp" />
-    <ClCompile Include="src\MediaPlayer.cpp" />
     <ClCompile Include="src\musicPlayer\LrcWidget.cpp" />
     <ClCompile Include="src\musicPlayer\musicImage.cpp" />
     <ClCompile Include="src\musicPlayer\musicInfoDelegate.cpp" />
@@ -108,52 +109,42 @@
     <ClCompile Include="src\musicPlayer\musicplayer.cpp" />
     <ClCompile Include="src\musicPlayer\searchMusicView.cpp" />
     <ClCompile Include="src\sql.cpp" />
-    <ClCompile Include="src\start.cpp" />
     <ClCompile Include="src\usersql.cpp" />
-    <ClCompile Include="src\vmarqueelabel.cpp" />
-    <ClCompile Include="src\vsliderwidget.cpp" />
+    <ClCompile Include="src\videoPlayer\videoControls.cpp" />
+    <ClCompile Include="src\videoPlayer\videoPlayer.cpp" />
+    <ClCompile Include="src\videoPlayer\videoWidget.cpp" />
     <QtRcc Include="MediaPlayer.qrc" />
     <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="src\customslider.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\mainwidget.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="src\common\vsliderwidget.ui" />
     <QtUic Include="src\mainwidget.ui" />
-    <QtUic Include="src\MediaPlayer.ui" />
     <QtUic Include="src\musicPlayer\LrcWidget.ui" />
     <QtUic Include="src\musicPlayer\musicInfoWidget.ui" />
     <QtUic Include="src\musicPlayer\musicplayer.ui" />
     <QtUic Include="src\musicPlayer\searchMusicView.ui" />
-    <QtUic Include="src\network.ui" />
     <QtUic Include="src\sql.ui" />
-    <QtUic Include="src\start.ui" />
     <QtUic Include="src\usersql.ui" />
-    <QtUic Include="src\vsliderwidget.ui" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="src\MediaPlayer.h" />
+    <QtUic Include="src\videoPlayer\videoPlayer.ui" />
+    <QtUic Include="src\videoPlayer\videoWidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\sql.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\start.h" />
-  </ItemGroup>
-  <ItemGroup>
     <QtMoc Include="src\usersql.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\vsliderwidget.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="src\vmarqueelabel.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\gifProxyStyle.h" />
+    <QtMoc Include="src\common\customslider.h" />
+    <ClInclude Include="src\common\gifProxyStyle.h" />
+    <QtMoc Include="src\common\vmarqueelabel.h" />
+    <QtMoc Include="src\common\vsliderwidget.h" />
+    <ClInclude Include="src\videoPlayer\videoControls.h" />
+    <QtMoc Include="src\videoPlayer\videoWidget.h" />
+    <QtMoc Include="src\videoPlayer\videoPlayer.h" />
     <QtMoc Include="src\musicPlayer\musicInfoWidget.h" />
     <QtMoc Include="src\musicPlayer\musicImage.h" />
     <QtMoc Include="src\musicPlayer\searchMusicView.h" />

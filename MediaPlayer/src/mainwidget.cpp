@@ -2,7 +2,7 @@
 #include <QMouseEvent>
 #include <QMovie>
 #include <QMediaPlayer>
-#include "mediaplayer.h"
+#include "videoPlayer.h"
 #include "musicplayer.h"
 #include "gifProxyStyle.h"
 #include <QDesktopServices>
@@ -55,7 +55,7 @@ MainWidget::~MainWidget()
 //ÊÓÆµ²¥·ÅÆ÷
 void MainWidget::on_vedio_clicked()
 {
-	m_videoPlayer = QSharedPointer<MediaPlayer>(new MediaPlayer());
+	m_videoPlayer = QSharedPointer<VideoPlayer>(new VideoPlayer());
 	if (m_videoPlayer) {
 		connect(m_videoPlayer.data(), SIGNAL(mySignal()), this, SLOT(show()));
 		connect(m_videoPlayer.data(), SIGNAL(mySignal()), this, SLOT(my_player()));
