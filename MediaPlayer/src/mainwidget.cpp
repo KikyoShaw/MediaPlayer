@@ -57,8 +57,7 @@ void MainWidget::on_vedio_clicked()
 {
 	m_videoPlayer = QSharedPointer<VideoPlayer>(new VideoPlayer());
 	if (m_videoPlayer) {
-		connect(m_videoPlayer.data(), SIGNAL(mySignal()), this, SLOT(show()));
-		connect(m_videoPlayer.data(), SIGNAL(mySignal()), this, SLOT(my_player()));
+		connect(m_videoPlayer.data(), SIGNAL(sigReturnPanel()), this, SLOT(my_player()));
 		m_videoPlayer->show();
 	}
 	if (m_bgPlayer->state() != QMediaPlayer::StoppedState) {

@@ -128,6 +128,7 @@
     <QtUic Include="src\musicPlayer\searchMusicView.ui" />
     <QtUic Include="src\sql.ui" />
     <QtUic Include="src\usersql.ui" />
+    <QtUic Include="src\videoPlayer\videoControls.ui" />
     <QtUic Include="src\videoPlayer\videoPlayer.ui" />
     <QtUic Include="src\videoPlayer\videoWidget.ui" />
   </ItemGroup>
@@ -142,7 +143,7 @@
     <ClInclude Include="src\common\gifProxyStyle.h" />
     <QtMoc Include="src\common\vmarqueelabel.h" />
     <QtMoc Include="src\common\vsliderwidget.h" />
-    <ClInclude Include="src\videoPlayer\videoControls.h" />
+    <QtMoc Include="src\videoPlayer\videoControls.h" />
     <QtMoc Include="src\videoPlayer\videoWidget.h" />
     <QtMoc Include="src\videoPlayer\videoPlayer.h" />
     <QtMoc Include="src\musicPlayer\musicInfoWidget.h" />

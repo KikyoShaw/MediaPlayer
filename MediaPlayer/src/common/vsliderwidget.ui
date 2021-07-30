@@ -236,7 +236,7 @@ QSlider::handle:vertical
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../MediaPlayer.qrc"/>
+  <include location="../../MediaPlayer.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -144,6 +144,9 @@
     <QtMoc Include="src\common\vsliderwidget.h">
       <Filter>common</Filter>
     </QtMoc>
+    <QtMoc Include="src\videoPlayer\videoControls.h">
+      <Filter>videoPlayer</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="src\mainwidget.ui">
@@ -176,11 +179,11 @@
     <QtUic Include="src\common\vsliderwidget.ui">
       <Filter>common</Filter>
     </QtUic>
+    <QtUic Include="src\videoPlayer\videoControls.ui">
+      <Filter>videoPlayer</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\videoPlayer\videoControls.h">
-      <Filter>videoPlayer</Filter>
-    </ClInclude>
     <ClInclude Include="src\common\gifProxyStyle.h">
       <Filter>common</Filter>
     </ClInclude>

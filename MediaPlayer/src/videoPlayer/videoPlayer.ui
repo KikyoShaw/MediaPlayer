@@ -434,7 +434,7 @@ border-image: url(:/musicPlayer/image/musicPlayer/pifu.png);
         <widget class="QWidget" name="page_local">
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <property name="spacing">
-           <number>0</number>
+           <number>10</number>
           </property>
           <property name="leftMargin">
            <number>0</number>
@@ -572,11 +572,26 @@ border-image: url(:/musicPlayer/image/musicPlayer/pifu.png);
           </item>
           <item>
            <widget class="QWidget" name="widget_video" native="true">
+            <property name="styleSheet">
+             <string notr="true">#widget_video
+{
+	background-color: #1C1C1E;
+}</string>
+            </property>
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <property name="spacing">
               <number>0</number>
              </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
              <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>10</number>
+             </property>
+             <property name="bottomMargin">
               <number>0</number>
              </property>
              <item>
@@ -714,6 +729,109 @@ border-image: url(:/musicPlayer/image/musicPlayer/pifu.png);
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_title" native="true">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>150</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>150</height>
+                </size>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_5">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QWidget" name="widget_title_top" native="true">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_5">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>16</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="label_videoName">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">	font-size: 16px;
+	font-family: 微软雅黑;
+	color: #01EEC3;</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_3">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>839</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QWidget" name="widget_title_main" native="true"/>
+                </item>
+               </layout>
               </widget>
              </item>
             </layout>
