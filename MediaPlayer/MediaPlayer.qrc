@@ -35,6 +35,8 @@
         <file>image/musicPlayer/ico_zkt.png</file>
         <file>image/musicPlayer/pifu.png</file>
         <file>image/musicPlayer/icon.gif</file>
+        <file>image/musicPlayer/bg_grkp.png</file>
+        <file>image/musicPlayer/ic_gb.png</file>
     </qresource>
     <qresource prefix="/qss">
         <file>image/qss/whiteScrollbar.qss</file>

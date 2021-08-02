@@ -25,6 +25,8 @@ public:
 	//´°¿Ú¹ÜÀí
 	void locateWidgets();
 	void closeWidget();
+	//MV
+	void setMvWidget();
 
 private:
 	void initVolumeSlider();

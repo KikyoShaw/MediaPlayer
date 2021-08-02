@@ -7,6 +7,7 @@
 class QMovie;
 class QNetworkAccessManager;
 class QNetworkReply;
+class VideoWidget;
 
 class MvItem :public QWidget
 {
@@ -19,9 +20,15 @@ public:
 
 private:
 	void setGifModel(const QString& filePath);
+	void requsetMvInfo();
+	void parseJson(const QString& json);
 
 private slots:
 	void sltNetWorkMvImg(QNetworkReply *reply);
+	void sltNetWorkMvInfo(QNetworkReply *reply);
+
+private:
+	virtual bool eventFilter(QObject *obj, QEvent *event);
 
 private:
 	Ui::mvItem ui;
@@ -29,6 +36,16 @@ private:
 	QMovie *m_bgMovie = nullptr;
 	//mv图片请求
 	QNetworkAccessManager *m_netWorkMvImg = nullptr;
+	//MV详细获取
+	QNetworkAccessManager *m_netWorkMv = nullptr;
+	//是否是gif资源
+	bool m_isGifImg;
 	//缓存当前mv数据
 	MvInfo m_mvInfo;
+	//避免数据多次请求
+	bool m_isWorking = false;
+	//gif路径
+	QString m_gifPath;
+	//MV播放器
+	QSharedPointer<VideoWidget> m_videoWidget = nullptr;
 };

@@ -106,6 +106,15 @@
     <ClCompile Include="src\musicPlayer\mvItemWidget.cpp">
       <Filter>musicPlayer</Filter>
     </ClCompile>
+    <ClCompile Include="src\common\frameless.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\DragShadow.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\videoPlayer\videoControlTops.cpp">
+      <Filter>videoPlayer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\mainwidget.h">
@@ -168,6 +177,15 @@
     <QtMoc Include="src\musicPlayer\mvItemWidget.h">
       <Filter>musicPlayer</Filter>
     </QtMoc>
+    <QtMoc Include="src\common\frameless.h">
+      <Filter>common</Filter>
+    </QtMoc>
+    <QtMoc Include="src\common\DragShadow.h">
+      <Filter>common</Filter>
+    </QtMoc>
+    <QtMoc Include="src\videoPlayer\videoControlTops.h">
+      <Filter>videoPlayer</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="src\mainwidget.ui">
@@ -208,6 +226,9 @@
     </QtUic>
     <QtUic Include="src\musicPlayer\mvItemWidget.ui">
       <Filter>musicPlayer</Filter>
+    </QtUic>
+    <QtUic Include="src\videoPlayer\videoControlTops.ui">
+      <Filter>videoPlayer</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>

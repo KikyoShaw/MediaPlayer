@@ -32,6 +32,9 @@ public:
 	//图片圆角化处理
 	QPixmap getRoundRectPixmap(QPixmap srcPixMap, const QSize & size, int radius);
 
+	//数字处理
+	QString createNumber(int64_t number);
+
 	////异步get请求,用于下载
 	//QtPromise::QPromise<QByteArray> get(const QUrl &url);
 

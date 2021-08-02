@@ -15,7 +15,7 @@ struct MvInfo
 	QString fileName; // 文件名
 	QString pic; //封面
 	QString ThumbGif; //gif封面
-	int historyHeat = 0; // 观看数量
+	int64_t historyHeat = 0; // 观看数量
 	int mvHot; //热度
 	QString mvHash; //mv hash
 	QString fileHash; // hash

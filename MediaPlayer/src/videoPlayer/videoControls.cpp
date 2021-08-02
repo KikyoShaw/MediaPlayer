@@ -76,7 +76,7 @@ void VideoControls::initVolumeSlider()
 void VideoControls::locateWidgets()
 {
 	if (m_volumeSlider) {
-		int posX = 117 - 4;
+		int posX = ui.pushButton_volum->x() - 4;
 		int posY = -m_volumeSlider->height();
 		m_volumeSlider->move(mapToGlobal(QPoint(posX, posY)));
 	}
@@ -88,6 +88,12 @@ void VideoControls::closeWidget()
 		m_volumeSlider->close();
 	}
 	close();
+}
+
+void VideoControls::setMvWidget()
+{
+	ui.pushButton_cycle->setVisible(false);
+	ui.pushButton_next->setVisible(false);
 }
 
 void VideoControls::sltSetPlayCycle()

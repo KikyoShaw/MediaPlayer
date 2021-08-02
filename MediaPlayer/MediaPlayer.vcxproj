@@ -96,7 +96,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\common\customslider.cpp" />
+    <ClCompile Include="src\common\DragShadow.cpp" />
     <ClCompile Include="src\common\flowlayout.cpp" />
+    <ClCompile Include="src\common\frameless.cpp" />
     <ClCompile Include="src\common\gifProxyStyle.cpp" />
     <ClCompile Include="src\common\vmarqueelabel.cpp" />
     <ClCompile Include="src\common\vsliderwidget.cpp" />
@@ -115,6 +117,7 @@
     <ClCompile Include="src\sql.cpp" />
     <ClCompile Include="src\usersql.cpp" />
     <ClCompile Include="src\videoPlayer\videoControls.cpp" />
+    <ClCompile Include="src\videoPlayer\videoControlTops.cpp" />
     <ClCompile Include="src\videoPlayer\videoPlayer.cpp" />
     <ClCompile Include="src\videoPlayer\videoWidget.cpp" />
     <QtRcc Include="MediaPlayer.qrc" />
@@ -135,6 +138,7 @@
     <QtUic Include="src\sql.ui" />
     <QtUic Include="src\usersql.ui" />
     <QtUic Include="src\videoPlayer\videoControls.ui" />
+    <QtUic Include="src\videoPlayer\videoControlTops.ui" />
     <QtUic Include="src\videoPlayer\videoPlayer.ui" />
     <QtUic Include="src\videoPlayer\videoWidget.ui" />
   </ItemGroup>
@@ -145,11 +149,14 @@
     <QtMoc Include="src\usersql.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="src\videoPlayer\videoControlTops.h" />
     <QtMoc Include="src\musicPlayer\mvItemWidget.h" />
     <QtMoc Include="src\musicPlayer\mvInfoModel.h" />
     <QtMoc Include="src\musicPlayer\mvWidget.h" />
     <QtMoc Include="src\common\customslider.h" />
+    <QtMoc Include="src\common\DragShadow.h" />
     <ClInclude Include="src\common\flowlayout.h" />
+    <QtMoc Include="src\common\frameless.h" />
     <ClInclude Include="src\common\gifProxyStyle.h" />
     <QtMoc Include="src\common\vmarqueelabel.h" />
     <QtMoc Include="src\common\vsliderwidget.h" />

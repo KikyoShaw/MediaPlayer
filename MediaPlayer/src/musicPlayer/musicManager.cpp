@@ -179,3 +179,25 @@ QPixmap MusicManager::getRoundRectPixmap(QPixmap srcPixMap, const QSize & size, 
 	painter.drawPixmap(0, 0, imageWidth, imageHeight, newPixMap);
 	return destImage;
 }
+
+QString MusicManager::createNumber(int64_t number)
+{
+	QString strNumber = QString();
+	number = qMax(number, (int64_t)0);
+
+	if (number >= 100000000)
+	{
+		double numberE = number / (double)100000000.0;
+		strNumber += QStringLiteral("%1вк").arg(QString::asprintf("%.2f", numberE));
+	}
+	else if (number >= 10000)
+	{
+		double numberW = number / (double)10000.0;
+		strNumber += QStringLiteral("%1Эђ").arg(QString::asprintf("%.2f", numberW));
+	}
+	else
+	{
+		strNumber += QStringLiteral("%1").arg(number);
+	}
+	return strNumber;
+}
