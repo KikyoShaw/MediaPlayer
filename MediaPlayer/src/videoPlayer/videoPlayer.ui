@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1080</width>
-    <height>760</height>
+    <width>1000</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -84,7 +84,7 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <property name="spacing">
-          <number>0</number>
+          <number>10</number>
          </property>
          <property name="leftMargin">
           <number>14</number>
@@ -99,6 +99,39 @@
           <number>0</number>
          </property>
          <item>
+          <widget class="QLabel" name="label_logo">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>56</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>56</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>华文彩云</family>
+             <pointsize>22</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(255, 255, 255);</string>
+           </property>
+           <property name="text">
+            <string>离歌视频</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer name="horizontalSpacer">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -110,6 +143,162 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QWidget" name="widget_net" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+	border:none;
+	background-color:transparent;
+	font-size: 16px;
+	font-family: 微软雅黑;
+	color: #01EEC3;
+}
+
+QPushButton:hover
+{
+	border-radius:10px;
+	background-color: rgba(255, 255, 255, 0.2);
+	font-size: 16px;
+	font-family: 微软雅黑;
+	color: #01EEC3;
+}</string>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="pushButton_movies">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="text">
+               <string>电影</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_tv">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="text">
+               <string>电视剧</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_anime">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="text">
+               <string>动漫</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_game">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="text">
+               <string>综艺</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_sports">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="text">
+               <string>体育</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </item>
          <item>
           <widget class="QWidget" name="widget_seach" native="true">
@@ -256,7 +445,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>20</width>
+                <width>10</width>
                 <height>20</height>
                </size>
               </property>
@@ -449,128 +638,6 @@ border-image: url(:/musicPlayer/image/musicPlayer/pifu.png);
            <number>0</number>
           </property>
           <item>
-           <widget class="QWidget" name="widget_left" native="true">
-            <property name="minimumSize">
-             <size>
-              <width>200</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>200</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">#widget_left
-{
-	background-color: #1C1C1E;
-}</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_4">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QWidget" name="widget_button" native="true">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>50</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>50</height>
-                </size>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_4">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <property name="leftMargin">
-                 <number>12</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QPushButton" name="pushButton_open">
-                  <property name="minimumSize">
-                   <size>
-                    <width>24</width>
-                    <height>26</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>24</width>
-                    <height>26</height>
-                   </size>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">border-image: url(:/musicPlayer/image/musicPlayer/open_normal.png);</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_2">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>161</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QListWidget" name="listWidget_localList">
-               <property name="styleSheet">
-                <string notr="true">#listWidget_localList
-{
-	border:none;
-	background: transparent;
-}
-</string>
-               </property>
-               <property name="horizontalScrollBarPolicy">
-                <enum>Qt::ScrollBarAlwaysOff</enum>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
            <widget class="QWidget" name="widget_video" native="true">
             <property name="styleSheet">
              <string notr="true">#widget_video
@@ -736,13 +803,13 @@ border-image: url(:/musicPlayer/image/musicPlayer/pifu.png);
                <property name="minimumSize">
                 <size>
                  <width>0</width>
-                 <height>150</height>
+                 <height>180</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
                  <width>16777215</width>
-                 <height>150</height>
+                 <height>180</height>
                 </size>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -786,7 +853,7 @@ border-image: url(:/musicPlayer/image/musicPlayer/pifu.png);
                     <number>0</number>
                    </property>
                    <property name="rightMargin">
-                    <number>0</number>
+                    <number>2</number>
                    </property>
                    <property name="bottomMargin">
                     <number>0</number>
@@ -825,11 +892,66 @@ border-image: url(:/musicPlayer/image/musicPlayer/pifu.png);
                      </property>
                     </spacer>
                    </item>
+                   <item>
+                    <widget class="QPushButton" name="pushButton_open">
+                     <property name="minimumSize">
+                      <size>
+                       <width>24</width>
+                       <height>26</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>24</width>
+                       <height>26</height>
+                      </size>
+                     </property>
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">border-image: url(:/musicPlayer/image/musicPlayer/open_normal.png);</string>
+                     </property>
+                    </widget>
+                   </item>
                   </layout>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QWidget" name="widget_title_main" native="true"/>
+                 <widget class="QWidget" name="widget_title_main" native="true">
+                  <layout class="QVBoxLayout" name="verticalLayout_6">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>10</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>10</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QListWidget" name="listWidget_localList">
+                     <property name="styleSheet">
+                      <string notr="true">#listWidget_localList
+{
+	border:none;
+	background: transparent;
+}
+</string>
+                     </property>
+                     <property name="horizontalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOff</enum>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
                 </item>
                </layout>
               </widget>

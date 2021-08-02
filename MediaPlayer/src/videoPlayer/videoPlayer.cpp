@@ -45,6 +45,15 @@ VideoPlayer::VideoPlayer(QWidget *parent) :
 	connect(ui.listWidget_localList, &QListWidget::itemDoubleClicked, this, &VideoPlayer::sltListWidgetDoubleClicked);
 	//返回主界面
 	connect(ui.pushButton_return, &QPushButton::clicked, this, &VideoPlayer::sltReturnPanel);
+	//播放测试链接
+	connect(ui.pushButton_movies, &QPushButton::clicked, this, [=]() {
+		auto each = "http://fs.mv.web.kugou.com/202107301857/57871ca2cd7ff27fbeb61c8edab225a8/G091/M00/09/18/O5QEAFtqHEeAClq3B2HfvZDGLBw796.mp4";
+		//m_videoPlayer->setMedia(QMediaContent(QUrl::fromLocalFile(each)));
+		m_videoPlayList->addMedia(QMediaContent(QUrl::fromLocalFile("http://example.com/myclip2.mp4")));
+		m_videoPlayer->play();
+		auto name = m_videoPlayList->currentMedia().canonicalUrl().fileName();
+		ui.label_videoName->setText(name);
+	});
 }
 
 VideoPlayer::~VideoPlayer()
@@ -93,7 +102,7 @@ void VideoPlayer::locateWidgets()
 {
 	if (m_videoControls) {
 		int posX = ui.widget_video->x();
-		int posY = ui.widget_top->height() + ui.widget_video->height() + 6 - 60 - 150;
+		int posY = ui.widget_top->height() + ui.widget_video->height() + 6 - 60 - 180;
 		m_videoControls->setFixedWidth(width() - posX - 10);
 		m_videoControls->move(mapToGlobal(QPoint(posX, posY)));
 		m_videoControls->locateWidgets();
@@ -117,7 +126,7 @@ void VideoPlayer::sltOpenLocalVideoList()
 
 	if (fileList.isEmpty()) return;
 	ui.listWidget_localList->clear();
-	//存储数据实体 //http://fs.mv.web.kugou.com/202107270955/5018e19c140d5adf019a877ae12f31b2/G031/M08/12/1D/_5MEAFXd0KSAZMLpARSo2wZan7k579.mp4
+	//存储数据实体
 	for (auto &each : fileList) {
 		QFileInfo fileInfo(each);
 		if (fileInfo.exists()) {
