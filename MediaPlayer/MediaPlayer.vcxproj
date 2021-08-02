@@ -96,6 +96,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\common\customslider.cpp" />
+    <ClCompile Include="src\common\flowlayout.cpp" />
     <ClCompile Include="src\common\gifProxyStyle.cpp" />
     <ClCompile Include="src\common\vmarqueelabel.cpp" />
     <ClCompile Include="src\common\vsliderwidget.cpp" />
@@ -107,6 +108,9 @@
     <ClCompile Include="src\musicPlayer\musicInfoWidget.cpp" />
     <ClCompile Include="src\musicPlayer\musicManager.cpp" />
     <ClCompile Include="src\musicPlayer\musicplayer.cpp" />
+    <ClCompile Include="src\musicPlayer\mvInfoModel.cpp" />
+    <ClCompile Include="src\musicPlayer\mvItemWidget.cpp" />
+    <ClCompile Include="src\musicPlayer\mvWidget.cpp" />
     <ClCompile Include="src\musicPlayer\searchMusicView.cpp" />
     <ClCompile Include="src\sql.cpp" />
     <ClCompile Include="src\usersql.cpp" />
@@ -125,6 +129,8 @@
     <QtUic Include="src\musicPlayer\LrcWidget.ui" />
     <QtUic Include="src\musicPlayer\musicInfoWidget.ui" />
     <QtUic Include="src\musicPlayer\musicplayer.ui" />
+    <QtUic Include="src\musicPlayer\mvItemWidget.ui" />
+    <QtUic Include="src\musicPlayer\mvWidget.ui" />
     <QtUic Include="src\musicPlayer\searchMusicView.ui" />
     <QtUic Include="src\sql.ui" />
     <QtUic Include="src\usersql.ui" />
@@ -139,7 +145,11 @@
     <QtMoc Include="src\usersql.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="src\musicPlayer\mvItemWidget.h" />
+    <QtMoc Include="src\musicPlayer\mvInfoModel.h" />
+    <QtMoc Include="src\musicPlayer\mvWidget.h" />
     <QtMoc Include="src\common\customslider.h" />
+    <ClInclude Include="src\common\flowlayout.h" />
     <ClInclude Include="src\common\gifProxyStyle.h" />
     <QtMoc Include="src\common\vmarqueelabel.h" />
     <QtMoc Include="src\common\vsliderwidget.h" />

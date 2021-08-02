@@ -94,6 +94,18 @@
     <ClCompile Include="src\common\vsliderwidget.cpp">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="src\musicPlayer\mvWidget.cpp">
+      <Filter>musicPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\flowlayout.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\musicPlayer\mvInfoModel.cpp">
+      <Filter>musicPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\musicPlayer\mvItemWidget.cpp">
+      <Filter>musicPlayer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\mainwidget.h">
@@ -147,6 +159,15 @@
     <QtMoc Include="src\videoPlayer\videoControls.h">
       <Filter>videoPlayer</Filter>
     </QtMoc>
+    <QtMoc Include="src\musicPlayer\mvWidget.h">
+      <Filter>musicPlayer</Filter>
+    </QtMoc>
+    <QtMoc Include="src\musicPlayer\mvInfoModel.h">
+      <Filter>musicPlayer</Filter>
+    </QtMoc>
+    <QtMoc Include="src\musicPlayer\mvItemWidget.h">
+      <Filter>musicPlayer</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="src\mainwidget.ui">
@@ -182,9 +203,18 @@
     <QtUic Include="src\videoPlayer\videoControls.ui">
       <Filter>videoPlayer</Filter>
     </QtUic>
+    <QtUic Include="src\musicPlayer\mvWidget.ui">
+      <Filter>musicPlayer</Filter>
+    </QtUic>
+    <QtUic Include="src\musicPlayer\mvItemWidget.ui">
+      <Filter>musicPlayer</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common\gifProxyStyle.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\flowlayout.h">
       <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>

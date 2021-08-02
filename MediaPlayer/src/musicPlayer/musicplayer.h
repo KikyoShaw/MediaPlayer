@@ -45,6 +45,7 @@ private slots:
 	void sltShowLrcModel();
 	void sltReturnPanel();
 	void sltSearchMusic();
+	void sltSearchMV();
 	void sltMouseDoubleClicked(int row);
 	void sltNetWorkMusicPlay(QNetworkReply *reply);
 	void sltDownLoadButtonClick();

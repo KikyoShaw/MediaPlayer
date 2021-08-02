@@ -751,6 +751,9 @@ border-image: url(:/musicPlayer/image/musicPlayer/pifu.png);
          </item>
          <item>
           <widget class="QStackedWidget" name="stackedWidget">
+           <property name="currentIndex">
+            <number>4</number>
+           </property>
            <widget class="QWidget" name="page_localList">
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <property name="spacing">
@@ -787,7 +790,7 @@ border-image: url(:/musicPlayer/image/musicPlayer/pifu.png);
                  <number>0</number>
                 </property>
                 <property name="leftMargin">
-                 <number>10</number>
+                 <number>16</number>
                 </property>
                 <property name="topMargin">
                  <number>0</number>
@@ -879,6 +882,25 @@ border-image: url(:/musicPlayer/image/musicPlayer/pifu.png);
            </widget>
            <widget class="SearchMusic" name="page_search"/>
            <widget class="MusicInfoWidget" name="page_lrc"/>
+           <widget class="MVWidget" name="page_mv">
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+            </layout>
+           </widget>
           </widget>
          </item>
          <item>
@@ -1452,7 +1474,13 @@ color: #01EEC3;
   <customwidget>
    <class>MusicInfoWidget</class>
    <extends>QWidget</extends>
-   <header location="global">musicInfoWidget.h</header>
+   <header>musicInfoWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MVWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">mvWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

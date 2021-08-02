@@ -64,6 +64,8 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 	connect(ui.pushButton_return, &QPushButton::clicked, this, &MusicPlayer::sltReturnPanel);
 	//搜索
 	connect(ui.pushButton_search, &QPushButton::clicked, this, &MusicPlayer::sltSearchMusic);
+	//MV
+	connect(ui.pushButton_mv, &QPushButton::clicked, this, &MusicPlayer::sltSearchMV);
 	//播放搜索列表里的歌
 	connect(&musicManager, &MusicManager::sigMouseDoubleClicked, this, &MusicPlayer::sltMouseDoubleClicked);
 	//播放本地的歌
@@ -415,6 +417,11 @@ void MusicPlayer::sltSearchMusic()
 	auto word = ui.lineEdit_search->text();
 	ui.page_search->searchMusic(word);
 	ui.stackedWidget->setCurrentWidget(ui.page_search);
+}
+
+void MusicPlayer::sltSearchMV()
+{
+	ui.stackedWidget->setCurrentWidget(ui.page_mv);
 }
 
 void MusicPlayer::sltMouseDoubleClicked(int row)

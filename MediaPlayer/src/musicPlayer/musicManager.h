@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QPixmap>
 #include "musicInfoModel.h"
+#include "mvInfoModel.h"
 
 class MusicManager : public QObject
 {
@@ -37,6 +38,7 @@ public:
 public:
 	MusicInfoModel &getLocalMusicInfoModel();
 	MusicInfoModel &getMusicInfoModel();
+	MvInfoModel &getMvInfoModel();
 	MusicInfo &getPlayingMusicInfo();
 	QMap<QString, QString> &getMusicLrcMap();
 
@@ -52,6 +54,8 @@ private:
 	MusicInfoModel m_localMusicInfoModel;
 	//歌曲信息
 	MusicInfoModel m_musicInfoModel;
+	//mv信息
+	MvInfoModel m_mvInfoModel;
 	//当前播放的歌曲信息
 	MusicInfo m_playingMusicInfo;
 	//歌词

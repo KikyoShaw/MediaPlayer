@@ -88,6 +88,11 @@ MusicInfoModel & MusicManager::getMusicInfoModel()
 	return m_musicInfoModel;
 }
 
+MvInfoModel & MusicManager::getMvInfoModel()
+{
+	return m_mvInfoModel;
+}
+
 MusicInfo & MusicManager::getPlayingMusicInfo()
 {
 	return m_playingMusicInfo;
