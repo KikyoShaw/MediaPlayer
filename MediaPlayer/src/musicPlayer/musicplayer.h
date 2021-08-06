@@ -11,6 +11,7 @@ class VSliderWidget;
 class LrcWidget;
 class QNetworkAccessManager;
 class QNetworkReply;
+class VideoWidget;
 
 class MusicPlayer : public QWidget
 {
@@ -27,6 +28,7 @@ private:
 	void initWebModel();
 	void checkLrcWidget(int index);
 	void parseJsonSongInfo(const QString& json);
+	void parseJsonMvInfo(const QString& json);
 
 private slots:
 	void sltMaxOrNormal();
@@ -50,6 +52,8 @@ private slots:
 	void sltNetWorkMusicPlay(QNetworkReply *reply);
 	void sltDownLoadButtonClick();
 	void sltDownLoadByNetWork(QNetworkReply *reply);
+	void sltLookMv();
+	void sltNetWorkMvInfo(QNetworkReply *reply);
 
 signals:
 	void sigReturnPanel();
@@ -80,6 +84,10 @@ private:
 	QNetworkAccessManager *m_netWorkMusicPlay = nullptr;
 	//下载请求
 	QNetworkAccessManager *m_netWorkDownLoad = nullptr;
+	//MV详细获取
+	QNetworkAccessManager *m_netWorkMv = nullptr;
+	//MV播放器
+	QSharedPointer<VideoWidget> m_videoWidget = nullptr;
 };
 
 #endif // MUSICPLAYER_H

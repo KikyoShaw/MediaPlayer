@@ -8,6 +8,7 @@ MusicInfoModel::MusicInfoModel()
 void MusicInfoModel::clear()
 {
 	//  清除映射和标记
+	m_listHash.clear();
 	m_listInfo.swap(QVector<MusicInfo>());
 	m_page = 0;
 }
@@ -36,6 +37,7 @@ int MusicInfoModel::getPageNum()
 
 void MusicInfoModel::addInfoToModel(MusicInfo pInfo)
 {
+	m_listHash.insert(pInfo.hash, pInfo);
 	beginInsertRows(QModelIndex(), rowCount(), rowCount());
 	m_listInfo.push_back(pInfo);
 	endInsertRows();
@@ -46,6 +48,15 @@ QString MusicInfoModel::getHash(int row)
 	auto size = m_listInfo.count();
 	if (size < row) return QString();
 	return m_listInfo.value(row).hash;
+}
+
+QString MusicInfoModel::getMvHash(const QString & hash)
+{
+	QString mvHash = QString();
+	if (m_listHash.contains(hash)) {
+		mvHash = m_listHash.value(hash).mvHash;
+	}
+	return mvHash;
 }
 
 QString MusicInfoModel::getAlbumId(int row)

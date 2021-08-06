@@ -30,6 +30,8 @@ public:
 	void addInfoToModel(MusicInfo pInfo);
 	//获取hash
 	QString getHash(int row);
+	//根据hash获取mvhash
+	QString getMvHash(const QString& hash);
 	//获取album_id
 	QString getAlbumId(int row);
 	//  model/view override函数
@@ -41,6 +43,8 @@ public:
 
 protected:
 	QVector<MusicInfo> m_listInfo;
+	//根据hash存储数据
+	QHash<QString, MusicInfo> m_listHash;
 	//分页数
 	int m_page = 0;
 };

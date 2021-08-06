@@ -13,6 +13,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QNetworkReply>
+#include "videoWidget.h"
+#include "frameless.h"
 
 //设置循环按钮属性
 constexpr char* Property_id = "id";
@@ -83,6 +85,10 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 	});
 	//下载接口
 	connect(ui.pushButton_download, &QPushButton::clicked, this, &MusicPlayer::sltDownLoadButtonClick);
+	//mv查看
+	connect(ui.pushButton_lookMv, &QPushButton::clicked, this, &MusicPlayer::sltLookMv);
+	m_netWorkMv = new QNetworkAccessManager(this);
+	connect(m_netWorkMv, &QNetworkAccessManager::finished, this, &MusicPlayer::sltNetWorkMvInfo, Qt::DirectConnection);
 
 	//声音进度条初始化
 	initVolumeSlider();
@@ -206,8 +212,12 @@ void MusicPlayer::parseJsonSongInfo(const QString & json)
 					info.musicName = musicManager.getJsonData(valuedataObject, "song_name");
 					info.musicPlayer = musicManager.getJsonData(valuedataObject, "author_name");
 					info.musicAlbum = musicManager.getJsonData(valuedataObject, "album_name");
+					//是否显示mv
+					info.hash = musicManager.getJsonData(valuedataObject, "hash");
+					info.mvHash = musicManager.getMusicInfoModel().getMvHash(info.hash);
+					ui.pushButton_lookMv->setVisible(!info.mvHash.isEmpty());
 					info.url = url;
-					musicManager.savePlayingMusicInfo(info);
+					musicManager.savePlayingMusicInfo(info);	
 					//启用播放/暂停按钮，并将其文本设置为“暂停”
 					ui.pushButton_play->setChecked(true);
 					//歌词获取
@@ -219,6 +229,44 @@ void MusicPlayer::parseJsonSongInfo(const QString & json)
 				else
 				{
 					qDebug() << "出错";
+				}
+			}
+		}
+	}
+}
+
+void MusicPlayer::parseJsonMvInfo(const QString & json)
+{
+	QByteArray byte_array;
+	QJsonParseError json_error;
+	QJsonDocument parse_doucment = QJsonDocument::fromJson(byte_array.append(json), &json_error);
+	if (parse_doucment.isNull()) {
+		return;
+	}
+	if (json_error.error == QJsonParseError::NoError) {
+		if (parse_doucment.isObject()) {
+			QJsonObject rootObj = parse_doucment.object();
+			MvInfoPlayer info;
+			info.mvName = musicManager.getJsonData(rootObj, "songname");
+			if (rootObj.contains("mvdata")) {
+				QJsonValue valuedata = rootObj.value("mvdata");
+				if (valuedata.isObject()) {
+					QJsonObject valuedataObject = valuedata.toObject();
+					if (valuedataObject.contains("sq")) {
+						QJsonValue valueSq = valuedataObject.value("sq");
+						if (valueSq.isObject()) {
+							QJsonObject object = valueSq.toObject();
+							info.url = musicManager.getJsonData(object, "downurl");
+							info.hash = musicManager.getJsonData(rootObj, "hash");
+							m_videoWidget = QSharedPointer<VideoWidget>(new VideoWidget());
+							if (m_videoWidget) {
+								//拉伸器
+								FrameLess *frameLess = new FrameLess(m_videoWidget.data());
+								m_videoWidget->setMvPlay(info);
+								m_videoWidget->show();
+							}
+						}
+					}
 				}
 			}
 		}
@@ -472,13 +520,48 @@ void MusicPlayer::sltDownLoadByNetWork(QNetworkReply * reply)
 		//下载路径（测试先固定路径,后续扩展）
 		auto info = musicManager.getPlayingMusicInfo();
 		//拼接
-		auto destFileName = info.musicName + ".mp3";
+		auto destFileName = "Music/" + info.musicName + ".mp3";
+		QFileInfo fileinfo(destFileName);
+		if (!fileinfo.exists()) {
+			QDir().mkpath(fileinfo.absolutePath());
+		}
 		QFile file(destFileName);
-		file.open(QIODevice::WriteOnly);
+		if (!file.open(QFile::WriteOnly)) {
+			return;
+		}
 		file.write(bytes);
 		file.close();
 	}
 	ui.pushButton_download->setEnabled(true);
+}
+
+void MusicPlayer::sltLookMv()
+{
+	if (m_musicPlayer->state() == QMediaPlayer::PlayingState) {
+		m_musicPlayer->pause();
+	}
+	ui.pushButton_lookMv->setEnabled(false);
+	auto info = musicManager.getPlayingMusicInfo();
+	QString url = QString("http://m.kugou.com/app/i/mv.php"
+		"?cmd=100&hash=%1&ismp3=1&ext=mp4").arg(info.mvHash);
+	QNetworkRequest request;
+	//设置请求数据
+	request.setUrl(QUrl(url));
+	request.setHeader(QNetworkRequest::UserAgentHeader, "RT-Thread ART");
+	m_netWorkMv->get(request);
+}
+
+void MusicPlayer::sltNetWorkMvInfo(QNetworkReply * reply)
+{
+	//获取响应的信息，状态码为200表示正常
+	QVariant status_code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+	//无错误返回
+	if (reply->error() == QNetworkReply::NoError) {
+		QByteArray bytes = reply->readAll();  //获取字节
+		QString result(bytes);                //转化为字符串
+		parseJsonMvInfo(result);
+	}
+	ui.pushButton_lookMv->setEnabled(true);
 }
 
 void MusicPlayer::mouseMoveEvent(QMouseEvent * event)
