@@ -89,6 +89,11 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 	connect(ui.pushButton_lookMv, &QPushButton::clicked, this, &MusicPlayer::sltLookMv);
 	m_netWorkMv = new QNetworkAccessManager(this);
 	connect(m_netWorkMv, &QNetworkAccessManager::finished, this, &MusicPlayer::sltNetWorkMvInfo, Qt::DirectConnection);
+	//歌手
+	connect(ui.pushButton_player, &QPushButton::clicked, this, [=]() {
+		ui.page_singer->requestSinger();
+		ui.stackedWidget->setCurrentWidget(ui.page_singer);
+	});
 
 	//声音进度条初始化
 	initVolumeSlider();
@@ -567,7 +572,7 @@ void MusicPlayer::sltNetWorkMvInfo(QNetworkReply * reply)
 void MusicPlayer::mouseMoveEvent(QMouseEvent * event)
 {
 	//判断左键是否被按下，只有左键按下了，其返回值就是1(true)
-	if ((event->buttons() & Qt::LeftButton) && m_bMove)
+	if ((event->buttons() & Qt::LeftButton) && m_bMove &&!isMaximized())
 	{
 		move(event->globalPos() - m_point);
 	}

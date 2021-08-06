@@ -752,7 +752,7 @@ border-image: url(:/musicPlayer/image/musicPlayer/pifu.png);
          <item>
           <widget class="QStackedWidget" name="stackedWidget">
            <property name="currentIndex">
-            <number>4</number>
+            <number>5</number>
            </property>
            <widget class="QWidget" name="page_localList">
             <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -901,6 +901,7 @@ border-image: url(:/musicPlayer/image/musicPlayer/pifu.png);
              </property>
             </layout>
            </widget>
+           <widget class="SingerWidget" name="page_singer"/>
           </widget>
          </item>
          <item>
@@ -1480,7 +1481,13 @@ color: #01EEC3;
   <customwidget>
    <class>MVWidget</class>
    <extends>QWidget</extends>
-   <header location="global">mvWidget.h</header>
+   <header>mvWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SingerWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">singerWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

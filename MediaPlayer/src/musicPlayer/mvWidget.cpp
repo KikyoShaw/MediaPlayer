@@ -125,8 +125,6 @@ void MVWidget::setMvModelItem()
 
 void MVWidget::sltSearchMvResult(QNetworkReply * reply)
 {
-	//还原请求
-	m_isWorking = false;
 	//获取响应的信息，状态码为200表示正常
 	QVariant status_code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
 	if (reply->error() == QNetworkReply::NoError) {
@@ -135,6 +133,8 @@ void MVWidget::sltSearchMvResult(QNetworkReply * reply)
 		parseJson(result);
 		musicManager.getMvInfoModel().setPageNum();
 	}
+	//还原请求
+	m_isWorking = false;
 }
 
 void MVWidget::sltSearchMvResultByScrollBar(int value)

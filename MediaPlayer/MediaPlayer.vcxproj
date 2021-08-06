@@ -114,6 +114,8 @@
     <ClCompile Include="src\musicPlayer\mvItemWidget.cpp" />
     <ClCompile Include="src\musicPlayer\mvWidget.cpp" />
     <ClCompile Include="src\musicPlayer\searchMusicView.cpp" />
+    <ClCompile Include="src\musicPlayer\singerItem.cpp" />
+    <ClCompile Include="src\musicPlayer\singerWidget.cpp" />
     <ClCompile Include="src\sql.cpp" />
     <ClCompile Include="src\usersql.cpp" />
     <ClCompile Include="src\videoPlayer\videoControls.cpp" />
@@ -135,6 +137,8 @@
     <QtUic Include="src\musicPlayer\mvItemWidget.ui" />
     <QtUic Include="src\musicPlayer\mvWidget.ui" />
     <QtUic Include="src\musicPlayer\searchMusicView.ui" />
+    <QtUic Include="src\musicPlayer\singerItem.ui" />
+    <QtUic Include="src\musicPlayer\singerWidget.ui" />
     <QtUic Include="src\sql.ui" />
     <QtUic Include="src\usersql.ui" />
     <QtUic Include="src\videoPlayer\videoControls.ui" />
@@ -149,6 +153,8 @@
     <QtMoc Include="src\usersql.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="src\musicPlayer\singerItem.h" />
+    <QtMoc Include="src\musicPlayer\singerWidget.h" />
     <QtMoc Include="src\videoPlayer\videoControlTops.h" />
     <QtMoc Include="src\musicPlayer\mvItemWidget.h" />
     <QtMoc Include="src\musicPlayer\mvInfoModel.h" />

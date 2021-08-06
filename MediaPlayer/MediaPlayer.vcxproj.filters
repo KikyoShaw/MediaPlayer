@@ -115,6 +115,12 @@
     <ClCompile Include="src\videoPlayer\videoControlTops.cpp">
       <Filter>videoPlayer</Filter>
     </ClCompile>
+    <ClCompile Include="src\musicPlayer\singerWidget.cpp">
+      <Filter>musicPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\musicPlayer\singerItem.cpp">
+      <Filter>musicPlayer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\mainwidget.h">
@@ -186,6 +192,12 @@
     <QtMoc Include="src\videoPlayer\videoControlTops.h">
       <Filter>videoPlayer</Filter>
     </QtMoc>
+    <QtMoc Include="src\musicPlayer\singerWidget.h">
+      <Filter>musicPlayer</Filter>
+    </QtMoc>
+    <QtMoc Include="src\musicPlayer\singerItem.h">
+      <Filter>musicPlayer</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="src\mainwidget.ui">
@@ -229,6 +241,12 @@
     </QtUic>
     <QtUic Include="src\videoPlayer\videoControlTops.ui">
       <Filter>videoPlayer</Filter>
+    </QtUic>
+    <QtUic Include="src\musicPlayer\singerWidget.ui">
+      <Filter>musicPlayer</Filter>
+    </QtUic>
+    <QtUic Include="src\musicPlayer\singerItem.ui">
+      <Filter>musicPlayer</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
