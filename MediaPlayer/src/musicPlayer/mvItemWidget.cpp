@@ -12,6 +12,8 @@
 #include <QMouseEvent>
 #include "videoWidget.h"
 #include "frameless.h"
+#include <QThread>
+#include "ThreadRequest.h"
 
 MvItem::MvItem(QWidget *parent /* = Q_NULLPTR */)
 	:QWidget(parent), m_isGifImg(false), m_gifPath(QString())
@@ -21,15 +23,21 @@ MvItem::MvItem(QWidget *parent /* = Q_NULLPTR */)
 	ui.label_img->installEventFilter(this);
 	ui.widget_controls->setAttribute(Qt::WA_TransparentForMouseEvents, true);
 
-	m_netWorkMvImg = new QNetworkAccessManager(this);
-	connect(m_netWorkMvImg, &QNetworkAccessManager::finished, this, &MvItem::sltNetWorkMvImg, Qt::DirectConnection);
-
 	m_netWorkMv = new QNetworkAccessManager(this);
 	connect(m_netWorkMv, &QNetworkAccessManager::finished, this, &MvItem::sltNetWorkMvInfo, Qt::DirectConnection);
 }
 
 MvItem::~MvItem()
 {
+	if (m_thread) {
+		m_thread->quit();
+		m_thread->disconnect();
+		m_thread->deleteLater();
+	}
+
+	if (m_threadRequest) {
+		m_threadRequest->deleteLater();
+	}
 }
 
 void MvItem::setMvInfo(MvInfo info)
@@ -51,6 +59,7 @@ void MvItem::setMvInfo(MvInfo info)
 	//观看数量
 	auto watch = musicManager.createNumber(info.historyHeat);
 	ui.label_watch->setText(watch);
+	QString _imgUrl = QString();
 	//动态背景
 	if (!info.ThumbGif.isEmpty()) {
 		//组装路径,如果存在则无需下载
@@ -62,11 +71,7 @@ void MvItem::setMvInfo(MvInfo info)
 			return;
 		}
 		m_isGifImg = true;
-		QNetworkRequest request;
-		//设置请求数据
-		request.setUrl(QUrl(info.ThumbGif));
-		request.setHeader(QNetworkRequest::UserAgentHeader, "RT-Thread ART");
-		m_netWorkMvImg->get(request);
+		_imgUrl = info.ThumbGif;
 	}
 	else { //动态背景不存在则使用静态背景
 		if (!info.pic.isEmpty()) {
@@ -74,12 +79,19 @@ void MvItem::setMvInfo(MvInfo info)
 			QNetworkRequest request;
 			//组装url
 			auto pic = info.pic.left(8);
-			QString imgUrl = QString("http://imge.kugou.com/mvhdpic/400/%1/%2").arg(pic).arg(info.pic);
-			//设置请求数据
-			request.setUrl(QUrl(imgUrl));
-			request.setHeader(QNetworkRequest::UserAgentHeader, "RT-Thread ART");
-			m_netWorkMvImg->get(request);
+			_imgUrl = QString("http://imge.kugou.com/mvhdpic/400/%1/%2").arg(pic).arg(info.pic);
 		}
+	}
+
+	if (!_imgUrl.isEmpty()) {
+		//初始化线程请求
+		m_thread = new QThread();
+		m_threadRequest = new ThreadRequest();
+		m_threadRequest->setRequestUrl(_imgUrl);
+		m_threadRequest->moveToThread(m_thread);
+		m_thread->start();
+		connect(m_thread, &QThread::started, m_threadRequest, &ThreadRequest::sltRequestNetWork);
+		connect(m_threadRequest, &ThreadRequest::sigNetWorkFinish, this, &MvItem::sltNetWorkMvImg, Qt::AutoConnection);
 	}
 }
 

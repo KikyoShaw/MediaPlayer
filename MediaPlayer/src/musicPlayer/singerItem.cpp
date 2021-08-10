@@ -1,21 +1,16 @@
 #include "singerItem.h"
 #include <QNetworkReply>
-#include <QNetworkAccessManager>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
 #include "musicManager.h"
+#include <QThread>
+#include "ThreadRequest.h"
 
 SingerItem::SingerItem(QWidget *parent)
 	:QWidget(parent), m_classId(0), m_url(QString())
 {
 	ui.setupUi(this);
-
-	m_netWorkSingerImg = new QNetworkAccessManager(this);
-	connect(m_netWorkSingerImg, &QNetworkAccessManager::finished, this, &SingerItem::sltNetWorkSingerImg, Qt::DirectConnection);
-
-	//connect(&m_threadFloat, &QThread::start, this, &SingerItem::sltRequsetImage);
-	//connect(&m_threadFloat, &QThread::start, this, &SingerItem::sltRequsetImage);
 }
 
 SingerItem::~SingerItem()
@@ -27,23 +22,15 @@ void SingerItem::setSingerItem(int classId, const QString & className, const QSt
 	m_classId = classId;
 	ui.label_name->setText(className);
 	m_url = url;
-	//图片请求
-	QNetworkRequest request;
-	//设置请求数据
-	request.setUrl(url);
-	request.setHeader(QNetworkRequest::UserAgentHeader, "RT-Thread ART");
-	m_netWorkSingerImg->get(request);
-	//m_threadFloat.start();
-}
 
-void SingerItem::sltRequsetImage()
-{
-	//图片请求
-	QNetworkRequest request;
-	//设置请求数据
-	request.setUrl(m_url);
-	request.setHeader(QNetworkRequest::UserAgentHeader, "RT-Thread ART");
-	m_netWorkSingerImg->get(request);
+	//初始化线程
+	m_thread = new QThread();
+	m_threadRequest = new ThreadRequest();
+	m_threadRequest->setRequestUrl(url);
+	m_threadRequest->moveToThread(m_thread);
+	m_thread->start();
+	connect(m_thread, &QThread::started, m_threadRequest, &ThreadRequest::sltRequestNetWork);
+	connect(m_threadRequest, &ThreadRequest::sigNetWorkFinish, this, &SingerItem::sltNetWorkSingerImg, Qt::AutoConnection);
 }
 
 void SingerItem::sltNetWorkSingerImg(QNetworkReply *reply)
@@ -59,7 +46,15 @@ void SingerItem::sltNetWorkSingerImg(QNetworkReply *reply)
 		if (!pixmap.isNull()) {
 			ui.label_image->setPixmap(pixmap);
 		}
-	/*	m_threadFloat.exit();
-		m_threadFloat.disconnect();*/
+	}
+
+	if (m_thread) {
+		m_thread->quit();
+		m_thread->disconnect();
+		m_thread->deleteLater();
+	}
+
+	if (m_threadRequest) {
+		m_threadRequest->deleteLater();
 	}
 }

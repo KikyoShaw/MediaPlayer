@@ -1,11 +1,11 @@
 #pragma once
 
 #include <QWidget>
-#include <QThread>
 #include "ui_singerItem.h"
 
-class QNetworkAccessManager;
 class QNetworkReply;
+class QThread;
+class ThreadRequest;
 
 class SingerItem :public QWidget
 {
@@ -18,13 +18,12 @@ public:
 
 private slots:
 	void sltNetWorkSingerImg(QNetworkReply *reply);
-	void sltRequsetImage();
 
 private:
 	Ui::singerItem ui;
 	int m_classId;
 	QString m_url;
-	//图片请求
-	QNetworkAccessManager *m_netWorkSingerImg = nullptr;
-	QThread m_threadFloat;
+	//请求数据线程
+	QThread* m_thread = nullptr;
+	ThreadRequest *m_threadRequest = nullptr;
 };

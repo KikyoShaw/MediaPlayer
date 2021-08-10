@@ -9,6 +9,9 @@ class QNetworkAccessManager;
 class QNetworkReply;
 class VideoWidget;
 
+class QThread;
+class ThreadRequest;
+
 class MvItem :public QWidget
 {
 	Q_OBJECT
@@ -34,8 +37,6 @@ private:
 	Ui::mvItem ui;
 	//动态背景
 	QMovie *m_bgMovie = nullptr;
-	//mv图片请求
-	QNetworkAccessManager *m_netWorkMvImg = nullptr;
 	//MV详细获取
 	QNetworkAccessManager *m_netWorkMv = nullptr;
 	//是否是gif资源
@@ -48,4 +49,7 @@ private:
 	QString m_gifPath;
 	//MV播放器
 	QSharedPointer<VideoWidget> m_videoWidget = nullptr;
+	//网络请求
+	QThread* m_thread = nullptr;
+	ThreadRequest *m_threadRequest = nullptr;
 };
