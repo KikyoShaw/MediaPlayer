@@ -29,15 +29,6 @@ MvItem::MvItem(QWidget *parent /* = Q_NULLPTR */)
 
 MvItem::~MvItem()
 {
-	if (m_thread) {
-		m_thread->quit();
-		m_thread->disconnect();
-		m_thread->deleteLater();
-	}
-
-	if (m_threadRequest) {
-		m_threadRequest->deleteLater();
-	}
 }
 
 void MvItem::setMvInfo(MvInfo info)
@@ -85,13 +76,13 @@ void MvItem::setMvInfo(MvInfo info)
 
 	if (!_imgUrl.isEmpty()) {
 		//初始化线程请求
-		m_thread = new QThread();
-		m_threadRequest = new ThreadRequest();
+		m_thread = QSharedPointer<QThread>(new QThread(this));
+		m_threadRequest = QSharedPointer<ThreadRequest>(new ThreadRequest(this));
 		m_threadRequest->setRequestUrl(_imgUrl);
-		m_threadRequest->moveToThread(m_thread);
+		m_threadRequest->moveToThread(m_thread.data());
 		m_thread->start();
-		connect(m_thread, &QThread::started, m_threadRequest, &ThreadRequest::sltRequestNetWork);
-		connect(m_threadRequest, &ThreadRequest::sigNetWorkFinish, this, &MvItem::sltNetWorkMvImg, Qt::AutoConnection);
+		connect(m_thread.data(), &QThread::started, m_threadRequest.data(), &ThreadRequest::sltRequestNetWork);
+		connect(m_threadRequest.data(), &ThreadRequest::sigNetWorkFinish, this, &MvItem::sltNetWorkMvImg, Qt::AutoConnection);
 	}
 }
 
@@ -215,5 +206,10 @@ void MvItem::sltNetWorkMvImg(QNetworkReply *reply)
 				ui.label_img->setPixmap(pixmap);
 			}
 		}
+	}
+
+	if (m_thread) {
+		m_thread->quit();
+		m_thread->disconnect();
 	}
 }

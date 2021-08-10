@@ -50,6 +50,6 @@ private:
 	//MV²¥·ÅÆ÷
 	QSharedPointer<VideoWidget> m_videoWidget = nullptr;
 	//ÍøÂçÇëÇó
-	QThread* m_thread = nullptr;
-	ThreadRequest *m_threadRequest = nullptr;
+	QSharedPointer<QThread> m_thread = nullptr;
+	QSharedPointer<ThreadRequest> m_threadRequest = nullptr;
 };
