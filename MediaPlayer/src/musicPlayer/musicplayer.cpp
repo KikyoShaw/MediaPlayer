@@ -15,6 +15,7 @@
 #include <QNetworkReply>
 #include "videoWidget.h"
 #include "frameless.h"
+#include <QMovie>
 
 //设置循环按钮属性
 constexpr char* Property_id = "id";
@@ -37,6 +38,17 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 
 	//音乐播放模块
 	initMusicPlayer();
+
+	//声音进度条初始化
+	initVolumeSlider();
+
+	//歌词模块初始化
+	initLrcModel();
+
+	//web模块初始化
+	initWebModel();
+
+	initInfo();
 
 	connect(ui.pushButton_min, &QPushButton::clicked, this, &MusicPlayer::showMinimized);
 	connect(ui.pushButton_close, &QPushButton::clicked, this, &MusicPlayer::close);
@@ -94,15 +106,10 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 		ui.page_singer->requestSinger();
 		ui.stackedWidget->setCurrentWidget(ui.page_singer);
 	});
-
-	//声音进度条初始化
-	initVolumeSlider();
-
-	//歌词模块初始化
-	initLrcModel();
-
-	//web模块初始化
-	initWebModel();
+	//设置
+	connect(ui.pushButton_set, &QPushButton::clicked, this, [=]() {
+		ui.stackedWidget->setCurrentWidget(ui.page_info);
+	});
 }
 
 MusicPlayer::~MusicPlayer()
@@ -179,6 +186,26 @@ void MusicPlayer::initWebModel()
 		return;
 	}
 	ui.webEngineView->load(QUrl("file:///" + htmlPath));
+}
+
+void MusicPlayer::initInfo()
+{
+	//设置动态背景
+	m_bgMovie = new QMovie(this);
+	m_bgMovie->setFileName(":/musicPlayer/image/musicPlayer/icon.gif");
+	ui.label_gif->setMovie(m_bgMovie);
+	m_bgMovie->start();
+
+	auto csdnText = QStringLiteral("CSDN：<a style='text-decoration:none;'href = 'https://blog.csdn.net/qq_36651243'>%1</a>").arg(QStringLiteral("点击进入"));
+	auto githubText = QStringLiteral("GitHub：<a style='text-decoration:none;'href = 'https://github.com/KikyoShaw'>%1</a>").arg(QStringLiteral("点击进入"));
+	ui.label_csdn->setText(csdnText);
+	ui.label_github->setText(githubText);
+	connect(ui.label_csdn, &QLabel::linkActivated, this, [=](const QString & text) {
+		QDesktopServices::openUrl(QUrl(text));
+	});
+	connect(ui.label_github, &QLabel::linkActivated, this, [=](const QString & text) {
+		QDesktopServices::openUrl(QUrl(text));
+	});
 }
 
 void MusicPlayer::checkLrcWidget(int position)

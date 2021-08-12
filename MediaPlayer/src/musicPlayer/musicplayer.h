@@ -12,6 +12,7 @@ class LrcWidget;
 class QNetworkAccessManager;
 class QNetworkReply;
 class VideoWidget;
+class QMovie;
 
 class MusicPlayer : public QWidget
 {
@@ -26,6 +27,7 @@ private:
 	void initLrcModel();
 	void initVolumeSlider();
 	void initWebModel();
+	void initInfo();
 	void checkLrcWidget(int index);
 	void parseJsonSongInfo(const QString& json);
 	void parseJsonMvInfo(const QString& json);
@@ -88,6 +90,8 @@ private:
 	QNetworkAccessManager *m_netWorkMv = nullptr;
 	//MV²¥·ÅÆ÷
 	QSharedPointer<VideoWidget> m_videoWidget = nullptr;
+	//¶¯Ì¬±³¾°
+	QMovie *m_bgMovie = nullptr;
 };
 
 #endif // MUSICPLAYER_H
