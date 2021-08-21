@@ -92,8 +92,10 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
 	connect(m_netWorkDownLoad, &QNetworkAccessManager::finished, this, &MusicPlayer::sltDownLoadByNetWork, Qt::DirectConnection);
 	//点击歌曲封面
 	connect(ui.label_image, &MusicImage::sigMouseClicked, this, [=]() {
-		ui.page_lrc->setMusicInfo();
-		ui.stackedWidget->setCurrentWidget(ui.page_lrc);
+		if (!ui.page_lrc->isVisible()) {
+			ui.page_lrc->setMusicInfo();
+			ui.stackedWidget->setCurrentWidget(ui.page_lrc);
+		}
 	});
 	//下载接口
 	connect(ui.pushButton_download, &QPushButton::clicked, this, &MusicPlayer::sltDownLoadButtonClick);
@@ -206,6 +208,9 @@ void MusicPlayer::initInfo()
 	connect(ui.label_github, &QLabel::linkActivated, this, [=](const QString & text) {
 		QDesktopServices::openUrl(QUrl(text));
 	});
+
+	ui.widget_progress->setVisible(false);
+	ui.widget_bottom->setVisible(false);
 }
 
 void MusicPlayer::checkLrcWidget(int position)
@@ -257,6 +262,9 @@ void MusicPlayer::parseJsonSongInfo(const QString & json)
 					//图片显示
 					auto imageUrl = musicManager.getJsonData(valuedataObject, "img");
 					ui.label_image->requestImage(imageUrl);
+					//播放组件出现
+					ui.widget_progress->setVisible(true);
+					ui.widget_bottom->setVisible(true);
 				}
 				else
 				{
@@ -396,6 +404,9 @@ void MusicPlayer::sltPlayListClicked(int row)
 	//歌词信息
 	QString path = m_filePath + name.split(".").front() + ".lrc";
 	musicManager.getLoaclLrcData(path);
+	//播放组件出现
+	ui.widget_progress->setVisible(true);
+	ui.widget_bottom->setVisible(true);
 }
 
 void MusicPlayer::sltDurationChanged(qint64 duration)
