@@ -20,6 +20,8 @@ public:
 	void setProgressText(const QString& text);
 	//播放状态
 	void setPlaying();
+	//设置声音
+	void setVolume(int value);
 	//获取声音窗口出现情况
 	bool getVolumVisible();
 	//窗口管理

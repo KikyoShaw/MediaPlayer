@@ -54,6 +54,11 @@ void VideoControls::setPlaying()
 	ui.pushButton_play->setChecked(true);
 }
 
+void VideoControls::setVolume(int value)
+{
+	m_volumeSlider->setVoiceValue(value);
+}
+
 bool VideoControls::getVolumVisible()
 {
 	if (m_volumeSlider) {
@@ -68,7 +73,6 @@ void VideoControls::initVolumeSlider()
 	if (m_volumeSlider) {
 		m_volumeSlider->installEventFilter(this);
 		m_volumeSlider->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
-		m_volumeSlider->setVoiceValue(50);
 		connect(m_volumeSlider.data(), &VSliderWidget::sigValueChanged, this, &VideoControls::sltSoundVoiceValue);
 	}
 }

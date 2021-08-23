@@ -50,6 +50,9 @@ private:
 	virtual void resizeEvent(QResizeEvent *event);
 	virtual bool eventFilter(QObject *obj, QEvent *event);
 
+	//键盘控制快进快退
+	virtual void keyReleaseEvent(QKeyEvent *event);
+
 private:
     Ui::video ui;
 	//窗口移动属性值
@@ -69,6 +72,10 @@ private:
 	QVBoxLayout* layout_video = nullptr;
 	//视频时间字符串
 	QString m_videoTime;
+	//当前视频进度
+	qint64 m_position;
+	//声音初始值
+	int m_volume;
 };
 
 #endif // MEDIAPLAYER_H

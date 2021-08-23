@@ -1,14 +1,14 @@
 #pragma once
 
 #include <QSlider>
-#include <QMouseEvent>
-#include <QCoreApplication>
 
 class CustomSlider : public QSlider
 {
 	Q_OBJECT
 public:
-	CustomSlider(QWidget *parent = 0);
+	CustomSlider(QWidget *parent = Q_NULLPTR);
+
+
 protected:
 	virtual void mousePressEvent(QMouseEvent *event);//重写QSlider的mousePressEvent事件
 	virtual void mouseMoveEvent(QMouseEvent *event); //重写QSlider的mouseMoveEvent事件

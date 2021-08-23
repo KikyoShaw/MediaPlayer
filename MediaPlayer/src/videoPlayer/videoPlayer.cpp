@@ -9,7 +9,7 @@
 #include "videoControls.h"
 
 VideoPlayer::VideoPlayer(QWidget *parent) :
-	QWidget(parent)
+	QWidget(parent), m_position(0), m_volume(50)
 {
     ui.setupUi(this);
 
@@ -68,7 +68,7 @@ void VideoPlayer::initVideoPlayModel()
 	m_listInfo.clear();
 	m_videoPlayList = new QMediaPlaylist(this);
 	m_videoPlayList->setPlaybackMode(QMediaPlaylist::Sequential);
-	m_videoPlayer->setVolume(50);
+	m_videoPlayer->setVolume(m_volume);
 	m_videoPlayer->setPlaylist(m_videoPlayList);
 	//初始化播放窗口
 	m_videoPlayWidget = new QVideoWidget();
@@ -90,6 +90,7 @@ void VideoPlayer::initVideoControls()
 	m_videoControls = QSharedPointer<VideoControls>(new VideoControls(this));
 	if (m_videoControls) {
 		m_videoControls->installEventFilter(this);
+		m_videoControls->setVolume(m_volume);
 		connect(m_videoControls.data(), &VideoControls::sigVideoPlayOrPause, this, &VideoPlayer::sltVideoPlayOrPause);
 		connect(m_videoControls.data(), &VideoControls::sigNextVideoPlay, this, &VideoPlayer::sltNextVideoPlay);
 		connect(m_videoControls.data(), &VideoControls::sigSetPlayCycle, this, &VideoPlayer::sltSetPlayCycle);
@@ -174,6 +175,7 @@ void VideoPlayer::sltPositionChanged(qint64 position)
 	if (m_videoControls->isSliderDown()) {
 		return;
 	}
+	m_position = position;
 	m_videoControls->setSliderPosition(position);
 	auto hh = position / 3600000;
 	auto mm = (position % 3600000) / 60000.0;
@@ -337,4 +339,48 @@ bool VideoPlayer::eventFilter(QObject * obj, QEvent * event)
 		}
 	}
 	return QWidget::eventFilter(obj, event);
+}
+
+//快进快退，时间为15s; 音量调节，大小间隔为5
+void VideoPlayer::keyReleaseEvent(QKeyEvent *event)
+{
+	auto key = event->key();
+	switch (key)
+	{
+	case Qt::Key_Left: {
+		if (QMediaPlayer::PlayingState == m_videoPlayer->state()) {
+			m_position = m_position - (15 * 1000);
+			m_videoPlayer->setPosition(m_position);
+		}
+		break;
+	}
+	case Qt::Key_Right: {
+		if (QMediaPlayer::PlayingState == m_videoPlayer->state()) {
+			m_position = m_position + (15 * 1000);
+			m_videoPlayer->setPosition(m_position);
+		}
+		break;
+	}
+	case Qt::Key_Up: {
+		if (QMediaPlayer::PlayingState == m_videoPlayer->state()) {
+			m_volume = m_volume + 5;
+			//最大不超过100
+			m_volume = qMin(m_volume, 100);
+			m_videoControls->setVolume(m_volume);
+		}
+		break;
+	}
+	case Qt::Key_Down: {
+		if (QMediaPlayer::PlayingState == m_videoPlayer->state()) {
+			m_volume = m_volume - 5;
+			//最小不小过0
+			m_volume = qMax(m_volume, 0);
+			m_videoControls->setVolume(m_volume);
+		}
+		break;
+	}
+	default:
+		break;
+	}
+	QWidget::keyReleaseEvent(event);
 }
