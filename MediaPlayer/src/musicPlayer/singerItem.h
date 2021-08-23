@@ -19,6 +19,8 @@ public:
 private slots:
 	void sltNetWorkSingerImg(QNetworkReply *reply);
 
+	void sltThreadFinsh();
+
 private:
 	Ui::singerItem ui;
 	int m_classId;

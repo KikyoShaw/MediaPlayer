@@ -25,12 +25,29 @@ void SingerItem::setSingerItem(int classId, const QString & className, const QSt
 
 	//初始化线程
 	m_thread = new QThread();
-	m_threadRequest = new ThreadRequest();
-	m_threadRequest->setRequestUrl(url);
-	m_threadRequest->moveToThread(m_thread);
-	m_thread->start();
-	connect(m_thread, &QThread::started, m_threadRequest, &ThreadRequest::sltRequestNetWork);
-	connect(m_threadRequest, &ThreadRequest::sigNetWorkFinish, this, &SingerItem::sltNetWorkSingerImg, Qt::AutoConnection);
+	if (m_thread) {
+		m_threadRequest = new ThreadRequest();
+		if (m_threadRequest) {
+			m_threadRequest->setRequestUrl(url);
+			m_threadRequest->moveToThread(m_thread);
+			m_thread->start();
+			connect(m_thread, &QThread::started, m_threadRequest, &ThreadRequest::sltRequestNetWork);
+			connect(m_threadRequest, &ThreadRequest::sigNetWorkFinish, this, &SingerItem::sltNetWorkSingerImg, Qt::AutoConnection);
+			connect(m_thread, &QThread::finished, this, &SingerItem::sltThreadFinsh);
+		}
+	}
+}
+
+void SingerItem::sltThreadFinsh()
+{
+	if (m_threadRequest) {
+		m_threadRequest->deleteLater();
+	}
+	if (m_thread) {
+		m_thread->quit();
+		m_thread->disconnect();
+		m_thread->deleteLater();
+	}
 }
 
 void SingerItem::sltNetWorkSingerImg(QNetworkReply *reply)
@@ -46,15 +63,5 @@ void SingerItem::sltNetWorkSingerImg(QNetworkReply *reply)
 		if (!pixmap.isNull()) {
 			ui.label_image->setPixmap(pixmap);
 		}
-	}
-
-	if (m_thread) {
-		m_thread->quit();
-		m_thread->disconnect();
-		m_thread->deleteLater();
-	}
-
-	if (m_threadRequest) {
-		m_threadRequest->deleteLater();
 	}
 }

@@ -47,9 +47,9 @@ VideoPlayer::VideoPlayer(QWidget *parent) :
 	connect(ui.pushButton_return, &QPushButton::clicked, this, &VideoPlayer::sltReturnPanel);
 	//²¥·Å²âÊÔÁ´½Ó
 	connect(ui.pushButton_movies, &QPushButton::clicked, this, [=]() {
-		auto each = "http://fs.mv.web.kugou.com/202107301857/57871ca2cd7ff27fbeb61c8edab225a8/G091/M00/09/18/O5QEAFtqHEeAClq3B2HfvZDGLBw796.mp4";
-		//m_videoPlayer->setMedia(QMediaContent(QUrl::fromLocalFile(each)));
-		m_videoPlayList->addMedia(QMediaContent(QUrl::fromLocalFile("http://example.com/myclip2.mp4")));
+		auto each = "http://fs.mv.web.kugou.com/202108231143/71a82e9f09cba1b55a29b3826f2bd504/G248/M04/0F/19/mIcBAF-6ABGAPdiEAg2aYeYrfdA165.mp4";
+		m_videoPlayer->setMedia(QMediaContent(QUrl::fromLocalFile(each)));
+		//m_videoPlayList->addMedia(QMediaContent(QUrl::fromLocalFile("http://example.com/myclip2.mp4")));
 		m_videoPlayer->play();
 		auto name = m_videoPlayList->currentMedia().canonicalUrl().fileName();
 		ui.label_videoName->setText(name);

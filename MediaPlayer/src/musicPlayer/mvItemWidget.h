@@ -29,6 +29,7 @@ private:
 private slots:
 	void sltNetWorkMvImg(QNetworkReply *reply);
 	void sltNetWorkMvInfo(QNetworkReply *reply);
+	void sltThreadFinsh();
 
 private:
 	virtual bool eventFilter(QObject *obj, QEvent *event);
@@ -50,6 +51,6 @@ private:
 	//MV²¥·ÅÆ÷
 	QSharedPointer<VideoWidget> m_videoWidget = nullptr;
 	//ÍøÂçÇëÇó
-	QSharedPointer<QThread> m_thread = nullptr;
-	QSharedPointer<ThreadRequest> m_threadRequest = nullptr;
+	QThread *m_thread = nullptr;
+	ThreadRequest *m_threadRequest = nullptr;
 };

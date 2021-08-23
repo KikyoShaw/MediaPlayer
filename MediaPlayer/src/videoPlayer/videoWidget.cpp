@@ -153,8 +153,8 @@ void VideoWidget::sltDurationChanged(qint64 duration)
 	}
 	//×ÜÊ±¼ä
 	auto hh = duration / 3600000;
-	auto mm = qRound((duration % 3600000) / 60000.0);
-	auto ss = qRound((duration % 60000) / 1000.0);
+	auto mm = (duration % 3600000) / 60000.0;
+	auto ss = (duration % 60000) / 1000.0;
 	QTime allTime(hh, mm, ss);
 	m_videoTime = allTime.toString(tr("hh:mm:ss"));
 }
@@ -169,8 +169,8 @@ void VideoWidget::sltPositionChanged(qint64 position)
 	}
 	m_videoControls->setSliderPosition(position);
 	auto hh = position / 3600000;
-	auto mm = qRound((position % 3600000) / 60000.0);
-	auto ss = qRound((position % 60000) / 1000.0);
+	auto mm = (position % 3600000) / 60000.0;
+	auto ss = (position % 60000) / 1000.0;
 	QTime duration(hh, mm, ss);
 	auto localTime = duration.toString(tr("hh:mm:ss"));
 	auto text = QString("%1/%2").arg(localTime).arg(m_videoTime);

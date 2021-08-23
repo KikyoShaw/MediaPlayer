@@ -1,14 +1,14 @@
 #include "mvWidget.h"
 #include <QScrollBar>
 #include <QFile>
-#include <QNetworkRequest>
-#include <QNetworkAccessManager>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
 #include "musicManager.h"
 #include "flowlayout.h"
 #include "mvItemWidget.h"
+#include <QThread>
+#include "ThreadRequest.h"
 
 //搜索数据分页
 #define PAGE 1
@@ -31,10 +31,6 @@ MVWidget::MVWidget(QWidget *parent /* = Q_NULLPTR */)
 	//滑动条拉动刷新
 	connect(ui.scrollArea_mv->verticalScrollBar(), &QScrollBar::valueChanged, this, &MVWidget::sltSearchMvResultByScrollBar);
 
-	//网络组件初始化
-	m_searchNetWorkManager = new QNetworkAccessManager(this);
-	connect(m_searchNetWorkManager, &QNetworkAccessManager::finished, this, &MVWidget::sltSearchMvResult, Qt::DirectConnection);
-
 	//初始化布局器
 	m_flowLayout = new FlowLayout(0, 4, 0);
 	ui.scrollAreaWidgetContents->setLayout(m_flowLayout);
@@ -50,11 +46,20 @@ void MVWidget::searchMV(const QString & word, int page, int pageSize)
 	m_isWorking = true;
 	QString url = QString("http://mvsearch.kugou.com/mv_search?"
 		"keyword=%1&page=%2&pagesize=%3&userid=-1&clientver=&platform=WebFilter&tag=em&filter=2&iscorrection=1&privilege_filter=0&_=1515052279917").arg(word).arg(page + PAGE).arg(pageSize + PAGESIZE);
-	QNetworkRequest request;
-	//设置请求数据
-	request.setUrl(QUrl(url));
-	request.setHeader(QNetworkRequest::UserAgentHeader, "RT-Thread ART");
-	m_searchNetWorkManager->get(request);
+	
+	//初始化线程请求
+	m_thread = new QThread();
+	if (m_thread) {
+		m_threadRequest = new ThreadRequest();
+		if (m_threadRequest) {
+			m_threadRequest->setRequestUrl(url);
+			m_threadRequest->moveToThread(m_thread);
+			m_thread->start();
+			connect(m_thread, &QThread::started, m_threadRequest, &ThreadRequest::sltRequestNetWork);
+			connect(m_threadRequest, &ThreadRequest::sigNetWorkFinish, this, &MVWidget::sltSearchMvResult, Qt::AutoConnection);
+			connect(m_thread, &QThread::finished, this, &MVWidget::sltThreadFinsh);
+		}
+	}
 }
 
 void MVWidget::parseJson(const QString & json)
@@ -144,6 +149,18 @@ void MVWidget::sltSearchMvResultByScrollBar(int value)
 		int page = musicManager.getMvInfoModel().getPageNum();
 		m_pIndex = musicManager.getMvInfoModel().rowCount();
 		searchMV(m_mvWord, page, PAGESIZE);
+	}
+}
+
+void MVWidget::sltThreadFinsh()
+{
+	if (m_threadRequest) {
+		m_threadRequest->deleteLater();
+	}
+	if (m_thread) {
+		m_thread->quit();
+		m_thread->disconnect();
+		m_thread->deleteLater();
 	}
 }
 
