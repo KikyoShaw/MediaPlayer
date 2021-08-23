@@ -17,18 +17,18 @@ VideoPlayer::VideoPlayer(QWidget *parent) :
 	//setAttribute(Qt::WA_TranslucentBackground);
 	ui.label_player->installEventFilter(this);
 
-	//³õÊ¼»¯²¥·ÅÆ÷Ä£¿é
+	//åˆå§‹åŒ–æ’­æ”¾å™¨æ¨¡å—
 	initVideoPlayModel();
 	initVideoControls();
 
-	//ÓÅ»¯»¬¶¯Ìõ
+	//ä¼˜åŒ–æ»‘åŠ¨æ¡
 	QFile QSS1(":/qss/image/qss/whiteScrollbar.qss");
 	if (QSS1.open(QIODevice::ReadOnly)) {
 		QString strStyle = QSS1.readAll();
 		ui.listWidget_localList->verticalScrollBar()->setStyleSheet(strStyle);
 	}
 
-	//ÁĞ±íÑùÊ½
+	//åˆ—è¡¨æ ·å¼
 	QFile QSS2(":/qss/image/qss/listWidget.qss");
 	if (QSS2.open(QIODevice::ReadOnly)) {
 		QString strStyle = QSS2.readAll();
@@ -39,13 +39,13 @@ VideoPlayer::VideoPlayer(QWidget *parent) :
 	connect(ui.pushButton_close, &QPushButton::clicked, this, &VideoPlayer::close);
 	connect(ui.pushButton_max, &QPushButton::clicked, this, &VideoPlayer::sltMaxOrNormal);
 
-	//´ò¿ª±¾µØÎÄ¼ş
+	//æ‰“å¼€æœ¬åœ°æ–‡ä»¶
 	connect(ui.pushButton_open, &QPushButton::clicked, this, &VideoPlayer::sltOpenLocalVideoList);
-	//ÁĞ±íµã»÷ÊÂ¼ş
+	//åˆ—è¡¨ç‚¹å‡»äº‹ä»¶
 	connect(ui.listWidget_localList, &QListWidget::itemDoubleClicked, this, &VideoPlayer::sltListWidgetDoubleClicked);
-	//·µ»ØÖ÷½çÃæ
+	//è¿”å›ä¸»ç•Œé¢
 	connect(ui.pushButton_return, &QPushButton::clicked, this, &VideoPlayer::sltReturnPanel);
-	//²¥·Å²âÊÔÁ´½Ó
+	//æ’­æ”¾æµ‹è¯•é“¾æ¥
 	connect(ui.pushButton_movies, &QPushButton::clicked, this, [=]() {
 		auto each = "http://fs.mv.web.kugou.com/202108231143/71a82e9f09cba1b55a29b3826f2bd504/G248/M04/0F/19/mIcBAF-6ABGAPdiEAg2aYeYrfdA165.mp4";
 		m_videoPlayer->setMedia(QMediaContent(QUrl::fromLocalFile(each)));
@@ -62,15 +62,15 @@ VideoPlayer::~VideoPlayer()
 
 void VideoPlayer::initVideoPlayModel()
 {
-	//³õÊ¼»¯²¥·ÅÆ÷¶ÔÏó
+	//åˆå§‹åŒ–æ’­æ”¾å™¨å¯¹è±¡
 	m_videoPlayer = new QMediaPlayer(this);
-	//³õÊ¼»¯ÁĞ±í
+	//åˆå§‹åŒ–åˆ—è¡¨
 	m_listInfo.clear();
 	m_videoPlayList = new QMediaPlaylist(this);
 	m_videoPlayList->setPlaybackMode(QMediaPlaylist::Sequential);
 	m_videoPlayer->setVolume(m_volume);
 	m_videoPlayer->setPlaylist(m_videoPlayList);
-	//³õÊ¼»¯²¥·Å´°¿Ú
+	//åˆå§‹åŒ–æ’­æ”¾çª—å£
 	m_videoPlayWidget = new QVideoWidget();
 	m_videoPlayWidget->setStyleSheet("border:none;background-color:transparent;");
 	layout_video = new QVBoxLayout();
@@ -80,7 +80,7 @@ void VideoPlayer::initVideoPlayModel()
 	layout_video->addWidget(m_videoPlayWidget);
 	ui.label_player->setLayout(layout_video);
 	m_videoPlayer->setVideoOutput(m_videoPlayWidget);
-	//½ø¶ÈÍ¬²½
+	//è¿›åº¦åŒæ­¥
 	connect(m_videoPlayer, SIGNAL(durationChanged(qint64)), this, SLOT(sltDurationChanged(qint64)));
 	connect(m_videoPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(sltPositionChanged(qint64)));
 }
@@ -121,13 +121,13 @@ void VideoPlayer::sltMaxOrNormal()
 void VideoPlayer::sltOpenLocalVideoList()
 {
 	auto fileList = QFileDialog::getOpenFileNames(this,
-		QStringLiteral("Ñ¡ÔñÃ½ÌåÎÄ¼ş"),
+		QStringLiteral("é€‰æ‹©åª’ä½“æ–‡ä»¶"),
 		".",
-		QStringLiteral("Ã½ÌåÎÄ¼ş(*.avi *.mp4 *.flv *.mkv*.mp3 *.wav *.wma);"));
+		QStringLiteral("åª’ä½“æ–‡ä»¶(*.avi *.mp4 *.flv *.mkv*.mp3 *.wav *.wma);"));
 
 	if (fileList.isEmpty()) return;
 	ui.listWidget_localList->clear();
-	//´æ´¢Êı¾İÊµÌå
+	//å­˜å‚¨æ•°æ®å®ä½“
 	for (auto &each : fileList) {
 		QFileInfo fileInfo(each);
 		if (fileInfo.exists()) {
@@ -138,7 +138,7 @@ void VideoPlayer::sltOpenLocalVideoList()
 			}
 		}
 	}
-	//±éÀúÊı¾İÊµÌåÀ´Ìî³äÁĞ±í
+	//éå†æ•°æ®å®ä½“æ¥å¡«å……åˆ—è¡¨
 	for (int i = 0; i < m_listInfo.size(); i++) {
 		auto fileName = m_listInfo.value(i);
 		ui.listWidget_localList->insertItem(i, fileName);
@@ -155,11 +155,11 @@ void VideoPlayer::sltOpenLocalVideoList()
 
 void VideoPlayer::sltDurationChanged(qint64 duration)
 {
-	//ÉèÖÃ½ø¶ÈÌõ
+	//è®¾ç½®è¿›åº¦æ¡
 	if (m_videoControls) {
 		m_videoControls->setProgressDuration(duration);
 	}
-	//×ÜÊ±¼ä
+	//æ€»æ—¶é—´
 	auto hh = duration / 3600000;
 	auto mm = (duration % 3600000) / 60000.0;
 	auto ss = (duration % 60000) / 1000.0;
@@ -253,7 +253,7 @@ void VideoPlayer::sltReturnPanel()
 
 void VideoPlayer::mouseMoveEvent(QMouseEvent * event)
 {
-	//ÅĞ¶Ï×ó¼üÊÇ·ñ±»°´ÏÂ£¬Ö»ÓĞ×ó¼ü°´ÏÂÁË£¬Æä·µ»ØÖµ¾ÍÊÇ1(true)
+	//åˆ¤æ–­å·¦é”®æ˜¯å¦è¢«æŒ‰ä¸‹ï¼Œåªæœ‰å·¦é”®æŒ‰ä¸‹äº†ï¼Œå…¶è¿”å›å€¼å°±æ˜¯1(true)
 	if ((event->buttons() & Qt::LeftButton) && m_bMove)
 	{
 		move(event->globalPos() - m_point);
@@ -263,18 +263,20 @@ void VideoPlayer::mouseMoveEvent(QMouseEvent * event)
 
 void VideoPlayer::mousePressEvent(QMouseEvent * event)
 {
-	//Êó±êÊÂ¼şÖĞ°üº¬¡°°´×¡µÄÊÇ×ó¼ü¡±
+	//é¼ æ ‡äº‹ä»¶ä¸­åŒ…å«â€œæŒ‰ä½çš„æ˜¯å·¦é”®â€
 	if ((event->button() == Qt::LeftButton) && (event->pos().y() < 56) && (event->pos().y() > 0))
 	{
 		m_bMove = true;
-		//»ñÈ¡ÒÆ¶¯µÄÎ»ÒÆÁ¿
+		//è·å–ç§»åŠ¨çš„ä½ç§»é‡
 		m_point = event->globalPos() - frameGeometry().topLeft();
 	}
+	QWidget::mousePressEvent(event);
 }
 
 void VideoPlayer::mouseReleaseEvent(QMouseEvent * event)
 {
 	m_bMove = false;
+	QWidget::mouseReleaseEvent(event);
 }
 
 void VideoPlayer::showEvent(QShowEvent * event)
@@ -341,7 +343,7 @@ bool VideoPlayer::eventFilter(QObject * obj, QEvent * event)
 	return QWidget::eventFilter(obj, event);
 }
 
-//¿ì½ø¿ìÍË£¬Ê±¼äÎª15s; ÒôÁ¿µ÷½Ú£¬´óĞ¡¼ä¸ôÎª5
+//å¿«è¿›å¿«é€€ï¼Œæ—¶é—´ä¸º15s; éŸ³é‡è°ƒèŠ‚ï¼Œå¤§å°é—´éš”ä¸º5
 void VideoPlayer::keyReleaseEvent(QKeyEvent *event)
 {
 	auto key = event->key();
@@ -364,7 +366,7 @@ void VideoPlayer::keyReleaseEvent(QKeyEvent *event)
 	case Qt::Key_Up: {
 		if (QMediaPlayer::PlayingState == m_videoPlayer->state()) {
 			m_volume = m_volume + 5;
-			//×î´ó²»³¬¹ı100
+			//æœ€å¤§ä¸è¶…è¿‡100
 			m_volume = qMin(m_volume, 100);
 			m_videoControls->setVolume(m_volume);
 		}
@@ -373,7 +375,7 @@ void VideoPlayer::keyReleaseEvent(QKeyEvent *event)
 	case Qt::Key_Down: {
 		if (QMediaPlayer::PlayingState == m_videoPlayer->state()) {
 			m_volume = m_volume - 5;
-			//×îĞ¡²»Ğ¡¹ı0
+			//æœ€å°ä¸å°è¿‡0
 			m_volume = qMax(m_volume, 0);
 			m_videoControls->setVolume(m_volume);
 		}
