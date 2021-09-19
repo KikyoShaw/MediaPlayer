@@ -127,6 +127,9 @@
     <ClCompile Include="src\common\ThreadManager.cpp">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="src\musicPlayer\animationLabel.cpp">
+      <Filter>musicPlayer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\mainwidget.h">
@@ -209,6 +212,9 @@
     </QtMoc>
     <QtMoc Include="src\common\ThreadManager.h">
       <Filter>common</Filter>
+    </QtMoc>
+    <QtMoc Include="src\musicPlayer\animationLabel.h">
+      <Filter>musicPlayer</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

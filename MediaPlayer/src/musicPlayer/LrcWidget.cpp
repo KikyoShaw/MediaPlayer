@@ -11,8 +11,8 @@ LrcWidget::LrcWidget(QWidget *parent)
 	setAttribute(Qt::WA_TranslucentBackground);
 
 	//设置样式
-	ui.label_lrc->setFont(QFont("华文彩云", 32));
-	ui.label_lrc->setText(QStringLiteral("聆听世界的美"));
+	//ui.label_lrc->setFont(QFont("华文彩云", 32));
+	/*ui.label_lrc->setText(QStringLiteral("聆听世界的美"));*/
 
 	//捕捉桌面位置
 	QDesktopWidget* desktopWidget = QApplication::desktop();
@@ -25,9 +25,14 @@ LrcWidget::~LrcWidget()
 {
 }
 
-void LrcWidget::setLrc(const QString & text)
+void LrcWidget::setLrc()
 {
-	ui.label_lrc->setText(text);
+	ui.label_lrc->setNoLrc();
+}
+
+void LrcWidget::setLrc(const QString & text, int position)
+{
+	ui.label_lrc->setTimerAndStartAnimation(text, position);
 }
 
 void LrcWidget::mouseMoveEvent(QMouseEvent * event)

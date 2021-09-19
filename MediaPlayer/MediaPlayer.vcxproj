@@ -105,6 +105,7 @@
     <ClCompile Include="src\common\vmarqueelabel.cpp" />
     <ClCompile Include="src\common\vsliderwidget.cpp" />
     <ClCompile Include="src\mainwidget.cpp" />
+    <ClCompile Include="src\musicPlayer\animationLabel.cpp" />
     <ClCompile Include="src\musicPlayer\LrcWidget.cpp" />
     <ClCompile Include="src\musicPlayer\musicImage.cpp" />
     <ClCompile Include="src\musicPlayer\musicInfoDelegate.cpp" />
@@ -155,6 +156,7 @@
     <QtMoc Include="src\usersql.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="src\musicPlayer\animationLabel.h" />
     <QtMoc Include="src\common\ThreadManager.h" />
     <QtMoc Include="src\common\ThreadRequest.h" />
     <QtMoc Include="src\musicPlayer\singerItem.h" />

@@ -28,6 +28,7 @@ private:
 	void initVolumeSlider();
 	void initWebModel();
 	void initInfo();
+	void showLrcModel();
 	void checkLrcWidget(int index);
 	void parseJsonSongInfo(const QString& json);
 	void parseJsonMvInfo(const QString& json);

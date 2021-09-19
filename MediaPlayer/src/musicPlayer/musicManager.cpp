@@ -3,6 +3,18 @@
 #include <QFile>
 #include <QTextStream>
 #include <QPainter>
+#include <QDebug>
+
+static int64_t ChangeTimeSpanStringToMillisconds(QString strTime)
+{
+	//分
+	auto mm = strTime.mid(1, 2).toInt();
+	auto ss = strTime.mid(4, 2).toInt();
+	auto hs = strTime.mid(7, 2).toInt();
+	int64_t result = 0;
+	result = ((mm * 60) + ss ) * 1000 + hs;
+	return result;
+ }
 
 MusicManager & MusicManager::getInstance()
 {
@@ -34,6 +46,7 @@ void MusicManager::getLrcJsonData(QJsonObject Object, const QString & key)
 {
 	//先清除数据
 	m_musicLrcMap.clear();
+	m_lrcTimeMap.clear();
 	QString lrc = getJsonData(Object, key);
 	//拆分
 	QStringList lrcList = lrc.split("\n");
@@ -48,8 +61,11 @@ void MusicManager::getLrcJsonData(QJsonObject Object, const QString & key)
 			//int s_3 = line.mid(7, 2).toInt();      //厘秒
 			//int lrctime = (s_1 * 60 + s_2) * 100 + s_3;   //规定写法
 			QString timestr = line.mid(0, 10);
+			auto timerNum = ChangeTimeSpanStringToMillisconds(timestr);
 			QString lrcstr = line.mid(10);
 			m_musicLrcMap.insert(timestr, lrcstr);
+			auto vec = lrcstr + "|" + QString::number(timerNum);
+			m_lrcTimeMap.push_back(vec);
 		}
 	}
 }
@@ -58,6 +74,7 @@ void MusicManager::getLoaclLrcData(const QString& filePath)
 {
 	//先清除数据
 	m_musicLrcMap.clear();
+	m_lrcTimeMap.clear();
 	//歌词校验
 	QFile file(filePath);
 	//qDebug() << ss +playList->currentMedia().canonicalUrl().fileName().split(".").front() + ".lrc";
@@ -70,12 +87,47 @@ void MusicManager::getLoaclLrcData(const QString& filePath)
 			bool match = ipRegExp.indexIn(line);
 			if (!match) {
 				QString timestr = line.mid(0, 10);
-				QString lrcstr = line.mid(10);
+				auto timerNum = ChangeTimeSpanStringToMillisconds(timestr);
+				QString lrcstr = line.mid(10).remove(QRegExp("\\s"));
 				m_musicLrcMap.insert(timestr, lrcstr);
+				auto vec = lrcstr + "|" + QString::number(timerNum);
+				m_lrcTimeMap.push_back(vec);
 			}
 			file.close();
 		}
 	}
+}
+
+bool MusicManager::isHasLrc()
+{
+	bool result = false;
+	if (!m_musicLrcMap.isEmpty()) {
+		result = true;
+	}
+	return result;
+}
+
+int64_t MusicManager::getNextLrcTime(const QString & lrc, int position)
+{
+	int64_t result = 0;
+	for (int i = 0; i < m_lrcTimeMap.size(); i++) {
+		auto lrcInfos = m_lrcTimeMap.value(i).split("|");
+		if (lrcInfos.size() > 1){
+			auto lrcText = lrcInfos.value(0);
+			if (lrc == lrcText) {
+				auto nextLrcInfos = m_lrcTimeMap.value(i + 1).split("|");
+				if (nextLrcInfos.size() > 1) {
+					result = (int64_t)nextLrcInfos.value(1).toInt();
+					//qInfo() << result << position << nextLrcInfos;
+					if (result > position) {
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	return result;
 }
 
 MusicInfoModel & MusicManager::getLocalMusicInfoModel()
@@ -127,6 +179,7 @@ QString MusicManager::getLrcByTime(int time)
 	while (iter != m_musicLrcMap.end())
 	{
 		QString key = iter.key();
+		auto num1 = key.mid(1, 2).toInt();
 		if (key.mid(1, 2).toInt() == (time / 60000) && (key.mid(4, 2)).toInt() == (time % 60000 / 1000)) {
 			lrc = iter.value();
 		}

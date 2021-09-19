@@ -20,7 +20,10 @@ void MusicInfoDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 	int y = rect.top();
 	int width = rect.width();
 	int height = rect.height();
-	int pWidth = width / 4;
+	int pWidth = width;
+	if (E_MusicType::E_NetWork == m_musicType) {
+		pWidth = width / 4;
+	}
 
 	const QWidget *widget = option.widget;
 	auto style = widget ? widget->style() : QApplication::style();

@@ -213,11 +213,19 @@ void MusicPlayer::initInfo()
 	ui.widget_bottom->setVisible(false);
 }
 
+void MusicPlayer::showLrcModel()
+{
+	bool result = musicManager.isHasLrc();
+	if (!result) {
+		m_lrcWidget->setLrc();
+	}
+}
+
 void MusicPlayer::checkLrcWidget(int position)
 {
 	auto lrc = musicManager.getLrcByTime(position);
 	if (!lrc.isEmpty()) {
-		m_lrcWidget->setLrc(lrc);
+		m_lrcWidget->setLrc(lrc, position);
 	}
 }
 
@@ -324,11 +332,15 @@ void MusicPlayer::sltMaxOrNormal()
 void MusicPlayer::sltSliderProgressClicked()
 {
 	m_musicPlayer->setPosition(ui.slider_progress->value());
+	//校正歌词
+	checkLrcWidget(ui.slider_progress->value());
 }
 
 void MusicPlayer::sltSliderProgressReleased()
 {
 	m_musicPlayer->setPosition(ui.slider_progress->value());
+	//校正歌词
+	checkLrcWidget(ui.slider_progress->value());
 }
 
 void MusicPlayer::sltMusicPlayOrPause()
@@ -416,6 +428,8 @@ void MusicPlayer::sltDurationChanged(qint64 duration)
 	//总时间
 	QTime allTime(0, duration / 60000, qRound((duration % 60000) / 1000.0));
 	m_musicTime = allTime.toString(tr("mm:ss"));
+	//检测是否存在歌词
+	showLrcModel();
 }
 
 void MusicPlayer::sltPositionChanged(qint64 position)

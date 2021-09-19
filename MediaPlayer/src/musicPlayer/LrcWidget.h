@@ -10,7 +10,8 @@ public:
 	LrcWidget(QWidget *parent = Q_NULLPTR);
 	~LrcWidget();
 
-	void setLrc(const QString &text);
+	void setLrc();
+	void setLrc(const QString &text, int position);
 
 private:
 	virtual void mouseMoveEvent(QMouseEvent *event);

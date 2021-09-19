@@ -38,6 +38,12 @@ public:
 	////异步get请求,用于下载
 	//QtPromise::QPromise<QByteArray> get(const QUrl &url);
 
+	//是否存在歌词
+	bool isHasLrc();
+
+	//根据当前歌词获取下一句歌词间隔时长
+	int64_t getNextLrcTime(const QString& lrc, int position);
+
 public:
 	MusicInfoModel &getLocalMusicInfoModel();
 	MusicInfoModel &getMusicInfoModel();
@@ -63,6 +69,7 @@ private:
 	MusicInfo m_playingMusicInfo;
 	//歌词
 	QMap<QString, QString> m_musicLrcMap;
+	QVector<QString> m_lrcTimeMap;
 	//图片
 	QPixmap m_imagePixMap;
 	//下载路径
