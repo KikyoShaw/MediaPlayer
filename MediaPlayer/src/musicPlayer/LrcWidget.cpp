@@ -1,6 +1,7 @@
 #include "LrcWidget.h"
 #include <QDesktopWidget>
 #include <QMouseEvent>
+#include "musicManager.h"
 
 LrcWidget::LrcWidget(QWidget *parent)
 	:QWidget(parent)
@@ -32,7 +33,9 @@ void LrcWidget::setLrc()
 
 void LrcWidget::setLrc(const QString & text, int position)
 {
-	ui.label_lrc->setTimerAndStartAnimation(text, position);
+	auto pDuration = musicManager.getNextLrcTime(text, position);
+	auto timeNum = abs(pDuration - position - 100);
+	ui.label_lrc->startLrcMask(timeNum, text);
 }
 
 void LrcWidget::mouseMoveEvent(QMouseEvent * event)

@@ -67,7 +67,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="animationLabel" name="label_lrc">
+       <widget class="Lrc" name="label_lrc">
         <property name="styleSheet">
          <string notr="true">color: #01EEC3;</string>
         </property>
@@ -99,9 +99,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>animationLabel</class>
+   <class>Lrc</class>
    <extends>QLabel</extends>
-   <header location="global">animationlabel.h</header>
+   <header location="global">Lrc.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
