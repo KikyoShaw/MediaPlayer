@@ -27,7 +27,7 @@
     <Filter Include="common">
       <UniqueIdentifier>{6a963636-a5b6-4242-8cef-11eebc1af4d3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\musicPlayer">
+    <Filter Include="musicPlayer">
       <UniqueIdentifier>{cc0a92b8-6565-4665-9de6-5654c494b9e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -50,28 +50,28 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\LrcWidget.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\musicInfoDelegate.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\musicInfoModel.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\musicManager.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\musicplayer.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\searchMusicView.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\musicImage.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\musicInfoWidget.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\videoPlayer\videoPlayer.cpp">
       <Filter>videoPlayer</Filter>
@@ -95,16 +95,16 @@
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\mvWidget.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\common\flowlayout.cpp">
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\mvInfoModel.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\mvItemWidget.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\common\frameless.cpp">
       <Filter>common</Filter>
@@ -116,10 +116,10 @@
       <Filter>videoPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\singerWidget.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\singerItem.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\common\ThreadRequest.cpp">
       <Filter>common</Filter>
@@ -128,10 +128,10 @@
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\animationLabel.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
     <ClCompile Include="src\musicPlayer\Lrc.cpp">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -145,28 +145,28 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\LrcWidget.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\musicInfoDelegate.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\musicInfoModel.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\musicManager.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\musicplayer.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\searchMusicView.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\musicImage.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\musicInfoWidget.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\videoPlayer\videoPlayer.h">
       <Filter>videoPlayer</Filter>
@@ -187,13 +187,13 @@
       <Filter>videoPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\mvWidget.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\mvInfoModel.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\mvItemWidget.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\common\frameless.h">
       <Filter>common</Filter>
@@ -205,10 +205,10 @@
       <Filter>videoPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\singerWidget.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\singerItem.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\common\ThreadRequest.h">
       <Filter>common</Filter>
@@ -217,10 +217,10 @@
       <Filter>common</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\animationLabel.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
     <QtMoc Include="src\musicPlayer\Lrc.h">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -234,16 +234,16 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="src\musicPlayer\LrcWidget.ui">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtUic>
     <QtUic Include="src\musicPlayer\musicplayer.ui">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtUic>
     <QtUic Include="src\musicPlayer\searchMusicView.ui">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtUic>
     <QtUic Include="src\musicPlayer\musicInfoWidget.ui">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtUic>
     <QtUic Include="src\videoPlayer\videoPlayer.ui">
       <Filter>videoPlayer</Filter>
@@ -258,19 +258,19 @@
       <Filter>videoPlayer</Filter>
     </QtUic>
     <QtUic Include="src\musicPlayer\mvWidget.ui">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtUic>
     <QtUic Include="src\musicPlayer\mvItemWidget.ui">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtUic>
     <QtUic Include="src\videoPlayer\videoControlTops.ui">
       <Filter>videoPlayer</Filter>
     </QtUic>
     <QtUic Include="src\musicPlayer\singerWidget.ui">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtUic>
     <QtUic Include="src\musicPlayer\singerItem.ui">
-      <Filter>Header Files\musicPlayer</Filter>
+      <Filter>musicPlayer</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
