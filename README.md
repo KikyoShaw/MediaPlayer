@@ -14,7 +14,7 @@
 支持下载功能
 
 #### 音乐播放器
-![image](https://github.com/KikyoShaw/MediaPlayer/tree/main/Image/2.jpg)
+![image](https://github.com/KikyoShaw/MediaPlayer/blob/main/Image/2.jpg)
 
 #### 视频播放器
-![image](https://github.com/KikyoShaw/MediaPlayer/tree/main/Image/1.png)
+![image](https://github.com/KikyoShaw/MediaPlayer/blob/main/Image/1.png)
